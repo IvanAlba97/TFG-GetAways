@@ -1,0 +1,20 @@
+.content {
+    display: flex;
+  }
+  
+  .column {
+    padding: 20px;
+  }
+  
+  .column-1 {
+    width: 80%;
+    background-color: lightblue;
+    min-height: 1000px;
+  }
+  
+  .column-2 {
+    width: 20%;
+    background-color: lightskyblue;
+    min-height: 1000px;
+  }
+  
