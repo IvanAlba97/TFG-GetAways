@@ -10,7 +10,7 @@ CREATE TABLE Ruta_senderismo (
   nombre VARCHAR(255) NOT NULL,
   descripcion TEXT NOT NULL,
   imagen VARCHAR(255) NOT NULL,
-  longitud FLOAT,
+  longitud FLOAT NOT NULL,
   tipo ENUM ('Lineal', 'Circular', 'Semicircular') NOT NULL,
   dificultad ENUM ('Fácil', 'Moderado', 'Difícil') NOT NULL,
   permiso_necesario BOOLEAN NOT NULL,
@@ -19,7 +19,7 @@ CREATE TABLE Ruta_senderismo (
   media_valoraciones FLOAT
 );
 
-CREATE TABLE Lista_pendientes (
+CREATE TABLE Ruta_pendiente (
   id INT AUTO_INCREMENT PRIMARY KEY,
   id_usuario INT NOT NULL,
   id_ruta INT NOT NULL,
@@ -27,7 +27,7 @@ CREATE TABLE Lista_pendientes (
   FOREIGN KEY (id_ruta) REFERENCES Ruta_senderismo (id)
 );
 
-CREATE TABLE Lista_realizadas (
+CREATE TABLE Ruta_completada (
   id INT AUTO_INCREMENT PRIMARY KEY,
   id_usuario INT NOT NULL,
   id_ruta INT NOT NULL,
