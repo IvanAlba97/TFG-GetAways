@@ -1,20 +1,24 @@
 .content {
-    display: flex;
+  display: flex;
+}
+
+.column-1 {
+  width: 80%;
+  background-color: lightblue;
+}
+
+.column-2 {
+  width: 20%;
+  background-color: lightskyblue;
+}
+
+@media (max-width: 768px) {
+  .content {
+    flex-direction: column;
   }
-  
-  .column {
-    padding: 20px;
-  }
-  
-  .column-1 {
-    width: 80%;
-    background-color: lightblue;
-    min-height: 1000px;
-  }
-  
+
+  .column-1,
   .column-2 {
-    width: 20%;
-    background-color: lightskyblue;
-    min-height: 1000px;
+    width: 100%;
   }
-  
+}
