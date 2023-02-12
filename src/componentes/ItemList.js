@@ -3,7 +3,7 @@ import axios from 'axios';
 import Tarjeta from './Tarjeta.js';
 
 function ItemList() {
-  
+
   const [rutas, setRutas] = useState([]);
   const [error, setError] = useState(null);
 
@@ -29,15 +29,13 @@ function ItemList() {
 
   return (
     <div>
-      {<ul>
-        {rutas.map(ruta => (
-                <Tarjeta 
-                id = {ruta.id} 
-                nombre = {ruta.nombre}
-                descripcion = {ruta.descripcion}
-                imagen = {ruta.imagen}/>
-              ))}
-      </ul>}
+      {rutas.map(ruta => (
+        <Tarjeta
+          id={ruta.id}
+          nombre={ruta.nombre}
+          descripcion={ruta.descripcion}
+          imagen={ruta.imagen} />
+      ))}
     </div>
   );
 }

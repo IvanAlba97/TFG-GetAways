@@ -1,32 +1,42 @@
 .contenedor-tarjeta {
-  width: 100%;
+  width: calc(100% - 100px);
   min-height: 200px;
   border: 1px solid black;
   background-color: #9E7540;
-  border-radius: 25px;
+  border-radius: 15px;
   display: flex;
+  padding: 25px;
+  margin: 25px;
 }
 
 .imagen-tarjeta {
-  min-width: 150px;
+  width: 200px;
   height: 100%;
-  border-radius: 25px;
+  border-radius: 15px;
   object-fit: cover;
 }
 
 .contenedor-informacion-general {
-  width: 50%;
-  border-radius: 25px;
+  width: auto;
+  border-radius: 15px;
   background: #BD9354;
+  padding: 25px;
+  margin-left: 25px;
+  margin-right: 25px;
 }
 
 .contenedor-interaccion {
-  min-width: 150px;
-  min-height: 150px;
+  min-width: 200px;
+  min-height: 200px;
   text-align: right;
-  border-radius: 25px;
+  border-radius: 15px;
   background: #BD9354;
   object-fit: cover;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  padding: 25px;
 }
 
 h2 {
@@ -39,14 +49,39 @@ p {
   text-align: justify;
 }
 
-@media only screen and (max-width: 768px) {
+.informacion {
+  display: flex;
+  flex-direction: column;
+}
+
+.acciones {
+  display: flex;
+  flex-direction: row;
+}
+
+.añadir-a-pendientes,
+.añadir-a-completadas {
+  background-color: lightgray;
+  border: none;
+  padding: 10px 20px;
+  font-size: 14px;
+  margin-left: 10px;
+  cursor: pointer;
+}
+
+@media only screen and (max-width: 868px) {
   .contenedor-tarjeta {
     flex-direction: column;
   }
-  
-  .imagen-tarjeta,
-  .contenedor-informacion-General,
-  .contenedor-interaccion {
+
+  .imagen-tarjeta {
     width: 100%;
+  }
+
+  .contenedor-informacion-general {
+    margin-left: 0px;
+    margin-right: 0px;
+    margin-top: 25px;
+    margin-bottom: 25px;
   }
 }
