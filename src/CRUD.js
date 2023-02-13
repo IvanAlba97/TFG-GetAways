@@ -25,7 +25,7 @@ app.use(express.json());
 
 // Obtener todas las rutas
 app.get('/', (req, res) => {
-  connection.query('SELECT * FROM ruta_senderismo', (error, results) => {
+  connection.query('SELECT * FROM ruta_senderismo WHERE id < 6', (error, results) => {
     if (error) {
       return res.status(500).json({
         error: error
@@ -107,6 +107,17 @@ app.delete('/:id', (req, res) => {
       message: 'Ruta eliminada'
     });
   });
+});
+
+// Realizar una consulta a la tabla ruta_senderismo para recuperar las imágenes
+app.get("/images", (req, res) => {
+  connection.query(
+    "SELECT imagen FROM ruta_senderismo",
+    (error, results) => {
+      if (error) throw error;
+      res.send(results);
+    }
+  );
 });
 
 // Escuchar en un puerto específico

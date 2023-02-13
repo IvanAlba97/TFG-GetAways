@@ -1,16 +1,18 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import '../estilos/Navbar.css';
+import Logo from '../img/logo.png';
+import Profile from '../img/profile-icon.ico';
 
 const Navbar = () => {
   return (
     <nav>
       <Link to='/'>
-        <img src="logo.png" alt="Logo" />
+        <img src={Logo} alt="Logo" />
       </Link>
-      <input type="text" placeholder="Search..." />
+      <input type="text" placeholder="Buscar..." />
       <Link to="/access">
-        <button>Profile</button>
+        <img className = 'contenedor-icono' src={Profile} alt="Profile" />
       </Link>
     </nav>
   );
