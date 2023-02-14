@@ -9,7 +9,7 @@ const Carrusel = () => {
   useEffect(() => {
     const fetchData = async () => {
       const result = await axios(
-        "http://localhost:3333"
+        "http://localhost:3333/carrusel"
       );
 
       setImages(result.data);

@@ -1,5 +1,7 @@
 const express = require('express');
 const app = express();
+const port = 3333;
+
 const mysql = require('mysql2');
 
 // Para solucionar el error de los CORS
@@ -10,117 +12,68 @@ app.use(function (req, res, next) {
   next();
 });
 
-// Configurar la conexión a la base de datos
 const connection = mysql.createConnection({
   host: 'localhost',
   user: 'root',
   password: '',
-  database: 'getaways_db'
+  database: 'GetAways_db'
 });
-
-// Conectar a la base de datos
-connection.connect();
 
 app.use(express.json());
 
-// Obtener todas las rutas
-app.get('/', (req, res) => {
+// Obtener todas las rutas de senderismo
+app.get('/ruta_senderismo', (req, res) => {
+  connection.query('SELECT * FROM ruta_senderismo', (error, results) => {
+    if (error) throw error;
+    res.send(results);
+  });
+});
+
+// Obtener una ruta de senderismo por su ID
+app.get('/ruta_senderismo/:id', (req, res) => {
+  const id = req.params.id;
+  connection.query('SELECT * FROM ruta_senderismo WHERE id = ?', [id], (error, results) => {
+    if (error) throw error;
+    res.send(results[0]);
+  });
+});
+
+// Crear una nueva ruta de senderismo
+app.post('/ruta_senderismo', (req, res) => {
+  const ruta = req.body;
+  connection.query('INSERT INTO ruta_senderismo SET ?', ruta, (error, results) => {
+    if (error) throw error;
+    res.send(results);
+  });
+});
+
+// Actualizar una ruta de senderismo
+app.put('/ruta_senderismo/:id', (req, res) => {
+  const id = req.params.id;
+  const ruta = req.body;
+  connection.query('UPDATE ruta_senderismo SET ? WHERE id = ?', [ruta, id], (error, results) => {
+    if (error) throw error;
+    res.send(results);
+  });
+});
+
+// Eliminar una ruta de senderismo
+app.delete('/ruta_senderismo/:id', (req, res) => {
+  const id = req.params.id;
+  connection.query('DELETE FROM ruta_senderismo WHERE id = ?', [id], (error, results) => {
+    if (error) throw error;
+    res.send(results);
+  });
+});
+
+// Obtener 6 primeras rutas para el carrusel
+app.get('/carrusel', (req, res) => {
   connection.query('SELECT * FROM ruta_senderismo WHERE id < 6', (error, results) => {
-    if (error) {
-      return res.status(500).json({
-        error: error
-      });
-    }
-    res.json(results);
+    if (error) throw error;
+    res.send(results);
   });
 });
 
-// Obtener una ruta por ID
-app.get('/:id', (req, res) => {
-  const rutaId = req.params.id;
-  connection.query('SELECT * FROM ruta_senderismo WHERE id = ?', [rutaId], (error, results) => {
-    if (error) {
-      return res.status(500).json({
-        error: error
-      });
-    }
-    if (results.length === 0) {
-      return res.status(404).json({
-        error: 'Ruta no encontrada'
-      });
-    }
-  });
-});
-
-// Crear una nueva ruta
-app.post('/', (req, res) => {
-  const ruta = req.body;
-  connection.query('INSERT INTO ruta_senderismo SET ?', ruta, (error, result) => {
-    if (error) {
-      return res.status(500).json({
-        error: error
-      });
-    }
-    res.status(201).json({
-      id: result.insertId,
-      message: 'Ruta creada'
-    });
-  });
-});
-
-// Actualizar una ruta
-app.put('/:id', (req, res) => {
-  const rutaId = req.params.id;
-  const ruta = req.body;
-  connection.query('UPDATE ruta_senderismo SET ? WHERE id = ?', [ruta, rutaId], (error, result) => {
-    if (error) {
-      return res.status(500).json({
-        error: error
-      });
-    }
-    if (result.affectedRows === 0) {
-      return res.status(404).json({
-        error: 'Ruta no encontrada'
-      });
-    }
-    res.json({
-      message: 'Ruta actualizada'
-    });
-  });
-});
-
-// Eliminar una ruta
-app.delete('/:id', (req, res) => {
-  const rutaId = req.params.id;
-  connection.query('DELETE FROM ruta_senderismo WHERE id = ?', [rutaId], (error, result) => {
-    if (error) {
-      return res.status(500).json({
-        error: error
-      });
-    }
-    if (result.affectedRows === 0) {
-      return res.status(404).json({
-        error: 'Ruta no encontrada'
-      });
-    }
-    res.json({
-      message: 'Ruta eliminada'
-    });
-  });
-});
-
-// Realizar una consulta a la tabla ruta_senderismo para recuperar las imágenes
-app.get("/images", (req, res) => {
-  connection.query(
-    "SELECT imagen FROM ruta_senderismo",
-    (error, results) => {
-      if (error) throw error;
-      res.send(results);
-    }
-  );
-});
-
-// Escuchar en un puerto específico
-app.listen(3333, () => {
-  console.log('Servidor iniciado en el puerto 3333');
+app.listen(port, () => {
+  console.log(`App listening at http://localhost:${port}`);
 });
