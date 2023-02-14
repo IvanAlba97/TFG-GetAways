@@ -74,6 +74,22 @@ app.get('/carrusel', (req, res) => {
   });
 });
 
+app.post('/login', (req, res) => {
+  const identifier = req.body.identifier;
+  const password = req.body.password;
+  
+  connection.query('SELECT * FROM usuario WHERE (nombre = ? OR correo = ?) AND contraseña = ?', [identifier, identifier, password], (error, results) => {
+    if (error) throw error;
+    
+    if (results.length > 0) {
+      res.status(200).send('Login successful');
+    } else {
+      res.status(401).send('Invalid credentials');
+    }
+  });
+});
+
+
 app.listen(port, () => {
   console.log(`App listening at http://localhost:${port}`);
 });

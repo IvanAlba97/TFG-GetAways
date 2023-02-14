@@ -1,23 +1,36 @@
 import React, { useState } from "react";
 
 const Login = () => {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
+  const [identifier, setIdentifier] = useState("");
+const [password, setPassword] = useState("");
 
   const handleSubmit = event => {
     event.preventDefault();
 
-    // Add code to send login data to server here
-
+    fetch('http://localhost:3333/login', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ identifier, password })
+    })
+      .then(response => {
+        if (response.ok) {
+          alert('Este usuario PERTENECE a esta comunidad.');
+        } else {
+          alert('Este usuario NO PERTENECE a esta comunidad.');
+        }
+      });
   };
+
 
   return (
     <form onSubmit={handleSubmit}>
       <input
         type="text"
-        placeholder="Username"
-        value={username}
-        onChange={event => setUsername(event.target.value)}
+        placeholder="Username or email"
+        value={identifier}
+        onChange={event => setIdentifier(event.target.value)}
       />
       <input
         type="password"
@@ -28,6 +41,6 @@ const Login = () => {
       <button type="submit">Login</button>
     </form>
   );
-};
+}
 
-export default Login;
+  export default Login;
