@@ -18,6 +18,7 @@ const Login = () => {
       .then(response => {
         if (response.ok) {
           alert('Este usuario PERTENECE a esta comunidad.');
+          window.location.href = '/';
         } else {
           alert('Este usuario NO PERTENECE a esta comunidad.');
         }
