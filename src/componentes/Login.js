@@ -1,8 +1,9 @@
 import React, { useState } from "react";
+import '../estilos/Login.css';
 
 const Login = () => {
   const [identifier, setIdentifier] = useState("");
-const [password, setPassword] = useState("");
+  const [password, setPassword] = useState("");
 
   const handleSubmit = event => {
     event.preventDefault();
@@ -43,4 +44,4 @@ const [password, setPassword] = useState("");
   );
 }
 
-  export default Login;
+export default Login;

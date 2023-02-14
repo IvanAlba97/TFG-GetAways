@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import '../estilos/Register.css';
 
 const Register = () => {
   const [username, setUsername] = useState("");
@@ -17,7 +18,7 @@ const Register = () => {
     })
       .then(response => {
         if (response.ok) {
-          console.log('User registered successfully');
+          alert('Usuario registrado correctamente');
           setUsername('');
           setEmail('');
           setPassword('');
