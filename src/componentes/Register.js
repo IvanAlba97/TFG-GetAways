@@ -8,7 +8,26 @@ const Register = () => {
   const handleSubmit = event => {
     event.preventDefault();
 
-    // Add code to send registration data to server here
+    fetch('http://localhost:3333/register', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ username, email, password })
+    })
+      .then(response => {
+        if (response.ok) {
+          console.log('User registered successfully');
+          setUsername('');
+          setEmail('');
+          setPassword('');
+        } else {
+          console.log('Registration failed');
+        }
+      })
+      .catch(error => {
+        console.error('Error registering user:', error);
+      });
   };
 
   return (

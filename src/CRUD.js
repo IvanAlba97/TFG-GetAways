@@ -6,9 +6,10 @@ const mysql = require('mysql2');
 
 // Para solucionar el error de los CORS
 
-app.use(function (req, res, next) {
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+app.use((req, res, next) => {
+  res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
   next();
 });
 
@@ -74,18 +75,28 @@ app.get('/carrusel', (req, res) => {
   });
 });
 
+// Autenticación de usuarios
 app.post('/login', (req, res) => {
   const identifier = req.body.identifier;
   const password = req.body.password;
   
   connection.query('SELECT * FROM usuario WHERE (nombre = ? OR correo = ?) AND contraseña = ?', [identifier, identifier, password], (error, results) => {
     if (error) throw error;
-    
     if (results.length > 0) {
       res.status(200).send('Login successful');
     } else {
       res.status(401).send('Invalid credentials');
     }
+  });
+});
+
+// Registro de usuarios
+app.post('/register', (req, res) => {
+  const { username, email, password } = req.body;
+  
+  connection.query('INSERT INTO usuario (nombre, correo, contraseña) VALUES (?, ?, ?)', [username, email, password], (error, results) => {
+    if (error) throw error;
+    res.status(200).send('User registered successfully');
   });
 });
 
