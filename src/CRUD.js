@@ -93,10 +93,19 @@ app.post('/login', (req, res) => {
 // Registro de usuarios
 app.post('/register', (req, res) => {
   const { username, email, password } = req.body;
-  
   connection.query('INSERT INTO usuario (nombre, correo, contraseña) VALUES (?, ?, ?)', [username, email, password], (error, results) => {
     if (error) throw error;
     res.status(200).send('User registered successfully');
+  });
+});
+
+app.get('/search', (req, res) => {
+  const { busqueda } = req.query;
+  const query = `SELECT * FROM ruta_senderismo WHERE nombre LIKE '%${busqueda}%'`;
+
+  connection.query(query, (err, results) => {
+    if (err) throw err;
+    res.json(results);
   });
 });
 
