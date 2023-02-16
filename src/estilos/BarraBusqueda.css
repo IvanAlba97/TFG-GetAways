@@ -3,8 +3,6 @@
 	
 }
 
-
-
 .resultados-busqueda {
 	position: absolute;
 	top: 100%;
@@ -32,4 +30,14 @@
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.contenedor-individual:hover {
+  background-color: #f0f0f0;
+}
+
+.enlace-ruta {
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
 }

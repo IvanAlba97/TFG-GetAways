@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import { Link } from 'react-router-dom';
 import '../estilos/BarraBusqueda.css';
 
 function BarraBusqueda() {
@@ -12,11 +13,13 @@ function BarraBusqueda() {
   };
 
   return (
-    <div className = 'contenedor-busqueda'>
+    <div className='contenedor-busqueda'>
       <input type="text" value={busqueda} onChange={(e) => setBusqueda(e.target.value)} onKeyUp={handleBusqueda} />
       <div className='resultados-busqueda'>
         {rutas.map((ruta) => (
-          <div key={ruta.id} className = 'contenedor-individual'>{ruta.nombre}</div>
+          <Link key={ruta.id} to={`/ruta/${ruta.id}`} className='enlace-ruta'>
+            <div className='contenedor-individual'>{ruta.nombre}</div>
+          </Link>
         ))}
       </div>
     </div>
