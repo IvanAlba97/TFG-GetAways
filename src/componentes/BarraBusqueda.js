@@ -12,13 +12,11 @@ function BarraBusqueda() {
   };
 
   return (
-    <div style={{ position: 'relative' }}>
-      <form>
-        <input type="text" value={busqueda} onChange={(e) => setBusqueda(e.target.value)} onKeyUp={handleBusqueda} />
-      </form>
+    <div className = 'contenedor-busqueda'>
+      <input type="text" value={busqueda} onChange={(e) => setBusqueda(e.target.value)} onKeyUp={handleBusqueda} />
       <div className='resultados-busqueda'>
         {rutas.map((ruta) => (
-          <div key={ruta.id}>{ruta.nombre}</div>
+          <div key={ruta.id} className = 'contenedor-individual'>{ruta.nombre}</div>
         ))}
       </div>
     </div>

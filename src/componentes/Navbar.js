@@ -11,7 +11,7 @@ const Navbar = () => {
       <Link to='/'>
         <img src={Logo} alt="Logo" />
       </Link>
-      <BarraBusqueda />
+      <BarraBusqueda className = 'barra-busqueda' />
       <Link to="/access">
         <img className = 'contenedor-icono' src={Profile} alt="Profile" />
       </Link>
