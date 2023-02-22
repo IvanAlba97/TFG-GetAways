@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import Navbar from "./Navbar";
 import Footer from "./Footer";
+/* import PendingCheck from './PendingCheck.js'; */
 import '../estilos/RouteDetail.css';
 
 function RouteDetail() {
@@ -35,13 +36,15 @@ function RouteDetail() {
               <dt>Tipo:</dt>
               <dd>{routeDetails.tipo}</dd>
               <dt>Permiso necesario:</dt>
-              <dd>{routeDetails.permiso_necesario}</dd>
+              {routeDetails.permiso_necesario}
               <dt>Cómo llegar:</dt>
               <dd>{routeDetails.como_llegar}</dd>
               <dt>Enlace a Google Maps:</dt>
               <dd><a href={routeDetails.enlace_maps} target="_blank" rel="noopener noreferrer">{routeDetails.enlace_maps}</a></dd>
               <dt>Media de valoraciones:</dt>
               <dd>{routeDetails.media_valoraciones}</dd>
+              {/* <dd>Pendiente:</dd>
+              <dd><PendingCheck /></dd> */}
             </dl>
           </div>
         )}

@@ -4,7 +4,11 @@ const port = 3333;
 
 const mysql = require('mysql2');
 
+
+
 // Para solucionar el error de los CORS
+
+const cors = require('cors');
 
 app.use((req, res, next) => {
   res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
@@ -12,6 +16,14 @@ app.use((req, res, next) => {
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
   next();
 });
+
+app.use(cors({
+  origin: 'http://localhost:3000',
+  credentials: true,
+}));
+
+
+
 
 const connection = mysql.createConnection({
   host: 'localhost',
@@ -21,6 +33,125 @@ const connection = mysql.createConnection({
 });
 
 app.use(express.json());
+
+
+
+
+
+
+
+
+
+
+
+
+const bcrypt = require('bcrypt');
+const router = express.Router();
+
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+const session = require('express-session');
+
+// Configuración de express-session
+app.use(session({
+  secret: 'mi-secreto',
+  resave: false,
+  saveUninitialized: true,
+  //store: sessionStore,
+  cookie: { secure: false }
+}));
+
+const authRouter = express.Router();
+
+app.post('/auth/login', (req, res) => {
+  const { identifier, password } = req.body;
+  connection.query('SELECT * FROM usuario WHERE nombre = ? OR correo = ?', [identifier, identifier], (error, results) => {
+    if (error) {
+      res.status(500).send('Error al buscar usuario');
+    } else if (results.length === 0) {
+      res.status(401).send('Usuario no encontrado');
+    } else {
+      const user = results[0];
+      bcrypt.compare(password, user.contraseña, (error, result) => {
+        if (error) {
+          res.status(500).send('Error al comparar contraseñas');
+        } else if (result) {
+          // Inicializar la sesión y almacenar la información del usuario en la sesión
+          req.session.user = { id: user.id, nombre: user.nombre, correo: user.correo };
+          res.json(req.session.user);
+        } else {
+          res.status(401).send('Contraseña incorrecta');
+        }
+      });
+    }
+  });
+});
+
+authRouter.post('/logout', (req, res) => {
+  req.session.destroy();
+  res.send('Cierre de sesión exitoso');
+});
+
+authRouter.post('/register', (req, res) => {
+  const { username, email, password } = req.body;
+
+  bcrypt.hash(password, 10, (error, hash) => {
+    if (error) {
+      res.status(500).send('Error al cifrar contraseña');
+    } else {
+      connection.query('INSERT INTO Usuario (nombre, correo, contraseña) VALUES (?, ?, ?)', [username, email, hash], (error, results) => {
+        if (error) {
+          res.status(500).send('Error al registrar usuario');
+        } else {
+          res.send('Registro exitoso');
+        }
+      });
+    }
+  });
+});
+
+
+app.use('/auth', authRouter);
+
+app.get('/', (req, res) => {
+  res.send('Página principal');
+});
+
+app.get('/perfil', (req, res) => {
+  if (req.session.user) {
+    res.send(`Bienvenido ${req.session.user.username}`);
+  } else {
+    res.redirect('/login');
+  }
+});
+
+app.get('/user', (req, res) => {
+  if (req.session.user) {
+    // Devolver la información del usuario almacenada en la sesión
+    res.json({ user: req.session.user });
+  } else {
+    res.status(401).json({ error: 'No se ha iniciado sesión' });
+  }
+});
+
+app.get('/session', (req, res) => {
+  res.json({ session: req.session });
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 // Obtener todas las rutas de senderismo
 app.get('/ruta_senderismo', (req, res) => {
@@ -76,7 +207,7 @@ app.get('/carrusel', (req, res) => {
 });
 
 // Autenticación de usuarios
-app.post('/login', (req, res) => {
+/* app.post('/login', (req, res) => {
   const identifier = req.body.identifier;
   const password = req.body.password;
   
@@ -88,16 +219,16 @@ app.post('/login', (req, res) => {
       res.status(401).send('Invalid credentials');
     }
   });
-});
+}); */
 
 // Registro de usuarios
-app.post('/register', (req, res) => {
+/* app.post('/register', (req, res) => {
   const { username, email, password } = req.body;
   connection.query('INSERT INTO usuario (nombre, correo, contraseña) VALUES (?, ?, ?)', [username, email, password], (error, results) => {
     if (error) throw error;
     res.status(200).send('User registered successfully');
   });
-});
+}); */
 
 app.get('/search', (req, res) => {
   const { busqueda } = req.query;
@@ -108,6 +239,11 @@ app.get('/search', (req, res) => {
     res.json(results);
   });
 });
+
+
+
+
+
 
 
 app.listen(port, () => {

@@ -2,29 +2,35 @@ import React, { useState } from "react";
 import '../estilos/Login.css';
 
 const Login = () => {
-  const [identifier, setIdentifier] = useState("");
-  const [password, setPassword] = useState("");
+  const [identifier, setIdentifier] = useState('');
+  const [password, setPassword] = useState('');
 
-  const handleSubmit = event => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
 
-    fetch('http://localhost:3333/login', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({ identifier, password })
-    })
-      .then(response => {
-        if (response.ok) {
-          alert('Este usuario PERTENECE a esta comunidad.');
-          window.location.href = '/';
-        } else {
-          alert('Este usuario NO PERTENECE a esta comunidad.');
-        }
+    try {
+      const response = await fetch('http://localhost:3333/auth/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          identifier,
+          password
+        }),
+        credentials: 'include',
       });
-  };
 
+      if (!response.ok) {
+        throw new Error('Error al iniciar sesión');
+      }
+      /* Para ver el contenido de la respuesta
+      console.log(await response.json()); */
+      window.location.href = '/';
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   return (
     <form onSubmit={handleSubmit}>
