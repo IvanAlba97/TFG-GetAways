@@ -46,16 +46,38 @@ function Equipaje() {
       })
       .catch((error) => console.error(error));
   };
-  
+
   const handleItemCheck = (itemId) => {
     const updatedItems = items.map((item) => {
-      if (item.id === itemId) {
-        return { ...item, checked: !item.checked };
-      }
       return item;
     });
     setItems(updatedItems);
+
+    fetch(`http://localhost:3333/equipaje/${itemId}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      credentials: 'include',
+      body: JSON.stringify({ checked: !updatedItems.find((item) => item.id === itemId).checked }),
+    })
+    .then(() => {
+      return fetch('http://localhost:3333/equipaje', { credentials: 'include' });
+    })
+    .then((response) => {
+      if (response.ok) {
+        return response.json();
+      } else {
+        throw new Error('Error al obtener lista actualizada de elementos');
+      }
+    })
+    .then((data) => {
+      setItems(data);
+      setNewItem('');
+    })
   };
+
+
 
   const [user, setUser] = useState(null);
 

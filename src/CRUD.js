@@ -239,6 +239,23 @@ app.post('/equipaje', (req, res) => {
   );
 });
 
+// Endpoint para actualizar el estado de un elemento
+app.put('/equipaje/:id', (req, res) => {
+  const { id } = req.params;
+  const { checked } = req.body;
+
+  const query = 'UPDATE lista_revisar SET marcado = ? WHERE id = ?';
+
+  connection.query(query, [checked, id], (err, result) => {
+    if (err) {
+      console.error(err);
+      res.status(500).send('Error al actualizar el estado del elemento');
+    } else {
+      res.send('Estado del elemento actualizado correctamente');
+    }
+  });
+});
+
 
 
 
