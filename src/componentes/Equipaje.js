@@ -47,9 +47,6 @@ function Equipaje() {
       .catch((error) => console.error(error));
   };
   
-  
-  
-
   const handleItemCheck = (itemId) => {
     const updatedItems = items.map((item) => {
       if (item.id === itemId) {
@@ -92,7 +89,7 @@ function Equipaje() {
 
   return (
     <div>
-      <Navbar />
+      <Navbar user={user} />
       <div className="equipaje">
         <h2>Equipaje para la ruta de senderismo:</h2>
         <ul>
