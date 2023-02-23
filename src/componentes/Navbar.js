@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
 import '../estilos/Navbar.css';
 import Logo from '../img/logo.png';
 import Profile from '../img/profile-icon.ico';
@@ -12,11 +11,29 @@ const Navbar = ({ user }) => {
     setMostrarDesplegable(!mostrarDesplegable);
   };
 
+  const handleLogout = () => {
+    fetch('http://localhost:3333/auth/logout', { method: 'POST' })
+      .then(response => {
+        if (response.ok) {
+          // Eliminar información de sesión almacenada en el navegador
+          localStorage.removeItem('token'); // suponiendo que el token de sesión se almacena en localStorage
+          // Redirigir al usuario a la página de inicio
+          window.location.href = '/';
+        } else {
+          // Mostrar un mensaje de error
+        }
+        
+      })
+      .catch(error => {
+        // Mostrar un mensaje de error
+      });
+  };
+
   return (
     <nav>
-      <Link to='/'>
+      <a href='/'>
         <img src={Logo} alt="Logo" />
-      </Link>
+      </a>
       <BarraBusqueda className='barra-busqueda' />
       <div className='contenedor-perfil'>
         {user ? (
@@ -25,19 +42,19 @@ const Navbar = ({ user }) => {
             <img className="contenedor-icono" src={Profile} alt="Profile" />
             {mostrarDesplegable && (
               <div className="desplegable">
-                <Link to='/perfil'>Perfil</Link>
-                <Link to='/equipaje'>Equipaje</Link>
-                <Link to='/rutas-pendientes'>Rutas pendientes</Link>
-                <Link to='/rutas-completadas'>Rutas completadas</Link>
-                <Link to='/cerrar-sesion'>Cerrar sesión</Link>
+                <a href='/perfil'>Perfil</a>
+                <a href='/equipaje'>Equipaje</a>
+                <a href='/rutas-pendientes'>Rutas pendientes</a>
+                <a href='/rutas-completadas'>Rutas completadas</a>
+                <a href='#' onClick={handleLogout}>Cerrar sesión</a>
               </div>
             )}
           </div>
         ) : (
           <div>
-            <Link to="/access">
+            <a href="/access">
               <img className="contenedor-icono" src={Profile} alt="Profile" />
-            </Link>
+            </a>
           </div>
         )
         }
@@ -47,4 +64,3 @@ const Navbar = ({ user }) => {
 };
 
 export default Navbar;
-
