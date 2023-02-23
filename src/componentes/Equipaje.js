@@ -145,7 +145,7 @@ function Equipaje() {
                 />
                 {item.elemento}
               </label>
-              <button onClick={() => handleItemDelete(item.id)}>Eliminar</button>
+              <button className="btn-eliminar" onClick={() => handleItemDelete(item.id)}>Eliminar</button>
             </li>
           ))}
         </ul>
