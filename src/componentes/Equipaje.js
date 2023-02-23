@@ -77,7 +77,27 @@ function Equipaje() {
     })
   };
 
-
+  const handleItemDelete = (itemId) => {
+    fetch(`http://localhost:3333/equipaje/${itemId}`, {
+      method: 'DELETE',
+      credentials: 'include',
+    })
+    .then(() => {
+      return fetch('http://localhost:3333/equipaje', { credentials: 'include' });
+    })
+    .then((response) => {
+      if (response.ok) {
+        return response.json();
+      } else {
+        throw new Error('Error al obtener lista actualizada de elementos');
+      }
+    })
+    .then((data) => {
+      setItems(data);
+      setNewItem('');
+    })
+    .catch((error) => console.error(error));
+  };
 
   const [user, setUser] = useState(null);
 
@@ -125,6 +145,7 @@ function Equipaje() {
                 />
                 {item.elemento}
               </label>
+              <button onClick={() => handleItemDelete(item.id)}>Eliminar</button>
             </li>
           ))}
         </ul>
@@ -141,7 +162,7 @@ function Equipaje() {
         </form>
       </div>
     </div>
-  );
+  );  
 }
 
 export default Equipaje;

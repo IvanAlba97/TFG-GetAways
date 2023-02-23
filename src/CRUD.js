@@ -256,6 +256,22 @@ app.put('/equipaje/:id', (req, res) => {
   });
 });
 
+// Definir la ruta para manejar la solicitud DELETE
+app.delete('/equipaje/:itemId', (req, res) => {
+  const itemId = req.params.itemId;
+
+  const query = 'DELETE FROM lista_revisar WHERE id = ?';
+
+  connection.query(query, [itemId], (err, result) => {
+    if (err) {
+      console.error(err);
+      res.status(500).send('Error al eliminar el elemento');
+    } else {
+      res.send('Elemento eliminado correctamente');
+    }
+  });
+});
+
 
 
 
