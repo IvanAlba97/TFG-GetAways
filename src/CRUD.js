@@ -22,9 +22,6 @@ app.use(cors({
   credentials: true,
 }));
 
-
-
-
 const connection = mysql.createConnection({
   host: 'localhost',
   user: 'root',
@@ -33,17 +30,6 @@ const connection = mysql.createConnection({
 });
 
 app.use(express.json());
-
-
-
-
-
-
-
-
-
-
-
 
 const bcrypt = require('bcrypt');
 const router = express.Router();
@@ -111,7 +97,6 @@ authRouter.post('/register', (req, res) => {
   });
 });
 
-
 app.use('/auth', authRouter);
 
 app.get('/', (req, res) => {
@@ -138,20 +123,6 @@ app.get('/user', (req, res) => {
 app.get('/session', (req, res) => {
   res.json({ session: req.session });
 });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // Obtener todas las rutas de senderismo
 app.get('/ruta_senderismo', (req, res) => {
@@ -206,30 +177,6 @@ app.get('/carrusel', (req, res) => {
   });
 });
 
-// Autenticación de usuarios
-/* app.post('/login', (req, res) => {
-  const identifier = req.body.identifier;
-  const password = req.body.password;
-  
-  connection.query('SELECT * FROM usuario WHERE (nombre = ? OR correo = ?) AND contraseña = ?', [identifier, identifier, password], (error, results) => {
-    if (error) throw error;
-    if (results.length > 0) {
-      res.status(200).send('Login successful');
-    } else {
-      res.status(401).send('Invalid credentials');
-    }
-  });
-}); */
-
-// Registro de usuarios
-/* app.post('/register', (req, res) => {
-  const { username, email, password } = req.body;
-  connection.query('INSERT INTO usuario (nombre, correo, contraseña) VALUES (?, ?, ?)', [username, email, password], (error, results) => {
-    if (error) throw error;
-    res.status(200).send('User registered successfully');
-  });
-}); */
-
 app.get('/search', (req, res) => {
   const { busqueda } = req.query;
   const query = `SELECT * FROM ruta_senderismo WHERE nombre LIKE '%${busqueda}%'`;
@@ -239,6 +186,60 @@ app.get('/search', (req, res) => {
     res.json(results);
   });
 });
+
+app.get('/equipaje', (req, res) => {
+  const userId = req.session.user?.id;
+  if (!userId) {
+    res.sendStatus(401);
+    return;
+  }
+
+  connection.query('SELECT * FROM lista_revisar WHERE id_usuario = ?', [userId], (err, result) => {
+    if (err) {
+      console.error(err);
+      res.sendStatus(500);
+      return;
+    }
+
+    const items = result.map(row => ({
+      id: row.id,
+      elemento: row.elemento,
+      checked: row.marcado === 1
+    }));
+
+    res.json(items);
+  });
+});
+
+app.post('/equipaje', (req, res) => {
+  const userId = req.session.user?.id;
+
+  if (!userId) {
+    return res.status(401).json({ error: 'No se ha iniciado sesión' });
+  }
+
+  const elemento = req.body.elemento;
+  if (!elemento) {
+    return res.status(400).json({ error: 'El elemento es requerido' });
+  }
+
+  connection.query(
+    'INSERT INTO lista_revisar (id_usuario, elemento, marcado) VALUES (?, ?, ?)',
+    [userId, elemento, false],
+    (error, result) => {
+      if (error) {
+        console.error('Error al insertar elemento en la base de datos', error);
+        return res.status(500).json({ error: 'Error al insertar elemento en la base de datos' });
+      }
+
+      const nuevoId = result.insertId;
+      const nuevoElemento = { id: nuevoId, elemento: elemento, marcado: false };
+      res.json(nuevoElemento);
+    }
+  );
+});
+
+
 
 
 

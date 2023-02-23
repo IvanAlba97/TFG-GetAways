@@ -1,15 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import '../estilos/Equipaje.css';
 import Navbar from './Navbar.js';
+import axios from 'axios';
 
 
 function Equipaje() {
 
-  const [items, setItems] = useState([
-    { id: 1, text: 'Botella de agua', checked: false },
-    { id: 2, text: 'Comida para picnic', checked: false },
-    { id: 3, text: 'Mochila', checked: false },
-  ]);
+  const [items, setItems] = useState([]);
   const [newItem, setNewItem] = useState('');
 
   const handleNewItemChange = (event) => {
@@ -18,11 +15,40 @@ function Equipaje() {
 
   const handleNewItemSubmit = (event) => {
     event.preventDefault();
-    const newId = Math.max(...items.map((item) => item.id)) + 1;
-    const newElement = { id: newId, text: newItem, checked: false };
-    setItems([...items, newElement]);
-    setNewItem('');
+    fetch('http://localhost:3333/equipaje', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      credentials: 'include',
+      body: JSON.stringify({ elemento: newItem }),
+    })
+      .then((response) => {
+        if (response.ok) {
+          return response.json();
+        } else {
+          throw new Error('Error al añadir nuevo elemento');
+        }
+      })
+      .then(() => {
+        return fetch('http://localhost:3333/equipaje', { credentials: 'include' });
+      })
+      .then((response) => {
+        if (response.ok) {
+          return response.json();
+        } else {
+          throw new Error('Error al obtener lista actualizada de elementos');
+        }
+      })
+      .then((data) => {
+        setItems(data);
+        setNewItem('');
+      })
+      .catch((error) => console.error(error));
   };
+  
+  
+  
 
   const handleItemCheck = (itemId) => {
     const updatedItems = items.map((item) => {
@@ -37,19 +63,31 @@ function Equipaje() {
   const [user, setUser] = useState(null);
 
   useEffect(() => {
-    // Realizar la solicitud para obtener información de sesión
+    fetch('http://localhost:3333/equipaje', { credentials: 'include' })
+      .then((response) => {
+        if (response.ok) {
+          return response.json();
+        } else {
+          throw new Error('Error al obtener lista de elementos');
+        }
+      })
+      .then((data) => {
+        setItems(data);
+      })
+      .catch((error) => console.error(error));
+
     fetch('http://localhost:3333/user', { credentials: 'include' })
-      .then(response => {
+      .then((response) => {
         if (response.ok) {
           return response.json();
         } else {
           throw new Error('No se ha iniciado sesión');
         }
       })
-      .then(data => {
+      .then((data) => {
         setUser(data.user);
       })
-      .catch(error => console.error(error));
+      .catch((error) => console.error(error));
   }, []);
 
   return (
@@ -66,7 +104,7 @@ function Equipaje() {
                   checked={item.checked}
                   onChange={() => handleItemCheck(item.id)}
                 />
-                {item.text}
+                {item.elemento}
               </label>
             </li>
           ))}
