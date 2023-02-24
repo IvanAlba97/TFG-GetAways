@@ -16,6 +16,23 @@ function RouteDetail() {
       .catch(error => console.error(error));
   }, [id]);
 
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    fetch('http://localhost:3333/user', { credentials: 'include' })
+      .then((response) => {
+        if (response.ok) {
+          return response.json();
+        } else {
+          throw new Error('No se ha iniciado sesión');
+        }
+      })
+      .then((data) => {
+        setUser(data?.user);
+      })
+      .catch((error) => console.error(error));
+  }, []);
+
   return (
     <div style={routeDetails ? { 
       backgroundImage: `url(${routeDetails.imagen})`,
@@ -23,7 +40,7 @@ function RouteDetail() {
       backgroundSize: 'cover',
       backgroundPosition: 'center',
     } : {}}>
-      <Navbar />
+      <Navbar user={user}/>
       <div className="container">
         {routeDetails && (
           <div className="route-details">

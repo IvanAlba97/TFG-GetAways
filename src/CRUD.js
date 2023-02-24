@@ -287,8 +287,20 @@ app.get('/ruta-pendiente', (req, res) => {
   if (!idUsuario) {
     res.status(401).json({ error: 'No autorizado' });
   } else {
-    /* connection.query('SELECT r.* FROM ruta_pendiente rp JOIN ruta r ON r.id = rp.id_ruta WHERE rp.id_usuario = ?', [idUsuario], (error, results) => { */
     connection.query('SELECT ruta.id, ruta.nombre, ruta.descripcion, ruta.imagen, ruta.longitud, ruta.tipo, ruta.dificultad, ruta.permiso_necesario, ruta.como_llegar, ruta.enlace_maps, ruta.media_valoraciones FROM ruta_senderismo AS ruta JOIN ruta_pendiente AS pendiente ON ruta.id = pendiente.id_ruta WHERE pendiente.id_usuario = ?', [idUsuario], (error, results) => {
+      if (error) throw error;
+      res.json(results);
+    });
+  }
+});
+
+app.get('/ruta-completada', (req, res) => {
+  const idUsuario = req.session.user.id;
+
+  if (!idUsuario) {
+    res.status(401).json({ error: 'No autorizado' });
+  } else {
+    connection.query('SELECT ruta.id, ruta.nombre, ruta.descripcion, ruta.imagen, ruta.longitud, ruta.tipo, ruta.dificultad, ruta.permiso_necesario, ruta.como_llegar, ruta.enlace_maps, ruta.media_valoraciones FROM ruta_senderismo AS ruta JOIN ruta_completada AS completada ON ruta.id = completada.id_ruta WHERE completada.id_usuario = ?', [idUsuario], (error, results) => {
       if (error) throw error;
       res.json(results);
     });

@@ -4,13 +4,13 @@ import TextTruncator from "./TextTruncator.js";
 function Tarjeta(props) {
   return (
     <div className='contenedor-tarjeta'>
-      <a href={props.id}>
+      <a href={`http://localhost:3000/ruta/${props.id}`}>
         <img className='imagen-tarjeta'
           src={props.imagen}
           alt='Foto de ruta' />
       </a>
       <div className='contenedor-informacion-general'>
-        <a href={props.id}>
+        <a href={`http://localhost:3000/ruta/${props.id}`}>
           <h2>{props.nombre}</h2>
         </a>
         <p>
@@ -24,3 +24,4 @@ function Tarjeta(props) {
 }
 
 export default Tarjeta;
+

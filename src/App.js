@@ -5,6 +5,7 @@ import Home from './componentes/Home.js';
 import RouteDetail from './componentes/RouteDetail.js';
 import Equipaje from './componentes/Equipaje.js';
 import RutaPendiente from './componentes/RutaPendiente.js';
+import RutaCompletada from './componentes/RutaCompletada.js';
 
 const App = () => {
   return (
@@ -15,6 +16,7 @@ const App = () => {
         <Route path="/ruta/:id" element={<RouteDetail />} />
         <Route path="/equipaje" element={<Equipaje />} />
         <Route path="/rutas-pendientes" element={<RutaPendiente />} />
+        <Route path="/rutas-completadas" element={<RutaCompletada />} />
       </Routes>
     </Router>
   );

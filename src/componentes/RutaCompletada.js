@@ -7,7 +7,7 @@ function RutaPendiente() {
   const [rutas, setRutas] = useState([]);
 
   useEffect(() => {
-    fetch('http://localhost:3333/ruta-pendiente', { credentials: 'include' })
+    fetch('http://localhost:3333/ruta-completada', { credentials: 'include' })
       .then(res => res.json())
       .then(data => setRutas(data));
   }, []);
