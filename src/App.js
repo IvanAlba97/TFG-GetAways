@@ -4,6 +4,7 @@ import Access from './componentes/Access.js';
 import Home from './componentes/Home.js';
 import RouteDetail from './componentes/RouteDetail.js';
 import Equipaje from './componentes/Equipaje.js';
+import RutaPendiente from './componentes/RutaPendiente.js';
 
 const App = () => {
   return (
@@ -13,6 +14,7 @@ const App = () => {
         <Route path="/access" element={<Access />} />
         <Route path="/ruta/:id" element={<RouteDetail />} />
         <Route path="/equipaje" element={<Equipaje />} />
+        <Route path="/rutas-pendientes" element={<RutaPendiente />} />
       </Routes>
     </Router>
   );

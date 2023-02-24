@@ -16,13 +16,12 @@ const Navbar = ({ user }) => {
       .then(response => {
         if (response.ok) {
           // Eliminar información de sesión almacenada en el navegador
-          localStorage.removeItem('token'); // suponiendo que el token de sesión se almacena en localStorage
+          sessionStorage.removeItem('session');
           // Redirigir al usuario a la página de inicio
           window.location.href = '/';
         } else {
           // Mostrar un mensaje de error
         }
-        
       })
       .catch(error => {
         // Mostrar un mensaje de error

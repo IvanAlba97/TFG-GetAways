@@ -74,9 +74,18 @@ app.post('/auth/login', (req, res) => {
   });
 });
 
-authRouter.post('/logout', (req, res) => {
-  req.session.destroy();
-  res.send('Cierre de sesión exitoso');
+app.post('/auth/logout', (req, res) => {
+  // Destruir la sesión del usuario
+  req.session.destroy(error => {
+    if (error) {
+      console.log('Error al cerrar sesión:', error);
+      res.status(500).json({ message: 'Error al cerrar sesión' });
+    } else {
+      res.clearCookie('connect.sid');
+      res.json({ message: 'Sesión cerrada exitosamente' });
+    }
+  });
+  req.session = null;
 });
 
 authRouter.post('/register', (req, res) => {
@@ -272,6 +281,19 @@ app.delete('/equipaje/:itemId', (req, res) => {
   });
 });
 
+app.get('/ruta-pendiente', (req, res) => {
+  const idUsuario = req.session.user.id;
+
+  if (!idUsuario) {
+    res.status(401).json({ error: 'No autorizado' });
+  } else {
+    /* connection.query('SELECT r.* FROM ruta_pendiente rp JOIN ruta r ON r.id = rp.id_ruta WHERE rp.id_usuario = ?', [idUsuario], (error, results) => { */
+    connection.query('SELECT ruta.id, ruta.nombre, ruta.descripcion, ruta.imagen, ruta.longitud, ruta.tipo, ruta.dificultad, ruta.permiso_necesario, ruta.como_llegar, ruta.enlace_maps, ruta.media_valoraciones FROM ruta_senderismo AS ruta JOIN ruta_pendiente AS pendiente ON ruta.id = pendiente.id_ruta WHERE pendiente.id_usuario = ?', [idUsuario], (error, results) => {
+      if (error) throw error;
+      res.json(results);
+    });
+  }
+});
 
 
 

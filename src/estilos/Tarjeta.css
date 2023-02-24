@@ -1,53 +1,61 @@
 .contenedor-tarjeta {
-  width: calc(100% - 100px);
+  width: calc(100% - 50px);
   min-height: 200px;
-  border: 1px solid black;
-  background-color: #9E7540;
-  border-radius: 15px;
+  border: none;
+  background-color: none;
   display: flex;
-  padding: 25px;
+  padding: 0;
   margin: 25px;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  border-radius: 15px;
 }
+
 
 .imagen-tarjeta {
   width: 200px;
   height: 100%;
   border-radius: 15px;
   object-fit: cover;
+  opacity: 0.8;
 }
 
 .contenedor-informacion-general {
   width: auto;
   border-radius: 15px;
-  background: #BD9354;
+  background: #FFFFFF;
   padding: 25px;
   margin-left: 25px;
   margin-right: 25px;
 }
+
 
 .contenedor-interaccion {
   min-width: 200px;
   min-height: 200px;
   text-align: right;
   border-radius: 15px;
-  background: #BD9354;
+  background: lightgrey;
   object-fit: cover;
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
-  padding: 25px;
+  padding: 0 25px;
 }
 
 h2 {
-  font-size: 20px;
+  font-size: 24px;
   text-align: center;
+  font-weight: bold;
+  color: #2C2C2C;
 }
 
 p {
-  font-size: 15px;
+  font-size: 16px;
   text-align: justify;
+  color: #555555;
 }
+
 
 .informacion {
   display: flex;
@@ -59,14 +67,22 @@ p {
   flex-direction: row;
 }
 
-.añadir-a-pendientes,
+.añadir-a-favoritos,
 .añadir-a-completadas {
-  background-color: lightgray;
-  border: none;
+  background-color: #FFFFFF;
+  border: 1px solid #2C2C2C;
+  color: #2C2C2C;
   padding: 10px 20px;
   font-size: 14px;
   margin-left: 10px;
   cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.añadir-a-favoritos:hover,
+.añadir-a-completadas:hover {
+  background-color: #2C2C2C;
+  color: #FFFFFF;
 }
 
 @media only screen and (max-width: 868px) {
