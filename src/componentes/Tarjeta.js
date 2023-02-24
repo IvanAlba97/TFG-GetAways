@@ -13,15 +13,24 @@ function Tarjeta(props) {
         <a href={`http://localhost:3000/ruta/${props.id}`}>
           <h2>{props.nombre}</h2>
         </a>
-        <p>
+        <div>
           <TextTruncator text={props.descripcion} maxLength={300} />
-        </p>
+        </div>
       </div>
       <div className='contenedor-interaccion'>
+        <div>
+          <p>Media de valoraciones</p>
+          {props.media_valoraciones}
+        </div>
+        <div>
+          <p>Añadir a pendientes</p>
+        </div>
+        <div>
+          <p>Añadir a completadas</p>
+        </div>
       </div>
     </div>
   );
 }
 
 export default Tarjeta;
-

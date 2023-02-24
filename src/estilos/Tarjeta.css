@@ -1,11 +1,11 @@
 .contenedor-tarjeta {
-  width: calc(100% - 50px);
+  width: calc(60% - 50px);
   min-height: 200px;
   border: none;
   background-color: none;
   display: flex;
   padding: 0;
-  margin: 25px;
+  margin: 25px auto;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
   border-radius: 15px;
 }
@@ -28,7 +28,6 @@
   margin-right: 25px;
 }
 
-
 .contenedor-interaccion {
   min-width: 200px;
   min-height: 200px;
@@ -41,6 +40,9 @@
   align-items: center;
   justify-content: space-between;
   padding: 0 25px;
+  display: block;
+  align-items: center;
+  justify-content: space-between;
 }
 
 h2 {
@@ -87,6 +89,7 @@ p {
 
 @media only screen and (max-width: 868px) {
   .contenedor-tarjeta {
+    width: calc(100% - 50px);
     flex-direction: column;
   }
 
