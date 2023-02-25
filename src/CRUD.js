@@ -294,6 +294,97 @@ app.get('/ruta-pendiente', (req, res) => {
   }
 });
 
+// Consulta si existe una ruta pendiente para el usuario con el id especificado
+app.get('/ruta-pendiente/:id', (req, res) => {
+  const idUsuario = req.session.user.id;
+
+  if (!idUsuario) {
+    res.status(401).json({ error: 'No autorizado' });
+  } else {
+    connection.query('SELECT EXISTS(SELECT * FROM ruta_pendiente WHERE id_usuario = ? AND id_ruta = ?) AS existe', [idUsuario, req.params.id], (error, results) => {
+      if (error) throw error;
+      res.json(results[0]);
+    });
+  }
+});
+
+// Actualiza el estado de la ruta pendiente
+app.post('/actualizar-pendientes', (req, res) => {
+  const { id/* , checked */ } = req.body;
+  const id_ruta = id;
+  /* const checked_ruta = checked; */
+  const id_usuario = req.session.user.id;
+  let query;
+  let values;
+
+  // Consulta si existe una ruta pendiente para el usuario con el id especificado
+  connection.query('SELECT EXISTS(SELECT * FROM ruta_pendiente WHERE id_usuario = ? AND id_ruta = ?) AS existe', [id_usuario, id_ruta], (error, results) => {
+    if (error) throw error;
+
+    // Si existe la ruta pendiente, actualiza su estado
+    if (results[0].existe) {
+      query = 'DELETE FROM ruta_pendiente WHERE id_usuario = ? AND id_ruta = ?';
+      values = [id_usuario, id_ruta];
+    } else {
+      // Si no existe la ruta pendiente, la crea con el estado especificado
+      query = 'INSERT INTO ruta_pendiente (id_usuario, id_ruta) VALUES (?, ?)';
+      values = [id_usuario, id_ruta];
+    }
+
+    // Ejecuta la consulta
+    connection.query(query, values, (error, results) => {
+      if (error) throw error;
+      res.json({ success: true });
+    });
+  });
+});
+
+// Consulta si existe una ruta completada para el usuario con el id especificado
+app.get('/ruta-completada/:id', (req, res) => {
+  const idUsuario = req.session.user.id;
+
+  if (!idUsuario) {
+    res.status(401).json({ error: 'No autorizado' });
+  } else {
+    connection.query('SELECT EXISTS(SELECT * FROM ruta_completada WHERE id_usuario = ? AND id_ruta = ?) AS existe', [idUsuario, req.params.id], (error, results) => {
+      if (error) throw error;
+      res.json(results[0]);
+    });
+  }
+});
+
+// Actualiza el estado de la ruta completada
+app.post('/actualizar-completadas', (req, res) => {
+  const { id/* , checked */ } = req.body;
+  const id_ruta = id;
+  /* const checked_ruta = checked; */
+  const id_usuario = req.session.user.id;
+  let query;
+  let values;
+
+  // Consulta si existe una ruta completada para el usuario con el id especificado
+  connection.query('SELECT EXISTS(SELECT * FROM ruta_completada WHERE id_usuario = ? AND id_ruta = ?) AS existe', [id_usuario, id_ruta], (error, results) => {
+    if (error) throw error;
+
+    // Si existe la ruta completada, actualiza su estado
+    if (results[0].existe) {
+      query = 'DELETE FROM ruta_completada WHERE id_usuario = ? AND id_ruta = ?';
+      values = [id_usuario, id_ruta];
+    } else {
+      // Si no existe la ruta completada, la crea con el estado especificado
+      query = 'INSERT INTO ruta_completada (id_usuario, id_ruta) VALUES (?, ?)';
+      values = [id_usuario, id_ruta];
+    }
+
+    // Ejecuta la consulta
+    connection.query(query, values, (error, results) => {
+      if (error) throw error;
+      res.json({ success: true });
+    });
+  });
+});
+
+
 app.get('/ruta-completada', (req, res) => {
   const idUsuario = req.session.user.id;
 
@@ -306,6 +397,38 @@ app.get('/ruta-completada', (req, res) => {
     });
   }
 });
+
+/* app.post('/actualizar-pendientes', (req, res) => {
+  const { id, checked } = req.body;
+  const id_ruta = id;
+  const checked_ruta = checked;
+  const id_usuario = req.session.user.id;
+  let query;
+  let values;
+  if (checked_ruta) {
+    query = `INSERT INTO ruta_pendiente (id_ruta, id_usuario) VALUES (${id_ruta}, ${id_usuario})`;
+  } else {
+    query = 'DELETE FROM ruta_pendiente WHERE id_usuario = ? AND id_ruta = ?';
+    values = [id_usuario, id_ruta];
+  }
+  connection.query(query, values, (error, result) => {
+    if (error) {
+      console.error('Error adding route to pending list:', error);
+      res.status(500).send('Error adding route to pending list');
+    } else {
+      if(checked_ruta) {
+        console.log('Route added to pending list');
+        res.send('Route added to pending list');
+      } else {
+        console.log('Route deleted from pending list');
+        res.send('Route deleted from pending list');
+      }
+    }
+  });
+}); */
+
+
+
 
 
 

@@ -31,7 +31,10 @@ function RutaPendiente() {
 
   return (
     <div>
-      <Navbar user={user}/>
+      <Navbar user={user} />
+      <div style={{ textAlign: 'center' }}>
+        <h1>Rutas Pendientes</h1>
+      </div>
       {rutas.map(ruta => (
         <Tarjeta
           key={ruta.id}

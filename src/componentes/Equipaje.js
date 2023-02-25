@@ -21,7 +21,7 @@ function Equipaje() {
         'Content-Type': 'application/json',
       },
       credentials: 'include',
-      body: JSON.stringify({ elemento: newItem }),
+      body: JSON.stringify({ elemento: newItem })
     })
       .then((response) => {
         if (response.ok) {
@@ -61,20 +61,20 @@ function Equipaje() {
       credentials: 'include',
       body: JSON.stringify({ checked: !updatedItems.find((item) => item.id === itemId).checked }),
     })
-    .then(() => {
-      return fetch('http://localhost:3333/equipaje', { credentials: 'include' });
-    })
-    .then((response) => {
-      if (response.ok) {
-        return response.json();
-      } else {
-        throw new Error('Error al obtener lista actualizada de elementos');
-      }
-    })
-    .then((data) => {
-      setItems(data);
-      setNewItem('');
-    })
+      .then(() => {
+        return fetch('http://localhost:3333/equipaje', { credentials: 'include' });
+      })
+      .then((response) => {
+        if (response.ok) {
+          return response.json();
+        } else {
+          throw new Error('Error al obtener lista actualizada de elementos');
+        }
+      })
+      .then((data) => {
+        setItems(data);
+        setNewItem('');
+      })
   };
 
   const handleItemDelete = (itemId) => {
@@ -82,21 +82,21 @@ function Equipaje() {
       method: 'DELETE',
       credentials: 'include',
     })
-    .then(() => {
-      return fetch('http://localhost:3333/equipaje', { credentials: 'include' });
-    })
-    .then((response) => {
-      if (response.ok) {
-        return response.json();
-      } else {
-        throw new Error('Error al obtener lista actualizada de elementos');
-      }
-    })
-    .then((data) => {
-      setItems(data);
-      setNewItem('');
-    })
-    .catch((error) => console.error(error));
+      .then(() => {
+        return fetch('http://localhost:3333/equipaje', { credentials: 'include' });
+      })
+      .then((response) => {
+        if (response.ok) {
+          return response.json();
+        } else {
+          throw new Error('Error al obtener lista actualizada de elementos');
+        }
+      })
+      .then((data) => {
+        setItems(data);
+        setNewItem('');
+      })
+      .catch((error) => console.error(error));
   };
 
   const [user, setUser] = useState(null);
@@ -162,7 +162,7 @@ function Equipaje() {
         </form>
       </div>
     </div>
-  );  
+  );
 }
 
 export default Equipaje;
