@@ -98,7 +98,7 @@ function RouteDetail() {
           <div className="route-details">
             <h3>{routeDetails.nombre}</h3>
             <p>{routeDetails.descripcion}</p>
-            <img src={routeDetails.imagen} alt={routeDetails.nombre} />
+            <img className='imagen' src={routeDetails.imagen} alt={routeDetails.nombre} />
             <dl>
               <dt>Longitud:</dt>
               <dd>{routeDetails.longitud} km</dd>

@@ -54,3 +54,8 @@
 .route-details a:hover {
   text-decoration: underline;
 }
+
+.imagen {
+  width: auto;
+  height: auto;
+}
