@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import Navbar from "./Navbar";
 import Footer from "./Footer";
-/* import PendingCheck from './PendingCheck.js'; */
+import Switch from 'react-switch';
 import '../estilos/RouteDetail.css';
 
 function RouteDetail() {
@@ -33,14 +33,66 @@ function RouteDetail() {
       .catch((error) => console.error(error));
   }, []);
 
+  const [pendientes, setPendientes] = useState(false);
+  const [completadas, setCompletadas] = useState(false);
+
+  useEffect(() => {
+    async function obtenerDatos() {
+      try {
+        const resPendientes = await fetch(`http://localhost:3333/ruta-pendiente/${id}`, {
+          credentials: 'include'
+        });
+        const { existe: pendientesExiste } = await resPendientes.json();
+        setPendientes(Boolean(pendientesExiste));
+
+        const resCompletada = await fetch(`http://localhost:3333/ruta-completada/${id}`, {
+          credentials: 'include'
+        });
+        const { existe: completadaExiste } = await resCompletada.json();
+        setCompletadas(Boolean(completadaExiste));
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    }
+    obtenerDatos();
+  }, [id]);
+
+  async function manejarCambio(checked, tipo) {
+    const endpoint = tipo === 'pendientes' ? 'actualizar-pendientes' : 'actualizar-completadas';
+    try {
+      const res = await fetch(`http://localhost:3333/${endpoint}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          id: routeDetails.id,
+          checked: checked
+        }),
+        credentials: 'include'
+      });
+      if (res.ok) {
+        if (tipo === 'pendientes') {
+          setPendientes(checked);
+        } else {
+          setCompletadas(checked);
+        }
+      } else {
+        console.error('Error updating data');
+      }
+    } catch (error) {
+      console.error('Error updating data:', error);
+    }
+  }
+
   return (
-    <div style={routeDetails ? { 
+    <div style={routeDetails ? {
       backgroundImage: `url(${routeDetails.imagen})`,
       backgroundRepeat: 'no-repeat',
       backgroundSize: 'cover',
       backgroundPosition: 'center',
     } : {}}>
-      <Navbar user={user}/>
+      <Navbar user={user} />
       <div className="container">
         {routeDetails && (
           <div className="route-details">
@@ -53,7 +105,7 @@ function RouteDetail() {
               <dt>Tipo:</dt>
               <dd>{routeDetails.tipo}</dd>
               <dt>Permiso necesario:</dt>
-              {routeDetails.permiso_necesario}
+              <dd>{routeDetails.permiso_necesario === 1 ? 'Sí' : 'No'}</dd>
               <dt>Cómo llegar:</dt>
               <dd>{routeDetails.como_llegar}</dd>
               <dt>Enlace a Google Maps:</dt>
@@ -62,6 +114,10 @@ function RouteDetail() {
               <dd>{routeDetails.media_valoraciones}</dd>
               {/* <dd>Pendiente:</dd>
               <dd><PendingCheck /></dd> */}
+              <dt>Pendiente:</dt>
+              <dd><Switch checked={pendientes} onChange={(checked) => manejarCambio(checked, 'pendientes')} /></dd>
+              <dt>Completada:</dt>
+              <dd><Switch checked={completadas} onChange={(checked) => manejarCambio(checked, 'completadas')} /></dd>
             </dl>
           </div>
         )}

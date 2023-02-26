@@ -134,7 +134,7 @@ app.get('/session', (req, res) => {
 });
 
 // Obtener todas las rutas de senderismo
-app.get('/ruta_senderismo', (req, res) => {
+app.get('/ruta-senderismo', (req, res) => {
   connection.query('SELECT * FROM ruta_senderismo', (error, results) => {
     if (error) throw error;
     res.send(results);
@@ -310,7 +310,7 @@ app.get('/ruta-pendiente/:id', (req, res) => {
 
 // Actualiza el estado de la ruta pendiente
 app.post('/actualizar-pendientes', (req, res) => {
-  const { id/* , checked */ } = req.body;
+  const { id } = req.body;
   const id_ruta = id;
   /* const checked_ruta = checked; */
   const id_usuario = req.session.user.id;
@@ -397,36 +397,6 @@ app.get('/ruta-completada', (req, res) => {
     });
   }
 });
-
-/* app.post('/actualizar-pendientes', (req, res) => {
-  const { id, checked } = req.body;
-  const id_ruta = id;
-  const checked_ruta = checked;
-  const id_usuario = req.session.user.id;
-  let query;
-  let values;
-  if (checked_ruta) {
-    query = `INSERT INTO ruta_pendiente (id_ruta, id_usuario) VALUES (${id_ruta}, ${id_usuario})`;
-  } else {
-    query = 'DELETE FROM ruta_pendiente WHERE id_usuario = ? AND id_ruta = ?';
-    values = [id_usuario, id_ruta];
-  }
-  connection.query(query, values, (error, result) => {
-    if (error) {
-      console.error('Error adding route to pending list:', error);
-      res.status(500).send('Error adding route to pending list');
-    } else {
-      if(checked_ruta) {
-        console.log('Route added to pending list');
-        res.send('Route added to pending list');
-      } else {
-        console.log('Route deleted from pending list');
-        res.send('Route deleted from pending list');
-      }
-    }
-  });
-}); */
-
 
 
 

@@ -5,7 +5,7 @@ import TextTruncator from "./TextTruncator.js";
 
 function Tarjeta(props) {
   const [pendientes, setPendientes] = useState(false);
-  const [completada, setCompletada] = useState(false);
+  const [completadas, setCompletadas] = useState(false);
 
   useEffect(() => {
     async function obtenerDatos() {
@@ -20,7 +20,7 @@ function Tarjeta(props) {
           credentials: 'include'
         });
         const { existe: completadaExiste } = await resCompletada.json();
-        setCompletada(Boolean(completadaExiste));
+        setCompletadas(Boolean(completadaExiste));
       } catch (error) {
         console.error('Error fetching data:', error);
       }
@@ -46,7 +46,7 @@ function Tarjeta(props) {
         if (tipo === 'pendientes') {
           setPendientes(checked);
         } else {
-          setCompletada(checked);
+          setCompletadas(checked);
         }
       } else {
         console.error('Error updating data');
@@ -82,7 +82,7 @@ function Tarjeta(props) {
         </div>
         <div>
           <p>Completada</p>
-          <Switch checked={completada} onChange={(checked) => manejarCambio(checked, 'completadas')} />
+          <Switch checked={completadas} onChange={(checked) => manejarCambio(checked, 'completadas')} />
         </div>
       </div>
     </div>
