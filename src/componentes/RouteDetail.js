@@ -4,6 +4,7 @@ import Navbar from "./Navbar";
 import Footer from "./Footer";
 import Switch from 'react-switch';
 import '../estilos/RouteDetail.css';
+import CommentBox from './CommentBox';
 
 function RouteDetail() {
   const { id } = useParams();
@@ -92,6 +93,7 @@ function RouteDetail() {
       backgroundSize: 'cover',
       backgroundPosition: 'center',
     } : {}}>
+
       <Navbar user={user} />
       <div className="container">
         {routeDetails && (
@@ -112,8 +114,6 @@ function RouteDetail() {
               <dd><a href={routeDetails.enlace_maps} target="_blank" rel="noopener noreferrer">{routeDetails.enlace_maps}</a></dd>
               <dt>Media de valoraciones:</dt>
               <dd>{routeDetails.media_valoraciones}</dd>
-              {/* <dd>Pendiente:</dd>
-              <dd><PendingCheck /></dd> */}
               <dt>Pendiente:</dt>
               <dd><Switch checked={pendientes} onChange={(checked) => manejarCambio(checked, 'pendientes')} /></dd>
               <dt>Completada:</dt>
@@ -121,6 +121,9 @@ function RouteDetail() {
             </dl>
           </div>
         )}
+      </div>
+      <div className='comments'>
+        <CommentBox />
       </div>
       <Footer />
     </div>

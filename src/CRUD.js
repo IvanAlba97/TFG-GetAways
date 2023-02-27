@@ -129,6 +129,26 @@ app.get('/user', (req, res) => {
   }
 });
 
+// Definir la ruta para obtener los datos del usuario con el id dado
+app.get('/user/:id', (req, res) => {
+  const userId = req.params.id;
+  const sql = `SELECT * FROM Usuario WHERE id = ${userId}`;
+
+  connection.query(sql, (error, results) => {
+    if (error) {
+      console.error('Error al obtener los datos del usuario:', error);
+      res.status(500).json({ error: 'Error al obtener los datos del usuario' });
+    } else {
+      if (results.length > 0) {
+        const user = results[0];
+        res.json(user);
+      } else {
+        res.status(404).json({ error: 'Usuario no encontrado' });
+      }
+    }
+  });
+});
+
 app.get('/session', (req, res) => {
   res.json({ session: req.session });
 });
@@ -398,7 +418,16 @@ app.get('/ruta-completada', (req, res) => {
   }
 });
 
-
+// Manejador para obtener todas las valoraciones
+app.get('/comments', (req, res) => {
+  connection.query('SELECT * FROM valoracion', (err, results) => {
+    if (err) {
+      console.error('Error executing MySQL query: ' + err.stack);
+      return res.status(500).json({ message: 'Internal server error' });
+    }
+    res.json(results);
+  });
+});
 
 
 
