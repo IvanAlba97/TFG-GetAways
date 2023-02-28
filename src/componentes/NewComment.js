@@ -1,11 +1,21 @@
 import React, { useState } from 'react';
+import Switch from 'react-switch';
+import '../estilos/NewComment.css'
 
 function NewComment(props) {
   const [comentario, setComentario] = useState('');
-  const [valoracion, setValoracion] = useState(0);
+  const [valoracion, setValoracion] = useState('');
+  const [publico, setPublico] = useState(true);
+  const [error, setError] = useState('');
 
   const handleSubmit = (event) => {
     event.preventDefault();
+
+    // Verifica que se haya ingresado un comentario y una valoración antes de enviar el formulario
+    if (!comentario.trim() || !valoracion) {
+      setError('Por favor, complete todos los campos obligatorios.');
+      return;
+    }
 
     // Obtiene el ID de ruta desde las propiedades de los componentes
     const id_ruta = props.id_ruta;
@@ -15,7 +25,7 @@ function NewComment(props) {
       id_ruta: id_ruta,
       valoracion: valoracion,
       comentario: comentario,
-      publica: true
+      publica: publico
     };
 
     // Envía los datos del comentario al servidor Node.js
@@ -27,25 +37,35 @@ function NewComment(props) {
       },
       body: JSON.stringify(nuevoComentario)
     })
-
       .then((response) => {
         console.log(response.data);
         setComentario('');
-        setValoracion(0);
+        setValoracion('');
+        setPublico(false);
+        setError('');
       })
       .catch((error) => {
         console.error(error);
       });
   };
 
+  const handleSwitchChange = (checked) => {
+    setPublico(checked);
+  };
+
   return (
-    <div>
+    <div className='container-new-comment'>
       <h2>Agregar comentario</h2>
+      {error && <div style={{ color: 'red' }}>{error}</div>}
       <form onSubmit={handleSubmit}>
+        <div>
+          <label htmlFor="comentario">Comentario:</label>
+          <textarea id="comentario" value={comentario} onChange={(event) => setComentario(event.target.value)} />
+        </div>
         <div>
           <label htmlFor="valoracion">Valoración:</label>
           <select id="valoracion" value={valoracion} onChange={(event) => setValoracion(event.target.value)}>
-            <option value="0">Seleccionar valoración</option>
+            <option value="">Seleccionar valoración</option>
             <option value="1">1 estrella</option>
             <option value="2">2 estrellas</option>
             <option value="3">3 estrellas</option>
@@ -54,8 +74,8 @@ function NewComment(props) {
           </select>
         </div>
         <div>
-          <label htmlFor="comentario">Comentario:</label>
-          <textarea id="comentario" value={comentario} onChange={(event) => setComentario(event.target.value)} />
+          <label htmlFor="publico">Público:</label>
+          <Switch id="publico" checked={publico} onChange={handleSwitchChange} />
         </div>
         <button type="submit">Enviar</button>
       </form>
