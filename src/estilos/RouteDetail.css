@@ -1,9 +1,6 @@
-.container {
+.route-details {
   max-width: 800px;
   margin: 30px auto;
-}
-
-.route-details {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -44,6 +41,7 @@
 
 .route-details dd {
   margin: 0;
+  word-wrap: break-word;
 }
 
 .route-details a {
@@ -62,7 +60,8 @@
 
 .comments {
   max-width: 800px;
-  margin: 30px auto;
+  margin: auto;
+  margin-bottom: 30px;
   display: flex;
   flex-direction: column;
   align-items: center;

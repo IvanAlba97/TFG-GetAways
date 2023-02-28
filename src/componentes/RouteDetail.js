@@ -4,7 +4,8 @@ import Navbar from "./Navbar";
 import Footer from "./Footer";
 import Switch from 'react-switch';
 import '../estilos/RouteDetail.css';
-import CommentBox from './CommentBox';
+import CommentBox from './CommentBox.js';
+import NewComment from './NewComment.js';
 
 function RouteDetail() {
   const { id } = useParams();
@@ -95,7 +96,7 @@ function RouteDetail() {
     } : {}}>
 
       <Navbar user={user} />
-      <div className="container">
+      <div className='container'>
         {routeDetails && (
           <div className="route-details">
             <h3>{routeDetails.nombre}</h3>
@@ -123,7 +124,8 @@ function RouteDetail() {
         )}
       </div>
       <div className='comments'>
-        <CommentBox />
+        <NewComment id_ruta={id}/>
+        <CommentBox id_ruta={id}/>
       </div>
       <Footer />
     </div>

@@ -375,9 +375,8 @@ app.get('/ruta-completada/:id', (req, res) => {
 
 // Actualiza el estado de la ruta completada
 app.post('/actualizar-completadas', (req, res) => {
-  const { id/* , checked */ } = req.body;
+  const { id } = req.body;
   const id_ruta = id;
-  /* const checked_ruta = checked; */
   const id_usuario = req.session.user.id;
   let query;
   let values;
@@ -419,8 +418,9 @@ app.get('/ruta-completada', (req, res) => {
 });
 
 // Manejador para obtener todas las valoraciones
-app.get('/comments', (req, res) => {
-  connection.query('SELECT * FROM valoracion', (err, results) => {
+app.get('/comments/:id_ruta', (req, res) => {
+  const { id_ruta } = req.params;
+  connection.query('SELECT v.*, u.nombre FROM valoracion v JOIN usuario u ON v.id_usuario = u.id WHERE v.id_ruta = ?', [id_ruta], (err, results) => {
     if (err) {
       console.error('Error executing MySQL query: ' + err.stack);
       return res.status(500).json({ message: 'Internal server error' });
@@ -428,6 +428,26 @@ app.get('/comments', (req, res) => {
     res.json(results);
   });
 });
+
+// Ruta para agregar nuevos comentarios
+app.post('/nuevo-comentario', (req, res) => {
+  const id_usuario = req.session.user.id;
+  // Obtiene los datos del comentario desde el cuerpo de la solicitud
+  const { id_ruta, valoracion, comentario, publica } = req.body;
+
+  // Crea una nueva entrada en la tabla valoracion con los datos del comentario
+  const query = `INSERT INTO valoracion (id_usuario, id_ruta, valoracion, comentario, publica) VALUES (${id_usuario}, ${id_ruta}, ${valoracion}, '${comentario}', ${publica})`;
+
+  connection.query(query, (error, results, fields) => {
+    if (error) {
+      console.error(error);
+      res.status(500).send('Error al agregar el comentario');
+    } else {
+      res.status(200).send('Comentario agregado correctamente');
+    }
+  });
+});
+
 
 
 

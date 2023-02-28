@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import '../estilos/CommentBox.css';
+import Profile from '../img/profile-icon.ico';
 
-function CommentBox() {
+function CommentBox(props) {
   const [comments, setComments] = useState([]);
 
   useEffect(() => {
-    fetch('http://localhost:3333/comments', {
+    fetch(`http://localhost:3333/comments/${props.id_ruta}`, {
       credentials: 'include'
     })
       .then(res => {
@@ -26,12 +27,12 @@ function CommentBox() {
   }, []);
 
   return (
-    <div>
+    <div style={{width: '100%'}}>
       {comments.map(comment => (
         <div className="comment" key={comment.id}>
           <h3 className="comment-title">{comment.comentario}</h3>
-          <p className="comment-author">{comment.usuario && comment.usuario.nombre}</p>
-          <p className="comment-rating-container" style={{marginTop: '5px'}}>
+          <p className="comment-author"><img className="contenedor-icono" src={Profile} />{comment.nombre}</p>
+          <p className="comment-rating-container">
             {[...Array(comment.valoracion)].map((e, i) => (
               <span key={i}>★</span>
             ))}
