@@ -31,7 +31,11 @@ function CommentBox() {
         <div className="comment" key={comment.id}>
           <h3 className="comment-title">{comment.comentario}</h3>
           <p className="comment-author">{comment.usuario && comment.usuario.nombre}</p>
-          <p className="comment-rating">Valoracion: {comment.valoracion}/5</p>
+          <p className="comment-rating-container" style={{marginTop: '5px'}}>
+            {[...Array(comment.valoracion)].map((e, i) => (
+              <span key={i}>★</span>
+            ))}
+          </p>
           <p className='comment-public'>Pública: {comment.publica === 1 ? 'Sí' : 'No'}</p>
           <p className="comment-date">Fecha: {comment.fecha}</p>
         </div>
