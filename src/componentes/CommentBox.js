@@ -17,7 +17,7 @@ function CommentBox(props) {
       })
       .then(data => {
         data.sort((a, b) => {
-          return new Date(a.fecha) - new Date(b.fecha);
+          return new Date(b.fecha) - new Date(a.fecha);
         });
         setComments(data);
       })
