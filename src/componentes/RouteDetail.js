@@ -10,6 +10,7 @@ import NewComment from './NewComment.js';
 function RouteDetail() {
   const { id } = useParams();
   const [routeDetails, setRouteDetails] = useState(null);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   useEffect(() => {
     fetch(`http://localhost:3333/ruta_senderismo/${id}`)
@@ -31,8 +32,12 @@ function RouteDetail() {
       })
       .then((data) => {
         setUser(data?.user);
+        setIsAuthenticated(true);
       })
-      .catch((error) => console.error(error));
+      .catch((error) => {
+        console.error(error);
+        setIsAuthenticated(false);
+      })
   }, []);
 
   const [pendientes, setPendientes] = useState(false);
@@ -60,30 +65,34 @@ function RouteDetail() {
   }, [id]);
 
   async function manejarCambio(checked, tipo) {
-    const endpoint = tipo === 'pendientes' ? 'actualizar-pendientes' : 'actualizar-completadas';
-    try {
-      const res = await fetch(`http://localhost:3333/${endpoint}`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          id: routeDetails.id,
-          checked: checked
-        }),
-        credentials: 'include'
-      });
-      if (res.ok) {
-        if (tipo === 'pendientes') {
-          setPendientes(checked);
+    if (isAuthenticated) {
+      const endpoint = tipo === 'pendientes' ? 'actualizar-pendientes' : 'actualizar-completadas';
+      try {
+        const res = await fetch(`http://localhost:3333/${endpoint}`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            id: routeDetails.id,
+            checked: checked
+          }),
+          credentials: 'include'
+        });
+        if (res.ok) {
+          if (tipo === 'pendientes') {
+            setPendientes(checked);
+          } else {
+            setCompletadas(checked);
+          }
         } else {
-          setCompletadas(checked);
+          console.error('Error updating data');
         }
-      } else {
-        console.error('Error updating data');
+      } catch (error) {
+        console.error('Error updating data:', error);
       }
-    } catch (error) {
-      console.error('Error updating data:', error);
+    } else {
+      window.location.href = '/access';
     }
   }
 
@@ -124,8 +133,8 @@ function RouteDetail() {
         )}
       </div>
       <div className='comments'>
-        <NewComment id_ruta={id}/>
-        <CommentBox id_ruta={id}/>
+        <NewComment id_ruta={id} />
+        <CommentBox id_ruta={id} />
       </div>
       <Footer />
     </div>
