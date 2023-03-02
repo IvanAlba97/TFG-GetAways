@@ -125,7 +125,7 @@ app.get('/user', (req, res) => {
     // Devolver la información del usuario almacenada en la sesión
     res.json({ user: req.session.user });
   } else {
-    res.status(401).json({ error: 'No se ha iniciado sesión' });
+    //res.status(401).json({ error: 'No se ha iniciado sesión' });
   }
 });
 
@@ -302,11 +302,10 @@ app.delete('/equipaje/:itemId', (req, res) => {
 });
 
 app.get('/ruta-pendiente', (req, res) => {
-  const idUsuario = req.session.user.id;
-
-  if (!idUsuario) {
-    res.status(401).json({ error: 'No autorizado' });
+  if (!req.session.user) {
+    //res.status(401).json({ error: 'No autorizado' });
   } else {
+    const idUsuario = req.session.user.id;
     connection.query('SELECT ruta.id, ruta.nombre, ruta.descripcion, ruta.imagen, ruta.longitud, ruta.tipo, ruta.dificultad, ruta.permiso_necesario, ruta.como_llegar, ruta.enlace_maps, ruta.media_valoraciones FROM ruta_senderismo AS ruta JOIN ruta_pendiente AS pendiente ON ruta.id = pendiente.id_ruta WHERE pendiente.id_usuario = ?', [idUsuario], (error, results) => {
       if (error) throw error;
       res.json(results);
@@ -314,13 +313,13 @@ app.get('/ruta-pendiente', (req, res) => {
   }
 });
 
+
 // Consulta si existe una ruta pendiente para el usuario con el id especificado
 app.get('/ruta-pendiente/:id', (req, res) => {
-  const idUsuario = req.session.user.id;
-
-  if (!idUsuario) {
-    res.status(401).json({ error: 'No autorizado' });
+  if (!req.session.user) {
+    //res.status(401).json({ error: 'No autorizado' });
   } else {
+    const idUsuario = req.session.user.id;
     connection.query('SELECT EXISTS(SELECT * FROM ruta_pendiente WHERE id_usuario = ? AND id_ruta = ?) AS existe', [idUsuario, req.params.id], (error, results) => {
       if (error) throw error;
       res.json(results[0]);
@@ -359,13 +358,24 @@ app.post('/actualizar-pendientes', (req, res) => {
   });
 });
 
+app.get('/ruta-completada', (req, res) => {
+  if (!req.session.user) {
+    //res.status(401).json({ error: 'No autorizado' });
+  } else {
+    const idUsuario = req.session.user.id;
+    connection.query('SELECT ruta.id, ruta.nombre, ruta.descripcion, ruta.imagen, ruta.longitud, ruta.tipo, ruta.dificultad, ruta.permiso_necesario, ruta.como_llegar, ruta.enlace_maps, ruta.media_valoraciones FROM ruta_senderismo AS ruta JOIN ruta_completada AS completada ON ruta.id = completada.id_ruta WHERE completada.id_usuario = ?', [idUsuario], (error, results) => {
+      if (error) throw error;
+      res.json(results);
+    });
+  }
+});
+
 // Consulta si existe una ruta completada para el usuario con el id especificado
 app.get('/ruta-completada/:id', (req, res) => {
-  const idUsuario = req.session.user.id;
-
-  if (!idUsuario) {
-    res.status(401).json({ error: 'No autorizado' });
+  if (!req.session.user) {
+    //res.status(401).json({ error: 'No autorizado' });
   } else {
+    const idUsuario = req.session.user.id;
     connection.query('SELECT EXISTS(SELECT * FROM ruta_completada WHERE id_usuario = ? AND id_ruta = ?) AS existe', [idUsuario, req.params.id], (error, results) => {
       if (error) throw error;
       res.json(results[0]);
@@ -401,20 +411,6 @@ app.post('/actualizar-completadas', (req, res) => {
       res.json({ success: true });
     });
   });
-});
-
-
-app.get('/ruta-completada', (req, res) => {
-  const idUsuario = req.session.user.id;
-
-  if (!idUsuario) {
-    res.status(401).json({ error: 'No autorizado' });
-  } else {
-    connection.query('SELECT ruta.id, ruta.nombre, ruta.descripcion, ruta.imagen, ruta.longitud, ruta.tipo, ruta.dificultad, ruta.permiso_necesario, ruta.como_llegar, ruta.enlace_maps, ruta.media_valoraciones FROM ruta_senderismo AS ruta JOIN ruta_completada AS completada ON ruta.id = completada.id_ruta WHERE completada.id_usuario = ?', [idUsuario], (error, results) => {
-      if (error) throw error;
-      res.json(results);
-    });
-  }
 });
 
 // Manejador para obtener todas las valoraciones

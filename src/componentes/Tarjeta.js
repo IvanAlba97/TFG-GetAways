@@ -6,6 +6,7 @@ import TextTruncator from "./TextTruncator.js";
 function Tarjeta(props) {
   const [pendientes, setPendientes] = useState(false);
   const [completadas, setCompletadas] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   useEffect(() => {
     async function obtenerDatos() {
@@ -21,38 +22,55 @@ function Tarjeta(props) {
         });
         const { existe: completadaExiste } = await resCompletada.json();
         setCompletadas(Boolean(completadaExiste));
+
+        const resUser = await fetch(`http://localhost:3333/user`, {
+          credentials: 'include'
+        });
+        if (resUser.ok) {
+          const json = await resUser.json();
+          setIsAuthenticated(true);
+        } else {
+          setIsAuthenticated(false);
+        }
       } catch (error) {
-        console.error('Error fetching data:', error);
+        // Si se produce un error al obtener la información del usuario,
+        // es posible que el usuario no esté autenticado
+        setIsAuthenticated(false);
       }
     }
+
     obtenerDatos();
   }, [props.id]);
 
   async function manejarCambio(checked, tipo) {
-    const endpoint = tipo === 'pendientes' ? 'actualizar-pendientes' : 'actualizar-completadas';
-    try {
-      const res = await fetch(`http://localhost:3333/${endpoint}`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          id: props.id,
-          checked: checked
-        }),
-        credentials: 'include'
-      });
-      if (res.ok) {
-        if (tipo === 'pendientes') {
-          setPendientes(checked);
+    if (isAuthenticated) {
+      const endpoint = tipo === 'pendientes' ? 'actualizar-pendientes' : 'actualizar-completadas';
+      try {
+        const res = await fetch(`http://localhost:3333/${endpoint}`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            id: props.id,
+            checked: checked
+          }),
+          credentials: 'include'
+        });
+        if (res.ok) {
+          if (tipo === 'pendientes') {
+            setPendientes(checked);
+          } else {
+            setCompletadas(checked);
+          }
         } else {
-          setCompletadas(checked);
+          console.error('Error updating data');
         }
-      } else {
-        console.error('Error updating data');
+      } catch (error) {
+        console.error('Error updating data:', error);
       }
-    } catch (error) {
-      console.error('Error updating data:', error);
+    } else {
+      window.location.href = '/';
     }
   }
 
@@ -78,7 +96,9 @@ function Tarjeta(props) {
         </div>
         <div>
           <p>Pendiente</p>
-          <Switch checked={pendientes} onChange={(checked) => manejarCambio(checked, 'pendientes')} />
+          {isAuthenticated ?
+            <Switch checked={pendientes} onChange={(checked) => manejarCambio(checked, 'pendientes')} />
+            : <Switch checked={pendientes} onClick={() => window.location.href = '/access'} onChange={(checked) => manejarCambio(checked, 'pendientes')} />}
         </div>
         <div>
           <p>Completada</p>
