@@ -70,7 +70,7 @@ function Tarjeta(props) {
         console.error('Error updating data:', error);
       }
     } else {
-      window.location.href = '/';
+      window.location.href = '/access';
     }
   }
 
