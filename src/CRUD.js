@@ -65,6 +65,7 @@ app.post('/auth/login', (req, res) => {
         } else if (result) {
           // Inicializar la sesión y almacenar la información del usuario en la sesión
           req.session.user = { id: user.id, nombre: user.nombre, correo: user.correo };
+          req.session.cookie.maxAge = 30 * 60 * 1000; // 30 minutos
           res.json(req.session.user);
         } else {
           res.status(401).send('Contraseña incorrecta');
@@ -74,8 +75,8 @@ app.post('/auth/login', (req, res) => {
   });
 });
 
+
 app.post('/auth/logout', (req, res) => {
-  // Destruir la sesión del usuario
   req.session.destroy(error => {
     if (error) {
       console.log('Error al cerrar sesión:', error);
@@ -84,9 +85,10 @@ app.post('/auth/logout', (req, res) => {
       res.clearCookie('connect.sid');
       res.json({ message: 'Sesión cerrada exitosamente' });
     }
+    // Cualquier código que necesites ejecutar después de la destrucción de la sesión debe estar aquí
   });
-  req.session = null;
 });
+
 
 authRouter.post('/register', (req, res) => {
   const { username, email, password } = req.body;

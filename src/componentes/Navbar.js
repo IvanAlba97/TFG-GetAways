@@ -11,22 +11,24 @@ const Navbar = ({ user }) => {
     setMostrarDesplegable(!mostrarDesplegable);
   };
 
-  const handleLogout = () => {
-    fetch('http://localhost:3333/auth/logout', { method: 'POST' })
-      .then(response => {
-        if (response.ok) {
-          // Eliminar información de sesión almacenada en el navegador
-          sessionStorage.removeItem('session');
-          // Redirigir al usuario a la página de inicio
-          window.location.href = '/';
-        } else {
-          // Mostrar un mensaje de error
-        }
-      })
-      .catch(error => {
-        // Mostrar un mensaje de error
+  const handleLogout = async () => {
+    try {
+      const response = await fetch('http://localhost:3333/auth/logout', {
+        method: 'POST',
+        credentials: 'include',
       });
+  
+      if (!response.ok) {
+        throw new Error('Error al cerrar sesión');
+      }
+  
+      sessionStorage.removeItem('session');
+      window.location.href = '/';
+    } catch (error) {
+      console.error(error);
+    }
   };
+  
 
   return (
     <nav>

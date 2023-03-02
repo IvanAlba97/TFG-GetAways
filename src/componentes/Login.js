@@ -7,7 +7,7 @@ const Login = () => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-
+  
     try {
       const response = await fetch('http://localhost:3333/auth/login', {
         method: 'POST',
@@ -20,17 +20,21 @@ const Login = () => {
         }),
         credentials: 'include',
       });
-
+  
       if (!response.ok) {
         throw new Error('Error al iniciar sesión');
       }
-      /* Para ver el contenido de la respuesta
-      console.log(await response.json()); */
+  
+      // Almacenar la sesión en sessionStorage
+      const data = await response.json();
+      sessionStorage.setItem('session', JSON.stringify(data));
+  
       window.location.href = '/';
     } catch (error) {
       console.error(error);
     }
   };
+  
 
   return (
     <form onSubmit={handleSubmit}>
