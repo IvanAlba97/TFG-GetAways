@@ -7,6 +7,7 @@ import Equipaje from './componentes/Equipaje.js';
 import RutaPendiente from './componentes/RutaPendiente.js';
 import RutaCompletada from './componentes/RutaCompletada.js';
 import AllRoutes from './componentes/AllRoutes.js';
+import Perfil from './componentes/Perfil.js';
 
 const App = () => {
   return (
@@ -19,6 +20,7 @@ const App = () => {
         <Route path="/rutas-pendientes" element={<RutaPendiente />} />
         <Route path="/rutas-completadas" element={<RutaCompletada />} />
         <Route path="/rutas" element={<AllRoutes />} />
+        <Route path="/perfil" element={<Perfil />} />
       </Routes>
     </Router>
   );

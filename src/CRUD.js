@@ -4,6 +4,8 @@ const port = 3333;
 
 const mysql = require('mysql2');
 
+const { check, validationResult } = require('express-validator');
+
 
 
 // Para solucionar el error de los CORS
@@ -114,13 +116,98 @@ app.get('/', (req, res) => {
   res.send('Página principal');
 });
 
-app.get('/perfil', (req, res) => {
-  if (req.session.user) {
-    res.send(`Bienvenido ${req.session.user.username}`);
-  } else {
-    res.redirect('/login');
+// Middleware para manejar los errores de validación de los datos recibidos en el cuerpo de las peticiones
+function validarDatos(req, res, next) {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() });
   }
+  next();
+}
+
+// Ruta para actualizar el nombre del usuario
+app.post('/actualizar-nombre', (req, res) => {
+  const { nombre } = req.body;
+  const { id } = req.session.user;
+
+  connection.query('UPDATE usuario SET nombre = ? WHERE id = ?', [nombre, id], (err, result) => {
+    if (err) {
+      console.error(err);
+      return res.status(500).json({ message: 'Error al actualizar el nombre' });
+    }
+    
+    // Actualizar el valor de la sesión con el nuevo nombre
+    req.session.user.nombre = nombre;
+    
+    res.json({ user: req.session.user });
+  });
 });
+
+
+// Ruta para actualizar el correo del usuario
+app.post('/actualizar-correo', [
+  check('correo', 'El correo es obligatorio').notEmpty(),
+  check('correo', 'El correo no es válido').isEmail(),
+  validarDatos
+], (req, res) => {
+  const { correo } = req.body;
+  const { id } = req.session.user;
+
+  connection.query('UPDATE usuario SET correo = ? WHERE id = ?', [correo, id], (err, result) => {
+    if (err) {
+      console.error(err);
+      return res.status(500).json({ message: 'Error al actualizar el correo' });
+    }
+    // Actualizar el valor de la sesión con el nuevo correo
+    req.session.user.correo = correo;
+    
+    res.json({ user: req.session.user });
+  });
+});
+
+// Ruta para actualizar la contraseña del usuario
+app.post('/actualizar-contrasena', [
+  check('passwordActual', 'La contraseña actual es obligatoria').notEmpty(),
+  check('passwordNueva', 'La nueva contraseña es obligatoria').notEmpty(),
+  validarDatos
+], (req, res) => {
+  const { passwordActual, passwordNueva } = req.body;
+  const { id } = req.session.user.id;
+
+  connection.query('SELECT * FROM usuario WHERE id = ?', [id], (err, result) => {
+    if (err) {
+      console.error(err);
+      return res.status(500).json({ message: 'Error al buscar al usuario' });
+    }
+    if (!result.length) {
+      return res.status(404).json({ message: 'Usuario no encontrado' });
+    }
+    const usuario = result[0];
+    bcrypt.compare(passwordActual, usuario.contraseña, (err, coinciden) => {
+      if (err) {
+        console.error(err);
+        return res.status(500).json({ message: 'Error al comparar contraseñas' });
+      }
+      if (!coinciden) {
+        return res.status(400).json({ message: 'La contraseña actual no es correcta' });
+      }
+      bcrypt.hash(passwordNueva, 10, (err, hash) => {
+        if (err) {
+          console.error(err);
+          return res.status(500).json({ message: 'Error al hashear la contraseña' });
+        }
+        connection.query('UPDATE usuario SET contraseña = ? WHERE id = ?', [hash, id], (err, result) => {
+          if (err) {
+            console.error(err);
+            return res.status(500).json({ message: 'Error al actualizar la contraseña' });
+          }
+          res.json({ message: 'Contraseña actualizada correctamente' });
+        });
+      });
+    });
+  });
+});
+
 
 app.get('/user', (req, res) => {
   if (req.session.user) {
