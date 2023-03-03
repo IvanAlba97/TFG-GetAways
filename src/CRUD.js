@@ -144,7 +144,7 @@ app.post('/actualizar-nombre', (req, res) => {
     // Actualizar el valor de la sesión con el nuevo nombre
     req.session.user.nombre = nombre;
     
-    res.json({ user: req.session.user });
+    res.json({ user: req.session.user, message: 'Usuario actualizado correctamente' });
   });
 });
 
@@ -177,7 +177,7 @@ app.post('/actualizar-correo', (req, res) => {
     // Actualizar el valor de la sesión con el nuevo correo
     req.session.user.correo = correo;
     
-    res.json({ user: req.session.user });
+    res.json({ user: req.session.user, message: 'Correo actualizado correctamente' });
   });
 });
 
