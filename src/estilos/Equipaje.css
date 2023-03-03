@@ -1,11 +1,18 @@
+.fondo {
+  background-image: url(../img/retina_wood.png);
+  background-repeat: repeat;
+}
+
 .equipaje {
-  max-width: 800px;
+  max-width: 900px;
   margin: 0 auto;
   padding: 30px;
   background-color: #fff;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   border-radius: 10px;
   font-family: 'Montserrat', sans-serif;
+  margin-top: 30px;
+  margin-bottom: 30px;
 }
 
 h2 {

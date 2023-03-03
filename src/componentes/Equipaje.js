@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import '../estilos/Equipaje.css';
 import Navbar from './Navbar.js';
-import axios from 'axios';
+import Footer from './Footer.js';
 
 
 function Equipaje() {
@@ -130,7 +130,7 @@ function Equipaje() {
   }, []);
 
   return (
-    <div>
+    <div className='fondo'>
       <Navbar user={user} />
       <div className="equipaje">
         <h2>Equipaje para la ruta de senderismo:</h2>
@@ -161,6 +161,7 @@ function Equipaje() {
           <button type="submit">Añadir</button>
         </form>
       </div>
+      <Footer />
     </div>
   );
 }

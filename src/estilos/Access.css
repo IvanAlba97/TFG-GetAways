@@ -1,18 +1,59 @@
+.fondo {
+  background-image: url(../img/retina_wood.png);
+  background-repeat: repeat;
+}
+
 .container {
   display: flex;
-  height: 100%;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-evenly;
+  margin: 30px auto;
 }
 
-.login {
-  align-self: center;
-  width: 45%;
-  text-align: center;
-  border: 1px solid black;
+.login, .register {
+  background-color: white;
+  padding: 1rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  margin-bottom: 1rem;
 }
 
-.register {
-  align-self: center;
-  width: 45%;
-  text-align: center;
-  border: 1px solid black;
+input[type="text"],
+input[type="email"],
+input[type="password"] {
+  padding: 0.5rem;
+  margin-bottom: 1rem;
+  border-radius: 4px;
+  border: none;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  font-size: 1rem;
+}
+
+button[type="submit"] {
+  background-color: #0077ff;
+  color: white;
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 4px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+button[type="submit"]:hover {
+  background-color: #0059b3;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+@media screen and (max-width: 600px) {
+  .container {
+    flex-direction: column;
+  }
 }

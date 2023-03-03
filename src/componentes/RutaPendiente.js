@@ -30,7 +30,7 @@ function RutaPendiente() {
   }, []);
 
   return (
-    <div>
+    <div className='fondo'>
       <Navbar user={user} />
       <div style={{ textAlign: 'center' }}>
         <h1>Rutas Pendientes</h1>

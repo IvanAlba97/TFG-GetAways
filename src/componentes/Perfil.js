@@ -93,7 +93,7 @@ function Perfil() {
   }
 
   return (
-    <div>
+    <div className='fondo'>
       <Navbar user={user} />
       <div className="perfil-content">
         <h1>Perfil</h1>

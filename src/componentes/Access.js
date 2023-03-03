@@ -7,7 +7,7 @@ import Footer from "./Footer";
 
 const Access = () => {
   return (
-    <div>
+    <div className="fondo">
       <Navbar />
       <div className="container">
         <div className="login">

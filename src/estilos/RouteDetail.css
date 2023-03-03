@@ -1,6 +1,11 @@
+.fondo {
+  background-image: url(../img/retina_wood.png);
+  background-repeat: repeat;
+}
+
 .route-details {
   max-width: 800px;
-  margin: 30px auto;
+  /* margin: 30px auto; */
   display: flex;
   flex-direction: column;
   align-items: center;

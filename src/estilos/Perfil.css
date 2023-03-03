@@ -1,3 +1,8 @@
+.fondo {
+  background-image: url(../img/retina_wood.png);
+  background-repeat: repeat;
+}
+
 .perfil-content {
   min-height: 100vh;
   max-width: 900px;
@@ -7,6 +12,8 @@
   border-radius: 10px;
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
   padding: 2rem;
+  margin-top: 30px;
+  margin-bottom: 30px;
 }
 
 h1 {

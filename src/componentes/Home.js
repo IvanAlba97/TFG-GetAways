@@ -25,7 +25,7 @@ function Home() {
   }, []);
 
   return (
-    <div className="App">
+    <div className="fondo">
       <Routes>
         <Route path="/access" element={<Access />} />
       </Routes>

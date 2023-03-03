@@ -4,7 +4,9 @@ footer {
   justify-content: space-around;
   align-items: center;
   padding: 20px;
-  background-color: lightgray;
+  /* background-color: lightgray; */
+  position: relative;
+  bottom: 0;
 }
 
 .contact-info, .social-media {

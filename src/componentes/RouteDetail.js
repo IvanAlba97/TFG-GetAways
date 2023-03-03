@@ -8,6 +8,7 @@ import CommentBox from './CommentBox.js';
 import NewComment from './NewComment.js';
 
 function RouteDetail() {
+
   const { id } = useParams();
   const [routeDetails, setRouteDetails] = useState(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -97,13 +98,7 @@ function RouteDetail() {
   }
 
   return (
-    <div style={routeDetails ? {
-      backgroundImage: `url(${routeDetails.imagen})`,
-      backgroundRepeat: 'no-repeat',
-      backgroundSize: 'cover',
-      backgroundPosition: 'center',
-    } : {}}>
-
+    <div className='fondo'>
       <Navbar user={user} />
       <div className='container'>
         {routeDetails && (
