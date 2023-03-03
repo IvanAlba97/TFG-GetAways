@@ -7,7 +7,9 @@ function Perfil() {
   const [nuevoNombre, setNuevoNombre] = useState('');
   const [nombreError, setNombreError] = useState(false);
   const [nuevoCorreo, setNuevoCorreo] = useState('');
+  const [correoAntiguo, setCorreoAntiguo] = useState('');
   const [correoError, setCorreoError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
 
   useEffect(() => {
     fetch('http://localhost:3333/user', { credentials: 'include' })
@@ -27,48 +29,54 @@ function Perfil() {
   }, []);
 
   function actualizarNombre() {
-    if (!nuevoNombre) {
-      setNombreError(true);
-      return;
-    }
-    
     fetch('http://localhost:3333/actualizar-nombre', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ nombre: nuevoNombre }),
       credentials: 'include'
     })
-      .then(() => {
-        setUser({...user, nombre: nuevoNombre});
-        setNuevoNombre('');
-        setNombreError(false);
+      .then(res => {
+        if (res.ok) {
+          setUser({ ...user, nombre: nuevoNombre });
+          setNuevoNombre('');
+          setNombreError(false);
+        } else {
+          setNombreError(true);
+          setCorreoError(false);
+          res.json().then(({ message }) => {
+            //console.error(message);
+            setErrorMessage(message);
+          });
+        }
       })
       .catch(err => console.error(err));
   }
 
   function actualizarCorreo() {
-    if (!nuevoCorreo) {
-      setCorreoError(true);
-      return;
-    }
-  
     fetch('http://localhost:3333/actualizar-correo', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ correo: nuevoCorreo }),
+      body: JSON.stringify({ correo: nuevoCorreo, correoAntiguo: correoAntiguo }),
       credentials: 'include'
     })
       .then(res => {
         if (res.ok) {
-          setUser({...user, correo: nuevoCorreo});
+          setUser({ ...user, correo: nuevoCorreo });
           setNuevoCorreo('');
+          setCorreoAntiguo('');
           setCorreoError(false);
         } else {
           setCorreoError(true);
+          setNombreError(false);
+          res.json().then(({ message }) => {
+            //console.error(message);
+            setErrorMessage(message);
+          });
         }
       })
       .catch(err => console.error(err));
   }
+
 
   return (
     <div>
@@ -78,14 +86,16 @@ function Perfil() {
       <div>
         <label>Nombre:</label>
         <input type="text" value={nuevoNombre} onChange={event => setNuevoNombre(event.target.value)} />
-        {nombreError && <p style={{ color: 'red' }}>Introduce un nombre válido.</p>}
+        {nombreError && <p style={{ color: 'red' }}>{errorMessage}</p>}
         <button onClick={actualizarNombre}>Actualizar</button>
       </div>
       <p>Hola {user.correo}</p>
       <div>
-        <label>Correo electrónico:</label>
+        <label>Correo electrónico antiguo:</label>
+        <input type="email" value={correoAntiguo} onChange={event => setCorreoAntiguo(event.target.value)} />
+        <label>Correo electrónico nuevo:</label>
         <input type="email" value={nuevoCorreo} onChange={event => setNuevoCorreo(event.target.value)} />
-        {correoError && <p style={{ color: 'red' }}>Introduce un correo electrónico válido.</p>}
+        {correoError && <p style={{ color: 'red' }}>{errorMessage}</p>}
         <button onClick={actualizarCorreo}>Actualizar</button>
       </div>
       <Footer />

@@ -130,6 +130,11 @@ app.post('/actualizar-nombre', (req, res) => {
   const { nombre } = req.body;
   const { id } = req.session.user;
 
+  // Comprobar si el nombre está vacío
+  if (!nombre) {
+    return res.status(400).json({ message: 'El campo nombre es obligatorio.' });
+  }
+
   connection.query('UPDATE usuario SET nombre = ? WHERE id = ?', [nombre, id], (err, result) => {
     if (err) {
       console.error(err);
@@ -145,13 +150,24 @@ app.post('/actualizar-nombre', (req, res) => {
 
 
 // Ruta para actualizar el correo del usuario
-app.post('/actualizar-correo', [
-  check('correo', 'El correo es obligatorio').notEmpty(),
-  check('correo', 'El correo no es válido').isEmail(),
-  validarDatos
-], (req, res) => {
-  const { correo } = req.body;
-  const { id } = req.session.user;
+app.post('/actualizar-correo', (req, res) => {
+  const { correo, correoAntiguo } = req.body;
+  const { id, correo: correoActual } = req.session.user;
+
+  // Comprobar si el correo y el correoAntiguo no están vacíos
+  if (!correo || !correoAntiguo) {
+    return res.status(400).json({ message: 'Los campos correo antiguo y correo nuevo son obligatorios.' });
+  }
+
+  // Comprobar si el correo y el correoAntiguo son válidos
+  if (!isValidEmail(correo) || !isValidEmail(correoAntiguo)) {
+    return res.status(400).json({ message: 'El correo antiguo y el correo nuevo deben ser válidos' });
+  }
+
+  // Comprobar si el correoAntiguo es igual al correoActual
+  if (correoAntiguo !== correoActual) {
+    return res.status(400).json({ message: 'El correo antiguo no coincide con el correo actual del usuario' });
+  }
 
   connection.query('UPDATE usuario SET correo = ? WHERE id = ?', [correo, id], (err, result) => {
     if (err) {
@@ -164,6 +180,14 @@ app.post('/actualizar-correo', [
     res.json({ user: req.session.user });
   });
 });
+
+function isValidEmail(email) {
+  // Expresión regular para validar el formato del correo electrónico
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  
+  // Devuelve true si el correo electrónico coincide con el formato de la expresión regular
+  return emailRegex.test(email);
+}
 
 // Ruta para actualizar la contraseña del usuario
 app.post('/actualizar-contrasena', [
