@@ -2,8 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { Route, Routes } from 'react-router-dom';
 import Navbar from './Navbar.js';
 import Footer from './Footer.js';
-import Content from './Content.js';
 import Access from './Access.js';
+import '../estilos/Home.css';
+import Intro from './Intro.js';
+import Carrusel from './Carrusel';
 
 function Home() {
   const [user, setUser] = useState(null);
@@ -30,7 +32,20 @@ function Home() {
         <Route path="/access" element={<Access />} />
       </Routes>
       <Navbar user={user} />
-      <Content />
+      <div className="content">
+        <div className="column-1">
+          <Carrusel />
+          {/* <Map /> */}
+          <a href='/rutas'>
+            <div className='todas-las-rutas'>
+              Todas las rutas
+            </div>
+          </a>
+        </div>
+        <div className="column-2">
+          <Intro />
+        </div>
+      </div>
       <Footer />
     </div>
   );

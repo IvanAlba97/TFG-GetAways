@@ -30,7 +30,7 @@ function AllRoutes() {
   }, []);
 
   return (
-    <div>
+    <div className='fondo'>
       <Navbar user={user} />
       <div style={{ textAlign: 'center' }}>
         <h1>Todas las rutas</h1>

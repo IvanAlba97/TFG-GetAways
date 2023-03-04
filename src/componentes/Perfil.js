@@ -15,6 +15,12 @@ function Perfil() {
   const [actualizacionCorreoExitosa, setActualizacionCorreoExitosa] = useState(false);
   const [successfulNameMessage, setSuccessfulNameMessage] = useState('');
   const [successfulEmailMessage, setSuccessfulEmailMessage] = useState('');
+  const [contrasenaAntigua, setContrasenaAntigua] = useState('');
+  const [contrasenaNueva, setContrasenaNueva] = useState('');
+  const [contrasenaNuevaRepetida, setContrasenaNuevaRepetida] = useState('');
+  const [contrasenaError, setContrasenaError] = useState(false);
+  const [actualizacionContrasenaExitosa, setActualizacionContrasenaExitosa] = useState(false);
+  const [successfulPasswordMessage, setSuccessfulPasswordMessage] = useState('');
 
   useEffect(() => {
     fetch('http://localhost:3333/user', { credentials: 'include' })
@@ -47,13 +53,17 @@ function Perfil() {
           setNombreError(false);
           setActualizacionNombreExitosa(true);
           setActualizacionCorreoExitosa(false);
+          setActualizacionContrasenaExitosa(false);
           res.json().then(({ message }) => {
             setSuccessfulNameMessage(message);
           });
         } else {
           setNombreError(true);
           setCorreoError(false);
+          setContrasenaError(false);
           setActualizacionNombreExitosa(false);
+          setActualizacionCorreoExitosa(false);
+          setActualizacionContrasenaExitosa(false);
           res.json().then(({ message }) => {
             setErrorMessage(message);
           });
@@ -77,6 +87,7 @@ function Perfil() {
           setCorreoError(false);
           setActualizacionCorreoExitosa(true);
           setActualizacionNombreExitosa(false);
+          setActualizacionContrasenaExitosa(false);
           res.json().then(({ message }) => {
             setSuccessfulEmailMessage(message);
           });
@@ -84,6 +95,36 @@ function Perfil() {
           setCorreoError(true);
           setNombreError(false);
           setActualizacionCorreoExitosa(false);
+          res.json().then(({ message }) => {
+            setErrorMessage(message);
+          });
+        }
+      })
+      .catch(err => console.error(err));
+  }
+
+  function actualizarContrasena() {
+    fetch('http://localhost:3333/actualizar-contrasena', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ contrasenaAntigua: contrasenaAntigua, contrasenaNueva: contrasenaNueva, contrasenaNuevaRepetida: contrasenaNuevaRepetida }),
+      credentials: 'include'
+    })
+      .then(res => {
+        if (res.ok) {
+          setContrasenaAntigua('');
+          setContrasenaNueva('');
+          setContrasenaNuevaRepetida('');
+          setContrasenaError(false);
+          setActualizacionContrasenaExitosa(true);
+          setActualizacionNombreExitosa(false);
+          setActualizacionCorreoExitosa(false);
+          res.json().then(({ message }) => {
+            setSuccessfulPasswordMessage(message);
+          });
+        } else {
+          setContrasenaError(true);
+          setActualizacionContrasenaExitosa(false);
           res.json().then(({ message }) => {
             setErrorMessage(message);
           });
@@ -113,12 +154,23 @@ function Perfil() {
           <input type="email" value={nuevoCorreo} onChange={event => setNuevoCorreo(event.target.value)} />
           {correoError && <p className="error-message">{errorMessage}</p>}
           {actualizacionCorreoExitosa && <p>{successfulEmailMessage}</p>}
-          <button className="perfil-button" onClick={actualizarCorreo}>Actualizar</button>
+          <button className="perfil-button" onClick={actualizarCorreo}>Actualizar correo</button>
+        </div>
+        <div className="perfil-input-container">
+          <label>Contraseña antigua:</label>
+          <input type="password" value={contrasenaAntigua} onChange={event => setContrasenaAntigua(event.target.value)} />
+          <label>Nueva contraseña:</label>
+          <input type="password" value={contrasenaNueva} onChange={event => setContrasenaNueva(event.target.value)} />
+          <label>Confirmar nueva contraseña:</label>
+          <input type="password" value={contrasenaNuevaRepetida} onChange={event => setContrasenaNuevaRepetida(event.target.value)} />
+          {contrasenaError && <p className="error-message">{errorMessage}</p>}
+          {actualizacionContrasenaExitosa && <p>{successfulPasswordMessage}</p>}
+          <button className="perfil-button" onClick={actualizarContrasena}>Actualizar contraseña</button>
         </div>
       </div>
       <Footer />
     </div>
   );
-  }
-  
-  export default Perfil;
+}
+
+export default Perfil;

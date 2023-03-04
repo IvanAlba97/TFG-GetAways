@@ -190,41 +190,58 @@ function isValidEmail(email) {
 }
 
 // Ruta para actualizar la contraseña del usuario
-app.post('/actualizar-contrasena', [
-  check('passwordActual', 'La contraseña actual es obligatoria').notEmpty(),
-  check('passwordNueva', 'La nueva contraseña es obligatoria').notEmpty(),
-  validarDatos
-], (req, res) => {
-  const { passwordActual, passwordNueva } = req.body;
-  const { id } = req.session.user.id;
+app.post('/actualizar-contrasena', (req, res) => {
+  const { contrasenaAntigua, contrasenaNueva, contrasenaNuevaRepetida } = req.body;
+  const { id } = req.session.user;
 
-  connection.query('SELECT * FROM usuario WHERE id = ?', [id], (err, result) => {
+  // Comprobar si la contraseña y la contraseñaNueva no están vacías
+  if (!contrasenaAntigua || !contrasenaNueva || !contrasenaNuevaRepetida) {
+    return res.status(400).json({ message: 'Todos los campos referentes a la contraseña son obligatorios.' });
+  }
+
+  // Obtener la contraseña encriptada de la base de datos
+  connection.query('SELECT contraseña FROM usuario WHERE id = ?', [id], (err, result) => {
     if (err) {
       console.error(err);
-      return res.status(500).json({ message: 'Error al buscar al usuario' });
+      return res.status(500).json({ message: 'Error al actualizar la contraseña' });
     }
-    if (!result.length) {
-      return res.status(404).json({ message: 'Usuario no encontrado' });
+
+    if (result.length === 0) {
+      return res.status(400).json({ message: 'El usuario no existe' });
     }
-    const usuario = result[0];
-    bcrypt.compare(passwordActual, usuario.contraseña, (err, coinciden) => {
+
+    const hashedPassword = result[0].contraseña;
+
+    // Comparar la contraseña antigua con la existente en la base de datos
+    bcrypt.compare(contrasenaAntigua, hashedPassword, (err, isMatch) => {
       if (err) {
         console.error(err);
-        return res.status(500).json({ message: 'Error al comparar contraseñas' });
+        return res.status(500).json({ message: 'Error al actualizar la contraseña' });
       }
-      if (!coinciden) {
-        return res.status(400).json({ message: 'La contraseña actual no es correcta' });
+
+      if (!isMatch) {
+        return res.status(400).json({ message: 'La contraseña antigua no coincide con la contraseña actual del usuario' });
       }
-      bcrypt.hash(passwordNueva, 10, (err, hash) => {
+
+      // Comprobar si la nueva contraseña se repite correctamente
+      if (contrasenaNueva !== contrasenaNuevaRepetida) {
+        return res.status(400).json({ message: 'La nueva contraseña y su repetición no coinciden' });
+      }
+
+      // Actualizar la contraseña del usuario
+      bcrypt.hash(contrasenaNueva, 10, (err, hashedNewPassword) => {
         if (err) {
           console.error(err);
-          return res.status(500).json({ message: 'Error al hashear la contraseña' });
+          return res.status(500).json({ message: 'Error al actualizar la contraseña' });
         }
-        connection.query('UPDATE usuario SET contraseña = ? WHERE id = ?', [hash, id], (err, result) => {
+
+        connection.query('UPDATE usuario SET contraseña = ? WHERE id = ?', [hashedNewPassword, id], (err, result) => {
           if (err) {
             console.error(err);
             return res.status(500).json({ message: 'Error al actualizar la contraseña' });
           }
+
+          // Devolver respuesta exitosa
           res.json({ message: 'Contraseña actualizada correctamente' });
         });
       });
@@ -232,6 +249,15 @@ app.post('/actualizar-contrasena', [
   });
 });
 
+
+
+function isValidPassword(password) {
+  // Expresión regular para validar el formato de la contraseña
+  const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/;
+
+  // Devuelve true si la contraseña coincide con el formato de la expresión regular
+  return passwordRegex.test(password);
+}
 
 app.get('/user', (req, res) => {
   if (req.session.user) {
