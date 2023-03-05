@@ -94,13 +94,13 @@ function Tarjeta(props) {
           <p>Media de valoraciones</p>
           {props.media_valoraciones}
         </div>
-        <div>
+        <div className='contenedor-switch'>
           <p>Pendiente</p>
           {isAuthenticated ?
             <Switch checked={pendientes} onChange={(checked) => manejarCambio(checked, 'pendientes')} />
             : <Switch checked={pendientes} onClick={() => window.location.href = '/access'} onChange={(checked) => manejarCambio(checked, 'pendientes')} />}
         </div>
-        <div>
+        <div className='contenedor-switch'>
           <p>Completada</p>
           <Switch checked={completadas} onChange={(checked) => manejarCambio(checked, 'completadas')} />
         </div>

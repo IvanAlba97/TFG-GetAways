@@ -35,14 +35,16 @@
   border-radius: 15px;
   background-color: #FFFFFF;
   object-fit: cover;
+  flex-direction: column;
+  padding: 0 25px;
+  display: flex;
+  justify-content: space-evenly;
+}
+
+.contenedor-switch {
   display: flex;
   flex-direction: row;
   align-items: center;
-  justify-content: space-between;
-  padding: 0 25px;
-  display: block;
-  align-items: center;
-  justify-content: space-between;
 }
 
 h2 {
@@ -56,6 +58,7 @@ p {
   font-size: 16px;
   text-align: justify;
   color: #555555;
+  margin: 10px;
 }
 
 
