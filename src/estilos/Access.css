@@ -1,6 +1,7 @@
 .fondo {
   background-image: url(../img/retina_wood.png);
   background-repeat: repeat;
+  min-height: 950px;
 }
 
 .container {

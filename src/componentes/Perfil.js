@@ -13,14 +13,14 @@ function Perfil() {
   const [nombreError, setNombreError] = useState(false);
   const [actualizacionNombreExitosa, setActualizacionNombreExitosa] = useState(false);
   const [successfulNameMessage, setSuccessfulNameMessage] = useState('');
-  
+
   /* CORREO */
   const [nuevoCorreo, setNuevoCorreo] = useState('');
   const [correoAntiguo, setCorreoAntiguo] = useState('');
   const [correoError, setCorreoError] = useState(false);
   const [actualizacionCorreoExitosa, setActualizacionCorreoExitosa] = useState(false);
   const [successfulEmailMessage, setSuccessfulEmailMessage] = useState('');
-  
+
   /* CONTRASEÑA */
   const [contrasenaAntigua, setContrasenaAntigua] = useState('');
   const [contrasenaNueva, setContrasenaNueva] = useState('');
@@ -162,51 +162,53 @@ function Perfil() {
     <div className='fondo'>
       <Navbar user={user} />
       <div className="perfil-content">
-        <h1>Perfil</h1>
-        <div>
-          <button className='perfil-button' onClick={toggleUpdateUsername}>
-            {showUpdateUsername ? "Ocultar" : "Mostrar"} componente
-          </button>
-          {showUpdateUsername &&
-            <div className="perfil-input-container">
-              <label>Nombre:</label>
-              <input type="text" value={nuevoNombre} onChange={event => setNuevoNombre(event.target.value)} />
-              {nombreError && <p className="error-message">{errorMessage}</p>}
-              {actualizacionNombreExitosa && <p>{successfulNameMessage}</p>}
-              <button className="perfil-button" onClick={actualizarNombre}>Actualizar</button>
-            </div>}
-        </div>
-        <div>
-          <button className='perfil-button' onClick={toggleUpdateEmail}>
-            {showUpdateEmail ? "Ocultar" : "Mostrar"} componente
-          </button>
-          {showUpdateEmail &&
-            <div className="perfil-input-container">
-              <label>Correo electrónico antiguo:</label>
-              <input type="email" value={correoAntiguo} onChange={event => setCorreoAntiguo(event.target.value)} />
-              <label>Correo electrónico nuevo:</label>
-              <input type="email" value={nuevoCorreo} onChange={event => setNuevoCorreo(event.target.value)} />
-              {correoError && <p className="error-message">{errorMessage}</p>}
-              {actualizacionCorreoExitosa && <p>{successfulEmailMessage}</p>}
-              <button className="perfil-button" onClick={actualizarCorreo}>Actualizar correo</button>
-            </div>}
-        </div>
-        <div>
-          <button className='perfil-button' onClick={toggleUpdatePassword}>
-            {showUpdatePassword ? "Ocultar" : "Mostrar"} componente
-          </button>
-          {showUpdatePassword &&
-            <div className="perfil-input-container">
-              <label>Contraseña antigua:</label>
-              <input type="password" value={contrasenaAntigua} onChange={event => setContrasenaAntigua(event.target.value)} />
-              <label>Nueva contraseña:</label>
-              <input type="password" value={contrasenaNueva} onChange={event => setContrasenaNueva(event.target.value)} />
-              <label>Confirmar nueva contraseña:</label>
-              <input type="password" value={contrasenaNuevaRepetida} onChange={event => setContrasenaNuevaRepetida(event.target.value)} />
-              {contrasenaError && <p className="error-message">{errorMessage}</p>}
-              {actualizacionContrasenaExitosa && <p>{successfulPasswordMessage}</p>}
-              <button className="perfil-button" onClick={actualizarContrasena}>Actualizar contraseña</button>
-            </div>}
+        <div className='titulo'><h1>Perfil</h1></div>
+        <div className='contenedor-botones'>
+          <div className='contenedor-boton-individual'>
+            <button className='perfil-button' onClick={toggleUpdateUsername}>
+              Cambiar nombre
+            </button>
+            {showUpdateUsername &&
+              <div className="perfil-input-container">
+                <label>Nombre:</label>
+                <input type="text" value={nuevoNombre} onChange={event => setNuevoNombre(event.target.value)} />
+                {nombreError && <p className="error-message">{errorMessage}</p>}
+                {actualizacionNombreExitosa && <p>{successfulNameMessage}</p>}
+                <button className="perfil-button" onClick={actualizarNombre}>Actualizar</button>
+              </div>}
+          </div>
+          <div className='contenedor-boton-individual'>
+            <button className='perfil-button' onClick={toggleUpdateEmail}>
+              Cambiar correo
+            </button>
+            {showUpdateEmail &&
+              <div className="perfil-input-container">
+                <label>Correo electrónico antiguo:</label>
+                <input type="email" value={correoAntiguo} onChange={event => setCorreoAntiguo(event.target.value)} />
+                <label>Correo electrónico nuevo:</label>
+                <input type="email" value={nuevoCorreo} onChange={event => setNuevoCorreo(event.target.value)} />
+                {correoError && <p className="error-message">{errorMessage}</p>}
+                {actualizacionCorreoExitosa && <p>{successfulEmailMessage}</p>}
+                <button className="perfil-button" onClick={actualizarCorreo}>Actualizar correo</button>
+              </div>}
+          </div>
+          <div className='contenedor-boton-individual'>
+            <button className='perfil-button' onClick={toggleUpdatePassword}>
+              Cambiar contraseña
+            </button>
+            {showUpdatePassword &&
+              <div className="perfil-input-container">
+                <label>Contraseña antigua:</label>
+                <input type="password" value={contrasenaAntigua} onChange={event => setContrasenaAntigua(event.target.value)} />
+                <label>Nueva contraseña:</label>
+                <input type="password" value={contrasenaNueva} onChange={event => setContrasenaNueva(event.target.value)} />
+                <label>Confirmar nueva contraseña:</label>
+                <input type="password" value={contrasenaNuevaRepetida} onChange={event => setContrasenaNuevaRepetida(event.target.value)} />
+                {contrasenaError && <p className="error-message">{errorMessage}</p>}
+                {actualizacionContrasenaExitosa && <p>{successfulPasswordMessage}</p>}
+                <button className="perfil-button" onClick={actualizarContrasena}>Actualizar contraseña</button>
+              </div>}
+          </div>
         </div>
       </div>
       <Footer />

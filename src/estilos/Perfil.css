@@ -4,23 +4,68 @@
 }
 
 .perfil-content {
-  min-height: 100vh;
+  min-height: 50vh;
   max-width: 900px;
   margin: 0 auto;
   padding: 2rem;
   background-color: #fff;
   border-radius: 10px;
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-  padding: 2rem;
   margin-top: 30px;
   margin-bottom: 30px;
+  display: flex;
+  flex-direction: column;
 }
 
-h1 {
+.titulo {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  font-size: 1rem;
+  margin-bottom: 1rem;
+}
+
+.contenedor-botones {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+
+.contenedor-boton-individual {
+  padding: 25px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 20px 10px 20px 10px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+}
+
+@media screen and (max-width: 870px) {
+  .contenedor-botones {
+    flex-direction: column;
+  }
+
+  .contenedor-boton-individual {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+}
+
+/* h1 {
   display: flex;
   justify-content: center;
   font-size: 2rem;
   margin-bottom: 1rem;
+} */
+
+.perfil-input-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
 .perfil-input-container input {
@@ -37,6 +82,9 @@ h1 {
   border: none;
   cursor: pointer;
   transition: background-color 0.2s ease-in-out;
+  height: 50px;
+  width: 200px;
+  margin-bottom: 30px;
 }
 
 .perfil-button:hover {

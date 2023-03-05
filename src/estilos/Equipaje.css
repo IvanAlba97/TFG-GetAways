@@ -70,7 +70,7 @@ label {
   cursor: pointer;
 }
 
-input[type="text"] {
+form input[type="text"] {
   padding: 15px 20px;
   font-size: 20px;
   border: none;
