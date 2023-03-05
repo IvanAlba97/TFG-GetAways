@@ -174,7 +174,7 @@ function Perfil() {
                 <input type="text" value={nuevoNombre} onChange={event => setNuevoNombre(event.target.value)} />
                 {nombreError && <p className="error-message">{errorMessage}</p>}
                 {actualizacionNombreExitosa && <p>{successfulNameMessage}</p>}
-                <button className="perfil-button" onClick={actualizarNombre}>Actualizar</button>
+                <button className="perfil-button" onClick={actualizarNombre}>Actualizar nombre</button>
               </div>}
           </div>
           <div className='contenedor-boton-individual'>

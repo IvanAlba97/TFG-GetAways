@@ -38,7 +38,7 @@ const Navbar = ({ user }) => {
       <BarraBusqueda className='barra-busqueda' />
       <div className='contenedor-perfil'>
         {user ? (
-          <div onClick={mostrarOcultarDesplegable}>
+          <div className='contenedor-perfil' onClick={mostrarOcultarDesplegable}>
             <span>{user.nombre}</span>
             <img className="contenedor-icono" src={Profile} alt="Profile" />
             {mostrarDesplegable && (
