@@ -116,7 +116,7 @@ function RouteDetail() {
               <dt>Cómo llegar:</dt>
               <dd>{routeDetails.como_llegar}</dd>
               <dt>Enlace a Google Maps:</dt>
-              <dd><a href={routeDetails.enlace_maps} target="_blank" rel="noopener noreferrer">{routeDetails.enlace_maps}</a></dd>
+              <dd>{/* <a href={routeDetails.enlace_maps} target="_blank" rel="noopener noreferrer">{routeDetails.enlace_maps}</a> */}</dd>
               <dt>Media de valoraciones:</dt>
               <dd>{routeDetails.media_valoraciones}</dd>
               <dt>Pendiente:</dt>

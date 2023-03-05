@@ -90,7 +90,7 @@ p {
   color: #FFFFFF;
 }
 
-@media only screen and (max-width: 868px) {
+@media only screen and (max-width: 768px) {
   .contenedor-tarjeta {
     width: calc(100% - 50px);
     flex-direction: column;

@@ -14,7 +14,7 @@
   /* background-color: lightskyblue; */
 }
 
-@media (max-width: 868px) {
+@media (max-width: 768px) {
   .content {
     flex-direction: column;
   }
@@ -48,14 +48,9 @@
 /* Media query para reducir el tamaño de fuente en pantallas más pequeñas */
 @media (max-width: 768px) {
   .todas-las-rutas {
+    width: calc(100% - 60px);
     font-size: 30px;
     min-height: 150px;
-  }
-}
-
-@media (max-width: 576px) {
-  .todas-las-rutas {
-    font-size: 20px;
   }
 }
 

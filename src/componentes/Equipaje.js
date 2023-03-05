@@ -143,8 +143,8 @@ function Equipaje() {
                   checked={item.checked}
                   onChange={() => handleItemCheck(item.id)}
                 />
-                {item.elemento}
               </label>
+              {item.elemento}
               <button className="btn-eliminar" onClick={() => handleItemDelete(item.id)}>Eliminar</button>
             </li>
           ))}

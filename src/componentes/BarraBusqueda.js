@@ -6,7 +6,7 @@ import '../estilos/BarraBusqueda.css';
 function BarraBusqueda() {
   const [busqueda, setBusqueda] = useState('');
   const [rutas, setRutas] = useState([]);
-  const [focused, setFocused] = useState(false); // nueva variable de estado
+  const [focused, setFocused] = useState(false);
 
   const handleBusqueda = async () => {
     const response = await axios.get(`http://localhost:3333/search?busqueda=${busqueda}`);

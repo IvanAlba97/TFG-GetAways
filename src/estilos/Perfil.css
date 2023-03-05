@@ -41,7 +41,7 @@
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
 }
 
-@media screen and (max-width: 870px) {
+@media screen and (max-width: 768px) {
   .contenedor-botones {
     flex-direction: column;
   }
