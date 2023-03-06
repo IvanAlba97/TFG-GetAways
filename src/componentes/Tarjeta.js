@@ -90,15 +90,12 @@ function Tarjeta(props) {
       </div>
       <div className='contenedor-interaccion'>
         <dl>
-
             <dt>Media de valoraciones</dt>
-            <dd>{props.media_valoraciones}</dd>
-
+            <dd>{props.media_valoraciones == null ? 'Sin valoraciones' : props.media_valoraciones + '/5'}</dd>
             <dt>Pendiente</dt>
             <dd>{isAuthenticated ?
               <Switch checked={pendientes} onChange={(checked) => manejarCambio(checked, 'pendientes')} />
               : <Switch checked={pendientes} onClick={() => window.location.href = '/access'} onChange={(checked) => manejarCambio(checked, 'pendientes')} />}</dd>
-
             <dt>Completada</dt>
             <dd><Switch checked={completadas} onChange={(checked) => manejarCambio(checked, 'completadas')} /></dd>
 

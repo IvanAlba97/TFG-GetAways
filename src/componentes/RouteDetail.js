@@ -118,7 +118,7 @@ function RouteDetail() {
               <dt>Enlace a Google Maps:</dt>
               <dd>{/* <a href={routeDetails.enlace_maps} target="_blank" rel="noopener noreferrer">{routeDetails.enlace_maps}</a> */}</dd>
               <dt>Media de valoraciones:</dt>
-              <dd>{routeDetails.media_valoraciones}</dd>
+              <dd>{routeDetails.media_valoraciones == null ? 'Sin valoraciones' : routeDetails.media_valoraciones + '/5'}</dd>
               <dt>Pendiente:</dt>
               <dd><Switch checked={pendientes} onChange={(checked) => manejarCambio(checked, 'pendientes')} /></dd>
               <dt>Completada:</dt>

@@ -43,11 +43,29 @@ function NewComment(props) {
         setValoracion('');
         setPublico(false);
         setError('');
+
+        // Llama a la ruta /actualizar-media-valoraciones después de realizar correctamente un nuevo comentario
+        fetch(`http://localhost:3333/actualizar-media-valoraciones`, {
+          method: 'PUT',
+          credentials: 'include',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ id_ruta: id_ruta })
+        })
+          .then((response) => {
+            console.log(response);
+          })
+
+          .catch((error) => {
+            console.error(error);
+          });
       })
       .catch((error) => {
         console.error(error);
       });
   };
+
 
   const handleSwitchChange = (checked) => {
     setPublico(checked);

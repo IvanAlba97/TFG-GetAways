@@ -41,7 +41,8 @@ function AllRoutes() {
           id={ruta.id}
           nombre={ruta.nombre}
           descripcion={ruta.descripcion}
-          imagen={ruta.imagen} />
+          imagen={ruta.imagen}
+          media_valoraciones={ruta.media_valoraciones} />
       ))}
       <Footer />
     </div>

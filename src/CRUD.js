@@ -583,6 +583,23 @@ app.post('/nuevo-comentario', (req, res) => {
   });
 });
 
+app.put('/actualizar-media-valoraciones', (req, res) => {
+  const { id_ruta } = req.body;
+  const sql = `
+    UPDATE ruta_senderismo
+    SET media_valoraciones = (
+      SELECT AVG(valoracion) as media_valoraciones
+      FROM valoracion
+      WHERE id_ruta = ?
+      GROUP BY id_ruta
+    )
+    WHERE id = ?
+  `;
+  connection.query(sql, [id_ruta, id_ruta], (err, result) => {
+    if (err) throw err;
+    res.send('Media de valoraciones actualizada correctamente');
+  });
+});
 
 
 
