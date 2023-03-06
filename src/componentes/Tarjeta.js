@@ -27,7 +27,6 @@ function Tarjeta(props) {
           credentials: 'include'
         });
         if (resUser.ok) {
-          const json = await resUser.json();
           setIsAuthenticated(true);
         } else {
           setIsAuthenticated(false);
@@ -90,20 +89,20 @@ function Tarjeta(props) {
         </div>
       </div>
       <div className='contenedor-interaccion'>
-        <div>
-          <p>Media de valoraciones</p>
-          {props.media_valoraciones}
-        </div>
-        <div className='contenedor-switch'>
-          <p>Pendiente</p>
-          {isAuthenticated ?
-            <Switch checked={pendientes} onChange={(checked) => manejarCambio(checked, 'pendientes')} />
-            : <Switch checked={pendientes} onClick={() => window.location.href = '/access'} onChange={(checked) => manejarCambio(checked, 'pendientes')} />}
-        </div>
-        <div className='contenedor-switch'>
-          <p>Completada</p>
-          <Switch checked={completadas} onChange={(checked) => manejarCambio(checked, 'completadas')} />
-        </div>
+        <dl>
+
+            <dt>Media de valoraciones</dt>
+            <dd>{props.media_valoraciones}</dd>
+
+            <dt>Pendiente</dt>
+            <dd>{isAuthenticated ?
+              <Switch checked={pendientes} onChange={(checked) => manejarCambio(checked, 'pendientes')} />
+              : <Switch checked={pendientes} onClick={() => window.location.href = '/access'} onChange={(checked) => manejarCambio(checked, 'pendientes')} />}</dd>
+
+            <dt>Completada</dt>
+            <dd><Switch checked={completadas} onChange={(checked) => manejarCambio(checked, 'completadas')} /></dd>
+
+        </dl>
       </div>
     </div>
   );

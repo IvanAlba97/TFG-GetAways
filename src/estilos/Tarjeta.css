@@ -28,24 +28,23 @@
   margin-right: 25px;
 }
 
-.contenedor-interaccion {
+.contenedor-interaccion dl {
   min-width: 200px;
-  min-height: 200px;
-  text-align: right;
+  min-height: calc(100% - 50px);
   border-radius: 15px;
   background-color: #FFFFFF;
-  object-fit: cover;
-  flex-direction: column;
-  padding: 0 25px;
-  display: flex;
-  justify-content: space-evenly;
+  padding: 25px;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-gap: 10px;
+  margin-top: 0px;
 }
 
-.contenedor-switch {
+/* .contenedor-switch {
   display: flex;
   flex-direction: row;
   align-items: center;
-}
+} */
 
 h2 {
   font-size: 24px;
