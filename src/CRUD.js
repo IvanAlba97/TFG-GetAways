@@ -34,9 +34,7 @@ const connection = mysql.createConnection({
 app.use(express.json());
 
 const bcrypt = require('bcrypt');
-const router = express.Router();
 
-app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 const session = require('express-session');
@@ -140,10 +138,10 @@ app.post('/actualizar-nombre', (req, res) => {
       console.error(err);
       return res.status(500).json({ message: 'Error al actualizar el nombre' });
     }
-    
+
     // Actualizar el valor de la sesión con el nuevo nombre
     req.session.user.nombre = nombre;
-    
+
     res.json({ user: req.session.user, message: 'Usuario actualizado correctamente' });
   });
 });
@@ -176,7 +174,7 @@ app.post('/actualizar-correo', (req, res) => {
     }
     // Actualizar el valor de la sesión con el nuevo correo
     req.session.user.correo = correo;
-    
+
     res.json({ user: req.session.user, message: 'Correo actualizado correctamente' });
   });
 });
@@ -184,7 +182,7 @@ app.post('/actualizar-correo', (req, res) => {
 function isValidEmail(email) {
   // Expresión regular para validar el formato del correo electrónico
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  
+
   // Devuelve true si el correo electrónico coincide con el formato de la expresión regular
   return emailRegex.test(email);
 }
@@ -563,7 +561,7 @@ app.get('/comments/:id_ruta', (req, res) => {
     query += ' AND v.id_usuario <> ?';
     queryParams.push(id_usuario);
   }
-  
+
   connection.query(query, queryParams, (err, results) => {
     if (err) {
       console.error('Error executing MySQL query: ' + err.stack);
@@ -584,15 +582,28 @@ app.get('/my-comment/:id_ruta', (req, res) => {
         console.error('Error executing MySQL query: ' + err.stack);
         return res.status(500).json({ message: 'Internal server error' });
       }
-      if (results.length === 0) {
-        return res.status(404).json({ message: 'No se encontraron resultados para la ruta y el usuario de la sesión.' });
+      if (results.length !== 0) {
+        res.json(results);
       }
-      res.json(results);
+      
     });
   } else {
     //res.status(401).json({ message: 'Se requiere una sesión para acceder a esta ruta.' });
   }
 });
+
+app.put('/edit-my-comment', (req, res) => {
+  const { commentId, newComment, newRating } = req.body;
+  const query = 'UPDATE valoracion SET valoracion = ?, comentario = ? WHERE id = ?';
+  connection.query(query, [newRating, newComment, commentId], (err, results) => {
+    if (err) {
+      console.error('Error executing MySQL query: ' + err.stack);
+      return res.status(500).json({ message: 'Internal server error' });
+    }
+    res.json({ message: 'Comment updated successfully' });
+  });
+});
+
 
 
 // Ruta para agregar nuevos comentarios
@@ -617,15 +628,15 @@ app.post('/nuevo-comentario', (req, res) => {
 app.put('/actualizar-media-valoraciones', (req, res) => {
   const { id_ruta } = req.body;
   const sql = `
-    UPDATE ruta_senderismo
-    SET media_valoraciones = (
-      SELECT AVG(valoracion) as media_valoraciones
-      FROM valoracion
-      WHERE id_ruta = ?
-      GROUP BY id_ruta
-    )
-    WHERE id = ?
-  `;
+                  UPDATE ruta_senderismo
+                  SET media_valoraciones = (
+                  SELECT AVG(valoracion) as media_valoraciones
+                  FROM valoracion
+                  WHERE id_ruta = ?
+                  GROUP BY id_ruta
+                  )
+                  WHERE id = ?
+                  `;
   connection.query(sql, [id_ruta, id_ruta], (err, result) => {
     if (err) throw err;
     res.send('Media de valoraciones actualizada correctamente');
