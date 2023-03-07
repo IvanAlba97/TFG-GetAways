@@ -34,6 +34,7 @@ function Home() {
       <Navbar user={user} />
       <div className="content">
         <div className="column-1">
+          <Intro />
           <Carrusel />
           {/* <Map /> */}
           <a href='/rutas'>

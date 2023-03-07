@@ -6,6 +6,7 @@ import Switch from 'react-switch';
 import '../estilos/RouteDetail.css';
 import CommentBox from './CommentBox.js';
 import NewComment from './NewComment.js';
+import EditComment from './EditComment';
 
 function RouteDetail() {
 
@@ -43,6 +44,7 @@ function RouteDetail() {
 
   const [pendientes, setPendientes] = useState(false);
   const [completadas, setCompletadas] = useState(false);
+  const [commentExists, setCommentExists] = useState(false);
 
   useEffect(() => {
     async function obtenerDatos() {
@@ -58,12 +60,20 @@ function RouteDetail() {
         });
         const { existe: completadaExiste } = await resCompletada.json();
         setCompletadas(Boolean(completadaExiste));
+
+        const resMyComment = await fetch(`http://localhost:3333/my-comment/${routeDetails.id}`, {
+          credentials: 'include'
+        });
+        const comentarios = await resMyComment.json();
+        setCommentExists(comentarios.length > 0);
       } catch (error) {
-        console.error('Error fetching data:', error);
+        setCommentExists(false);
       }
     }
     obtenerDatos();
-  }, [id]);
+  }, [id, routeDetails]);
+
+
 
   async function manejarCambio(checked, tipo) {
     if (isAuthenticated) {
@@ -128,7 +138,10 @@ function RouteDetail() {
         )}
       </div>
       <div className='comments'>
-        <NewComment id_ruta={id} />
+        {isAuthenticated ?
+          (commentExists ? <EditComment id_ruta={id} /> : <NewComment id_ruta={id} />)
+          : null
+        }
         <CommentBox id_ruta={id} />
       </div>
       <Footer />

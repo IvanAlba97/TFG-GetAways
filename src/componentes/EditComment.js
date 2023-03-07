@@ -6,7 +6,7 @@ function CommentBox(props) {
   const [comments, setComments] = useState([]);
 
   useEffect(() => {
-    fetch(`http://localhost:3333/comments/${props.id_ruta}`, {
+    fetch(`http://localhost:3333/my-comment/${props.id_ruta}`, {
       credentials: 'include'
     })
       .then(res => {
@@ -26,6 +26,19 @@ function CommentBox(props) {
       });
   }, []);
 
+  const handleEdit = () => {
+    // Creamos una copia del array de comentarios para poder modificarlo
+    const updatedComments = [...comments];
+  
+    // Modificamos los valores de comentario y valoracion del primer comentario
+    updatedComments[0].comentario = prompt("Introduce el nuevo comentario", updatedComments[0].comentario);
+    updatedComments[0].valoracion = parseInt(prompt("Introduce la nueva valoración (de 1 a 5)", updatedComments[0].valoracion));
+  
+    // Actualizamos el estado de los comentarios
+    setComments(updatedComments);
+  };
+  
+
   return (
     <div style={{width: '100%'}}>
       {comments.map(comment => (
@@ -38,7 +51,9 @@ function CommentBox(props) {
             ))}
           </p>
           {/* <p className='comment-public'>Pública: {comment.publica === 1 ? 'Sí' : 'No'}</p> */}
+          <button onClick={handleEdit}>Editar</button>
           <p className="comment-date">Fecha: {comment.fecha}</p>
+          
         </div>
       ))}
     </div>

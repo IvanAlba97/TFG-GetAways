@@ -555,7 +555,16 @@ app.post('/actualizar-completadas', (req, res) => {
 // Manejador para obtener todas las valoraciones
 app.get('/comments/:id_ruta', (req, res) => {
   const { id_ruta } = req.params;
-  connection.query('SELECT v.*, u.nombre FROM valoracion v JOIN usuario u ON v.id_usuario = u.id WHERE v.id_ruta = ?', [id_ruta], (err, results) => {
+  let query = 'SELECT v.*, u.nombre FROM valoracion v JOIN usuario u ON v.id_usuario = u.id WHERE v.id_ruta = ?';
+  const queryParams = [id_ruta];
+
+  if (req.session.user) {
+    const id_usuario = req.session.user.id;
+    query += ' AND v.id_usuario <> ?';
+    queryParams.push(id_usuario);
+  }
+  
+  connection.query(query, queryParams, (err, results) => {
     if (err) {
       console.error('Error executing MySQL query: ' + err.stack);
       return res.status(500).json({ message: 'Internal server error' });
@@ -563,6 +572,28 @@ app.get('/comments/:id_ruta', (req, res) => {
     res.json(results);
   });
 });
+
+app.get('/my-comment/:id_ruta', (req, res) => {
+  if (req.session.user) {
+    const { id_ruta } = req.params;
+    const id_usuario = req.session.user.id;
+    let query = 'SELECT v.*, u.nombre FROM valoracion v JOIN usuario u ON v.id_usuario = u.id WHERE v.id_ruta = ? AND v.id_usuario = ?';
+    query += ' AND v.id_usuario = ?';
+    connection.query(query, [id_ruta, id_usuario, id_usuario], (err, results) => {
+      if (err) {
+        console.error('Error executing MySQL query: ' + err.stack);
+        return res.status(500).json({ message: 'Internal server error' });
+      }
+      if (results.length === 0) {
+        return res.status(404).json({ message: 'No se encontraron resultados para la ruta y el usuario de la sesión.' });
+      }
+      res.json(results);
+    });
+  } else {
+    //res.status(401).json({ message: 'Se requiere una sesión para acceder a esta ruta.' });
+  }
+});
+
 
 // Ruta para agregar nuevos comentarios
 app.post('/nuevo-comentario', (req, res) => {
