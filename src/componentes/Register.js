@@ -63,26 +63,26 @@ const Register = () => {
     <form onSubmit={handleSubmit}>
       <input
         type="text"
-        placeholder="Username"
+        placeholder="Usuario"
         value={username}
         onChange={event => setUsername(event.target.value)}
       />
       <input
         type="email"
-        placeholder="Email"
+        placeholder="Correo electrónico"
         value={email}
         onChange={event => setEmail(event.target.value)}
       />
       <input
         type="password"
-        placeholder="Password"
+        placeholder="Contraseña"
         value={password}
         onChange={event => setPassword(event.target.value)}
       />
       <div className='error-message'>
         {showErrorMessage ? errorMessage : ''}
       </div>
-      <button type="submit">Register</button>
+      <button type="submit">Registrar</button>
     </form>
   );
 };

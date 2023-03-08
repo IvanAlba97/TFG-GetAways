@@ -48,20 +48,20 @@ const Login = () => {
     <form onSubmit={handleSubmit}>
       <input
         type="text"
-        placeholder="Username or email"
+        placeholder="Usuario o correo"
         value={identifier}
         onChange={event => setIdentifier(event.target.value)}
       />
       <input
         type="password"
-        placeholder="Password"
+        placeholder="Contraseña"
         value={password}
         onChange={event => setPassword(event.target.value)}
       />
       <div className='error-message'>
         {showErrorMessage ? errorMessage : ''}
       </div>
-      <button type="submit">Login</button>
+      <button type="submit">Acceder</button>
     </form>
   );
 }
