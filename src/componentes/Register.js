@@ -8,23 +8,44 @@ const Register = () => {
   const [errorMessage, setErrorMessage] = useState('');
   const [showErrorMessage, setShowErrorMessage] = useState(false);
 
-  const handleSubmit = event => {
+  const handleSubmit = async event => {
     event.preventDefault();
 
-    fetch('http://localhost:3333/auth/register', {
+    const response = await fetch('http://localhost:3333/auth/register', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({ username, email, password })
     })
-      .then(response => {
+      .then(async response => {
         if (response.ok) {
           alert('Usuario registrado correctamente');
           setUsername('');
           setEmail('');
           setPassword('');
           setShowErrorMessage(false);
+
+          fetch('http://localhost:3333/auth/login', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              identifier: username,
+              password
+            }),
+            credentials: 'include',
+          })
+            .then(async res => {
+              if (res.ok) {
+                // Almacenar la sesión en sessionStorage
+                const data = res.json();
+                sessionStorage.setItem('session', JSON.stringify(data));
+
+                window.location.href = '/';
+              }
+            })
         } else {
           response.json().then(({ error }) => {
             setErrorMessage(error);
