@@ -5,6 +5,8 @@ const Register = () => {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [errorMessage, setErrorMessage] = useState('');
+  const [showErrorMessage, setShowErrorMessage] = useState(false);
 
   const handleSubmit = event => {
     event.preventDefault();
@@ -22,12 +24,17 @@ const Register = () => {
           setUsername('');
           setEmail('');
           setPassword('');
+          setShowErrorMessage(false);
         } else {
-          console.log('Registration failed');
+          response.json().then(({ error }) => {
+            setErrorMessage(error);
+            setShowErrorMessage(true);
+          });
+          throw new Error('Error al iniciar sesión');
         }
       })
       .catch(error => {
-        console.error('Error registering user:', error);
+        //console.error(error);
       });
   };
 
@@ -51,6 +58,9 @@ const Register = () => {
         value={password}
         onChange={event => setPassword(event.target.value)}
       />
+      <div className='error-message'>
+        {showErrorMessage ? errorMessage : ''}
+      </div>
       <button type="submit">Register</button>
     </form>
   );

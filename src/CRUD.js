@@ -99,6 +99,10 @@ app.post('/auth/logout', (req, res) => {
 authRouter.post('/register', (req, res) => {
   const { username, email, password } = req.body;
 
+  if (!username || !email || !password) {
+    return res.status(400).send({ error: 'Debes completar todos los campos.' });
+  }
+
   bcrypt.hash(password, 10, (error, hash) => {
     if (error) {
       res.status(500).send('Error al cifrar contraseña');

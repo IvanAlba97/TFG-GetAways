@@ -29,3 +29,7 @@ form {
     background-color: #3e8e41;
   }
   
+  .error-message {
+    color: red;
+    margin-top: 0.5rem;
+  }
