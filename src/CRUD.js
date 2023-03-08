@@ -614,6 +614,17 @@ app.put('/edit-my-comment', (req, res) => {
   });
 });
 
+app.delete('/delete-my-comment/:id', (req, res) => {
+  const { id } = req.params;
+  const query = 'DELETE FROM valoracion WHERE id = ?';
+  connection.query(query, [id], (err, results) => {
+    if (err) {
+      console.error('Error executing MySQL query: ' + err.stack);
+      return res.status(500).json({ message: 'Internal server error' });
+    }
+    res.json({ message: 'Comment deleted successfully' });
+  });
+});
 
 
 // Ruta para agregar nuevos comentarios

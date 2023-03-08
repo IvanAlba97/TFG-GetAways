@@ -92,3 +92,15 @@
 .new-comment input {
   width: calc(100% - 20px);
 }
+
+.btn-delete {
+  background-color: red;
+  color: white;
+  cursor: pointer;
+  margin: 10px;
+}
+
+.btn-delete:hover {
+  background-color: rgb(200, 0, 0);
+  
+}

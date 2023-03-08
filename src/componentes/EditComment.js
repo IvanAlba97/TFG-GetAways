@@ -58,30 +58,62 @@ function EditComment(props) {
         }
         throw new Error('Network response was not ok.');
       })
-      .then((data) => {
+      .then(async (data) => {
         setComment(data);
         setNewComment('');
         setNewRating(undefined);
         setIsEditing(false);
-        return fetch('http://localhost:3333/actualizar-media-valoraciones', {
+        try {
+          const response = await fetch('http://localhost:3333/actualizar-media-valoraciones', {
+            method: 'PUT',
+            credentials: 'include',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ id_ruta: props.id_ruta })
+          });
+          console.log(response);
+        } catch (error) {
+          console.error(error);
+        }
+      })
+      .catch(error => {
+        console.error(error);
+      });
+  };
+
+  const handleDelete = (commentId) => {
+    fetch(`http://localhost:3333/delete-my-comment/${commentId.id}`, {
+      method: 'DELETE',
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
+    .then(res => {
+      if (res.ok) {
+        return res.json();
+      }
+      throw new Error('Network response was not ok.');
+    })
+    .then(async () => {
+      try {
+        const response = await fetch('http://localhost:3333/actualizar-media-valoraciones', {
           method: 'PUT',
           credentials: 'include',
           headers: {
             'Content-Type': 'application/json'
           },
           body: JSON.stringify({ id_ruta: props.id_ruta })
-        })
-          .then((response) => {
-            console.log(response);
-          })
-          .catch((error) => {
-            console.error(error);
-          });
-      })
-      .catch(error => {
+        });
+        console.log(response);
+      } catch (error) {
         console.error(error);
-      });
+      }
+      window.location.reload();
+    })
   };
+  
 
   return (
     <div style={{ width: '100%' }}>
@@ -115,6 +147,7 @@ function EditComment(props) {
               </p>
               {/* <p className='comment-public'>Pública: {comment.publica === 1 ? 'Sí' : 'No'}</p> */}
               <button onClick={() => handleEdit(comment)}>Editar</button>
+              <button className='btn-delete' onClick={() => handleDelete(comment)}>Eliminar</button>
               <p className="comment-date">Fecha: {comment.fecha}</p>
             </>
           )}
