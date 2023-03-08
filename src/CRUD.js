@@ -54,14 +54,14 @@ app.post('/auth/login', (req, res) => {
   const { identifier, password } = req.body;
 
   if (!identifier || !password) {
-    return res.status(400).send({ error: 'Debes proporcionar un usuario y una contraseña' });
+    return res.status(400).send({ message: 'Debes proporcionar un usuario y una contraseña' });
   }
 
   connection.query('SELECT * FROM usuario WHERE nombre = ? OR correo = ?', [identifier, identifier], (error, results) => {
     if (error) {
       res.status(500).send('Error al buscar usuario');
     } else if (results.length === 0) {
-      res.status(401).send('Usuario no encontrado');
+      res.status(401).send({message: 'Usuario no encontrado'});
     } else {
       const user = results[0];
       bcrypt.compare(password, user.contraseña, (error, result) => {
@@ -73,7 +73,7 @@ app.post('/auth/login', (req, res) => {
           req.session.cookie.maxAge = 30 * 60 * 1000; // 30 minutos
           res.json(req.session.user);
         } else {
-          res.status(401).send('Contraseña incorrecta');
+          res.status(401).send({message: 'Contraseña incorrecta'});
         }
       });
     }

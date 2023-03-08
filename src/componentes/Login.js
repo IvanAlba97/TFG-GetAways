@@ -24,8 +24,8 @@ const Login = () => {
       });
 
       if (!response.ok) {
-        response.json().then(({ error }) => {
-          setErrorMessage(error);
+        response.json().then(({ message }) => {
+          setErrorMessage(message);
           setShowErrorMessage(true);
         });
         throw new Error('Error al iniciar sesión');
