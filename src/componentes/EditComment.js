@@ -88,26 +88,26 @@ function EditComment(props) {
       {comment.map(comment => (
         <div className="comment" key={comment.id}>
           {isEditing ? (
-            <div>
+            <div className='new-comment'>
               <input
                 type="text"
                 value={newComment}
                 onChange={(e) => setNewComment(e.target.value)}
               />
-              <select
-                value={newRating}
-                onChange={(e) => setNewRating(parseInt(e.target.value))}
-              >
-                {[1, 2, 3, 4, 5].map((rating) => (
-                  <option key={rating} value={rating}>{rating}</option>
-                ))}
+              <select id="valoracion" value={newRating} onChange={(e) => setNewRating(parseInt(e.target.value))}>
+                <option value="">Seleccionar valoración</option>
+                <option value="1">1 estrella</option>
+                <option value="2">2 estrellas</option>
+                <option value="3">3 estrellas</option>
+                <option value="4">4 estrellas</option>
+                <option value="5">5 estrellas</option>
               </select>
-              <button onClick={() => handleSave(comment.id)}>Publicar</button>
+              <button className='buttom' onClick={() => handleSave(comment.id)}>Publicar</button>
             </div>
           ) : (
             <>
               <h3 className="comment-title">{comment.comentario}</h3>
-              <p className="comment-author"><img className="contenedor-icono" src={Profile} />{comment.nombre}</p>
+              <p className="comment-author"><img className="contenedor-icono" src={Profile} alt="Icono-Perfil" />{comment.nombre}</p>
               <p className="comment-rating-container">
                 {[...Array(comment.valoracion)].map((e, i) => (
                   <span key={i}>★</span>

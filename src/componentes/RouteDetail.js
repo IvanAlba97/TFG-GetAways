@@ -138,6 +138,7 @@ function RouteDetail() {
         )}
       </div>
       <div className='comments'>
+        <h3>Comentarios</h3>
         {isAuthenticated ?
           (commentExists ? <EditComment id_ruta={id} /> : <NewComment id_ruta={id} />)
           : null
