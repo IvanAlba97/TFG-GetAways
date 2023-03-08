@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import Switch from 'react-switch';
 import '../estilos/CommentBox.css';
 import Profile from '../img/profile-icon.ico';
 
@@ -7,6 +8,7 @@ function EditComment(props) {
   const [isEditing, setIsEditing] = useState(false);
   const [newComment, setNewComment] = useState('');
   const [newRating, setNewRating] = useState(undefined);
+  const [publico, setPublico] = useState(true);
 
   useEffect(() => {
     fetch(`http://localhost:3333/my-comment/${props.id_ruta}`, {
@@ -30,6 +32,7 @@ function EditComment(props) {
     setIsEditing(true);
     setNewComment(comment.comentario);
     setNewRating(comment.valoracion);
+    setPublico(comment.publica);
   };
 
   const handleSave = (commentId) => {
@@ -39,7 +42,7 @@ function EditComment(props) {
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({ commentId, newComment, newRating })
+      body: JSON.stringify({ commentId, newComment, newRating, publico })
     })
       .then(res => {
         if (res.ok) {
@@ -90,30 +93,33 @@ function EditComment(props) {
         'Content-Type': 'application/json'
       }
     })
-    .then(res => {
-      if (res.ok) {
-        return res.json();
-      }
-      throw new Error('Network response was not ok.');
-    })
-    .then(async () => {
-      try {
-        const response = await fetch('http://localhost:3333/actualizar-media-valoraciones', {
-          method: 'PUT',
-          credentials: 'include',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({ id_ruta: props.id_ruta })
-        });
-        console.log(response);
-      } catch (error) {
-        console.error(error);
-      }
-      window.location.reload();
-    })
+      .then(res => {
+        if (res.ok) {
+          return res.json();
+        }
+        throw new Error('Network response was not ok.');
+      })
+      .then(async () => {
+        try {
+          const response = await fetch('http://localhost:3333/actualizar-media-valoraciones', {
+            method: 'PUT',
+            credentials: 'include',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ id_ruta: props.id_ruta })
+          });
+          console.log(response);
+        } catch (error) {
+          console.error(error);
+        }
+        window.location.reload();
+      })
   };
-  
+
+  const handleSwitchChange = (checked) => {
+    setPublico(checked);
+  };
 
   return (
     <div style={{ width: '100%' }}>
@@ -134,6 +140,10 @@ function EditComment(props) {
                 <option value="4">4 estrellas</option>
                 <option value="5">5 estrellas</option>
               </select>
+              <div>
+                <label htmlFor="publico">Público:</label>
+                <Switch id="publico" checked={publico ? true : false} onChange={handleSwitchChange} />
+              </div>
               <button className='buttom' onClick={() => handleSave(comment.id)}>Publicar</button>
             </div>
           ) : (

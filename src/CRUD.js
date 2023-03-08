@@ -603,9 +603,9 @@ app.get('/my-comment/:id_ruta', (req, res) => {
 });
 
 app.put('/edit-my-comment', (req, res) => {
-  const { commentId, newComment, newRating } = req.body;
-  const query = 'UPDATE valoracion SET valoracion = ?, comentario = ? WHERE id = ?';
-  connection.query(query, [newRating, newComment, commentId], (err, results) => {
+  const { commentId, newComment, newRating, publico } = req.body;
+  const query = 'UPDATE valoracion SET valoracion = ?, comentario = ?, publica = ? WHERE id = ?';
+  connection.query(query, [newRating, newComment, publico, commentId], (err, results) => {
     if (err) {
       console.error('Error executing MySQL query: ' + err.stack);
       return res.status(500).json({ message: 'Internal server error' });
@@ -648,16 +648,7 @@ app.post('/nuevo-comentario', (req, res) => {
 
 app.put('/actualizar-media-valoraciones', (req, res) => {
   const { id_ruta } = req.body;
-  const sql = `
-                  UPDATE ruta_senderismo
-                  SET media_valoraciones = (
-                  SELECT AVG(valoracion) as media_valoraciones
-                  FROM valoracion
-                  WHERE id_ruta = ?
-                  GROUP BY id_ruta
-                  )
-                  WHERE id = ?
-                  `;
+  const sql = `UPDATE ruta_senderismo SET media_valoraciones = ( SELECT AVG(valoracion) as media_valoraciones FROM valoracion WHERE id_ruta = ? GROUP BY id_ruta) WHERE id = ?`;
   connection.query(sql, [id_ruta, id_ruta], (err, result) => {
     if (err) throw err;
     res.send('Media de valoraciones actualizada correctamente');
