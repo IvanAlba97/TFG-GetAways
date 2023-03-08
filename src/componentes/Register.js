@@ -61,6 +61,7 @@ const Register = () => {
 
   return (
     <form onSubmit={handleSubmit}>
+      <h2>Registro</h2>
       <input
         type="text"
         placeholder="Usuario"

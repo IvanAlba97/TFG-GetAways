@@ -59,6 +59,10 @@ li input[type="checkbox"] {
   margin: 10px;
 }
 
+li p {
+  text-align: center;
+}
+
 form {
   display: flex;
   flex-direction: column;

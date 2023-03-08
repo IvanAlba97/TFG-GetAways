@@ -46,6 +46,7 @@ const Login = () => {
 
   return (
     <form onSubmit={handleSubmit}>
+      <h2>Iniciar sesión</h2>
       <input
         type="text"
         placeholder="Usuario o correo"

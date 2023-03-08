@@ -144,7 +144,7 @@ function Equipaje() {
                   onChange={() => handleItemCheck(item.id)}
                 />
               </label>
-              {item.elemento}
+              <p>{item.elemento}</p>
               <button className="btn-eliminar" onClick={() => handleItemDelete(item.id)}>Eliminar</button>
             </li>
           ))}
