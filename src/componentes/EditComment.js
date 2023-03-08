@@ -95,7 +95,7 @@ function EditComment(props) {
                 onChange={(e) => setNewComment(e.target.value)}
               />
               <select id="valoracion" value={newRating} onChange={(e) => setNewRating(parseInt(e.target.value))}>
-                <option value="">Seleccionar valoración</option>
+                {/* <option value="">Seleccionar valoración</option> */}
                 <option value="1">1 estrella</option>
                 <option value="2">2 estrellas</option>
                 <option value="3">3 estrellas</option>

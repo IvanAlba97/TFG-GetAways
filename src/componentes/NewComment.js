@@ -83,7 +83,7 @@ function NewComment(props) {
         <div>
           <label htmlFor="valoracion">Valoración:</label>
           <select id="valoracion" value={valoracion} onChange={(event) => setValoracion(event.target.value)}>
-            <option value="">Seleccionar valoración</option>
+            {/* <option value="">Seleccionar valoración</option> */}
             <option value="1">1 estrella</option>
             <option value="2">2 estrellas</option>
             <option value="3">3 estrellas</option>

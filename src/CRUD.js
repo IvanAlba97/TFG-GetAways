@@ -52,6 +52,11 @@ const authRouter = express.Router();
 
 app.post('/auth/login', (req, res) => {
   const { identifier, password } = req.body;
+
+  if (!identifier || !password) {
+    return res.status(400).send({ error: 'Debes proporcionar un usuario y una contraseña' });
+  }
+
   connection.query('SELECT * FROM usuario WHERE nombre = ? OR correo = ?', [identifier, identifier], (error, results) => {
     if (error) {
       res.status(500).send('Error al buscar usuario');
@@ -74,6 +79,7 @@ app.post('/auth/login', (req, res) => {
     }
   });
 });
+
 
 
 app.post('/auth/logout', (req, res) => {
