@@ -74,7 +74,6 @@ function NewComment(props) {
   return (
     <div className='container-new-comment'>
       <h2>Agregar comentario</h2>
-      {error && <div style={{ color: 'red' }}>{error}</div>}
       <form onSubmit={handleSubmit}>
         <div>
           <label htmlFor="comentario">Comentario:</label>
@@ -82,8 +81,8 @@ function NewComment(props) {
         </div>
         <div>
           <label htmlFor="valoracion">Valoración:</label>
-          <select id="valoracion" value={valoracion} onChange={(event) => setValoracion(event.target.value)}>
-            {/* <option value="">Seleccionar valoración</option> */}
+          <select id="valoracion" onChange={(event) => setValoracion(event.target.value)}>
+            {<option value="">Seleccionar valoración</option>}
             <option value="1">1 estrella</option>
             <option value="2">2 estrellas</option>
             <option value="3">3 estrellas</option>
@@ -95,6 +94,7 @@ function NewComment(props) {
           <label htmlFor="publico">Público:</label>
           <Switch id="publico" checked={publico} onChange={handleSwitchChange} />
         </div>
+        {error && <div style={{ color: 'red' }}>{error}</div>}
         <button type="submit">Enviar</button>
       </form>
     </div>
