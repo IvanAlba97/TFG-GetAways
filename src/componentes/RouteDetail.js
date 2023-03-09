@@ -114,6 +114,11 @@ function RouteDetail() {
         {routeDetails && (
           <div className="route-details">
             <h3>{routeDetails.nombre}</h3>
+            <div>
+              {Array.from({ length: routeDetails.media_valoraciones }, (_, i) => (
+                <span key={i}>★</span>
+              ))}
+            </div>
             <p>{routeDetails.descripcion}</p>
             <img className='imagen' src={routeDetails.imagen} alt={routeDetails.nombre} />
             <dl>

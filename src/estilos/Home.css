@@ -4,16 +4,53 @@
 }
 
 .column-1 {
-  width: 80%;
+  width: 100%;
   min-height: 500px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   /* background-color: lightblue; */
 }
 
 .column-2 {
-  width: 20%;
+  width: 0%;
   /* background-color: lightskyblue; */
 }
 
+.todas-las-rutas {
+  width: 100%;
+  min-height: 300px;
+  border: 1px solid black;
+  border-radius: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  font-size: 40px;
+  background-image: url('../img/pano.png');
+  background-size: cover;
+}
+
+.column-1 a {
+  display: flex;
+  justify-content: center;
+  width: calc(75% - 60px);
+  margin: 30px;
+}
+
+.contenedor-intro {
+  width: calc(75% - 90px);
+  height: auto;
+  border: 1px solid black;
+  margin: 20px;
+  border-radius: 10px;
+  padding: 25px;
+  background-color:lightgoldenrodyellow;
+  font-size: 15px;
+  text-align: justify;
+}
+
+/* Media query para reducir el tamaño de fuente en pantallas más pequeñas */
 @media (max-width: 768px) {
   .content {
     flex-direction: column;
@@ -23,34 +60,18 @@
   .column-2 {
     width: 100%;
   }
-}
 
-.todas-las-rutas {
-  width: calc(75% - 60px);
-  min-height: 300px;
-  border: 1px solid black;
-  border-radius: 10px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  color: white;
-  font-size: 40px;
-  margin: 30px;
-  background-image: url('../img/pano.png');
-  background-size: cover;
-}
-
-.column-1 a {
-  display: flex;
-  justify-content: center;
-}
-
-/* Media query para reducir el tamaño de fuente en pantallas más pequeñas */
-@media (max-width: 768px) {
   .todas-las-rutas {
-    width: calc(100% - 60px);
     font-size: 30px;
     min-height: 150px;
+  }
+
+  .column-1 a {
+    width: calc(100% - 30px);
+  }
+
+  .contenedor-intro {
+    width: calc(100% - 80px);
   }
 }
 

@@ -44,7 +44,7 @@ function Home() {
           </a>
         </div>
         <div className="column-2">
-          <Intro />
+          {/* <Intro /> */}
         </div>
       </div>
       <Footer />
