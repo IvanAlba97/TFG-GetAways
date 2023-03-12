@@ -1,56 +1,60 @@
 .contenedor-tarjeta {
   width: calc(75% - 50px);
   min-height: 200px;
-  border: none;
-  background-color: none;
   display: flex;
-  padding: 10px;
+  padding: 20px;
   margin: 25px auto;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
-  border-radius: 15px;
+  border-radius: 10px;
+  background-color: #fff;
 }
 
 
 .imagen-tarjeta {
   width: 250px;
   height: 100%;
-  border-radius: 15px;
+  border-radius: 10px;
   object-fit: cover;
   opacity: 0.8;
+  box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.2);
 }
 
 .contenedor-informacion-general {
   width: auto;
-  border-radius: 15px;
-  background: #FFFFFF;
+  border-radius: 10px;
+  background: #f7f7f7;
   padding: 25px;
-  margin-left: 25px;
-  margin-right: 25px;
+  margin-left: 20px;
+  margin-right: 20px;
+  box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.2);
+  color: #725d3f;
 }
 
 .contenedor-interaccion dl {
   min-width: 200px;
   min-height: calc(100% - 50px);
-  border-radius: 15px;
-  background-color: #FFFFFF;
+  border-radius: 10px;
+  background-color: #f7f7f7;
   padding: 25px;
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   grid-gap: 10px;
   margin-top: 0px;
+  box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.2);
+  color: #725d3f;
 }
 
 h2 {
   font-size: 24px;
   text-align: center;
   font-weight: bold;
-  color: #2C2C2C;
+  color: #725d3f;
 }
 
 p {
   font-size: 16px;
   text-align: justify;
-  color: #555555;
+  color: #725d3f;
   margin: 10px;
 }
 
@@ -87,6 +91,7 @@ p {
   .contenedor-tarjeta {
     width: calc(100% - 50px);
     flex-direction: column;
+    padding-bottom: 0px;
   }
 
   .imagen-tarjeta {
@@ -96,7 +101,11 @@ p {
   .contenedor-informacion-general {
     margin-left: 0px;
     margin-right: 0px;
-    margin-top: 25px;
-    margin-bottom: 25px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+  }
+
+  .contenedor-interaccion {
+    margin-bottom: 0px;
   }
 }

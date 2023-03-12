@@ -6,6 +6,7 @@ import Access from './Access.js';
 import '../estilos/Home.css';
 import Intro from './Intro.js';
 import Carrusel from './Carrusel';
+/* import Map from './Map.js'; */
 
 function Home() {
   const [user, setUser] = useState(null);
@@ -36,12 +37,12 @@ function Home() {
         <div className="column-1">
           <Intro />
           <Carrusel />
-          {/* <Map /> */}
           <a href='/rutas'>
             <div className='todas-las-rutas'>
               Todas las rutas
             </div>
           </a>
+          {/* <Map /> */}
         </div>
         <div className="column-2">
           {/* <Intro /> */}

@@ -656,6 +656,24 @@ app.put('/actualizar-media-valoraciones', (req, res) => {
   });
 });
 
+// Ruta para obtener la tabla ruta_completada
+app.get('/ruta_completada', (req, res) => {
+  const query = `
+    SELECT rs.*, COUNT(rc.id_ruta) AS num_ocurrencias
+    FROM ruta_senderismo rs
+    LEFT JOIN ruta_completada rc ON rc.id_ruta = rs.id
+    GROUP BY rs.id;
+  `;
+
+  connection.query(query, (error, results) => {
+    if (error) {
+      res.status(500).send('Error al obtener la tabla ruta_completada');
+    } else {
+      res.status(200).send(results);
+    }
+  });
+});
+
 
 
 

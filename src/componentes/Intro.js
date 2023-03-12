@@ -1,5 +1,3 @@
-import '../estilos/Intro.css';
-
 const Intro = () => {
   return (
     <div className = 'contenedor-intro'>
