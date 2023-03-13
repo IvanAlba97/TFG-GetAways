@@ -130,10 +130,10 @@ function RouteDetail() {
               <dd>{routeDetails.permiso_necesario === 1 ? 'Sí' : 'No'}</dd>
               <dt>Media de valoraciones:</dt>
               <dd>{routeDetails.media_valoraciones == null ? 'Sin valoraciones' : routeDetails.media_valoraciones + '/5'}</dd>
-              <dt>Cómo llegar:</dt>
-              <dd>{routeDetails.como_llegar}</dd>
               <dt>Provincia:</dt>
               <dd>{routeDetails.provincia}</dd>
+              <dt>Cómo llegar:</dt>
+              <dd>{routeDetails.como_llegar}</dd>
               <dt>Enlace a Google Maps:</dt>
               <dd className="google-maps-link">{<a href={routeDetails.enlace_maps} target="_blank" rel="noopener noreferrer">{routeDetails.enlace_maps}</a>}</dd>
               <dt>Pendiente:</dt>
