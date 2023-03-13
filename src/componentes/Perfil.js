@@ -47,6 +47,7 @@ function Perfil() {
         }
       })
       .then((data) => {
+        console.log('PERFIL')
         setUser(data.user);
       })
       .catch((error) => {

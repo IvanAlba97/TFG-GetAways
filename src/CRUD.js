@@ -302,6 +302,7 @@ app.get('/session', (req, res) => {
 
 // Obtener todas las rutas de senderismo
 app.get('/ruta-senderismo', (req, res) => {
+  console.log('Ruta senderismo');
   connection.query('SELECT * FROM ruta_senderismo', (error, results) => {
     if (error) throw error;
     res.send(results);
@@ -658,6 +659,7 @@ app.put('/actualizar-media-valoraciones', (req, res) => {
 
 // Ruta para obtener la tabla ruta_completada
 app.get('/ruta_completada', (req, res) => {
+  console.log('Ruta completadas');
   const query = `
     SELECT rs.*, COUNT(rc.id_ruta) AS num_ocurrencias
     FROM ruta_senderismo rs

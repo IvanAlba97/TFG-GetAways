@@ -9,51 +9,63 @@ function AllRoutes() {
   const [user, setUser] = useState(null);
 
   useEffect(() => {
+    fetch('http://localhost:3333/user', { credentials: 'include' })
+      .then((response) => {
+        if (response.ok) {
+          return response.json();
+        } else {
+          setUser(null);
+          console.warn('No se ha iniciado sesión');
+        }
+      })
+      .then((data) => {
+        if (data) {
+          setUser(data.user);
+          console.log('User');
+        }
+      })
+      .catch((error) => console.error(error));
+  }, []);
+
+  useEffect(() => {
     switch (orden) {
       case 'valoraciones':
-        fetch('http://localhost:3333/ruta-senderismo', { credentials: 'include' })
+        fetch('http://localhost:3333/ruta-senderismo')
           .then(res => res.json())
           .then(data => {
             data.sort((a, b) => b.media_valoraciones - a.media_valoraciones);
             setRutas(data);
             console.log('Valoraciones');
           })
+          .catch(error => {
+            console.error('Error al obtener datos:', error);
+          });
         break;
       case 'completadas':
-        fetch('http://localhost:3333/ruta_completada', { credentials: 'include' })
+        fetch('http://localhost:3333/ruta_completada')
           .then(res => res.json())
           .then(data => {
             data.sort((a, b) => b.num_ocurrencias - a.num_ocurrencias);
             setRutas(data);
             console.log('Completadas');
           })
+          .catch(error => {
+            console.error('Error al obtener datos:', error);
+          });
         break;
       default:
-        fetch('http://localhost:3333/ruta-senderismo', { credentials: 'include' })
+        fetch('http://localhost:3333/ruta-senderismo')
           .then(res => res.json())
           .then(data => {
             setRutas(data);
             console.log('Default');
           })
+          .catch(error => {
+            console.error('Error al obtener datos:', error);
+          });
         break;
     }
   }, [orden, setRutas]);
-
-
-  useEffect(() => {
-    fetch('http://localhost:3333/user', { credentials: 'include' })
-      .then((response) => {
-        if (response.ok) {
-          return response.json();
-        } else {
-          throw new Error('No se ha iniciado sesión');
-        }
-      })
-      .then((data) => {
-        setUser(data.user);
-      })
-      .catch((error) => console.error(error));
-  }, []);
 
   return (
     <div className='fondo'>
