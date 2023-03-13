@@ -105,5 +105,8 @@
 
 .btn-delete:hover {
   background-color: rgb(200, 0, 0);
-  
+}
+
+.google-maps-link {
+  word-break: break-all;
 }

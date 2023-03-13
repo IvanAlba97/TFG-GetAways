@@ -122,20 +122,20 @@ function RouteDetail() {
             <p>{routeDetails.descripcion}</p>
             <img className='imagen' src={routeDetails.imagen} alt={routeDetails.nombre} />
             <dl>
-              <dt>Provincia:</dt>
-              <dd>{routeDetails.provincia}</dd>
-              <dt>Longitud:</dt>
-              <dd>{routeDetails.longitud} km</dd>
               <dt>Tipo:</dt>
               <dd>{routeDetails.tipo}</dd>
+              <dt>Longitud:</dt>
+              <dd>{routeDetails.longitud} km</dd>
               <dt>Permiso necesario:</dt>
               <dd>{routeDetails.permiso_necesario === 1 ? 'Sí' : 'No'}</dd>
-              <dt>Cómo llegar:</dt>
-              <dd>{routeDetails.como_llegar}</dd>
-              <dt>Enlace a Google Maps:</dt>
-              <dd>{<a href={routeDetails.enlace_maps} target="_blank" rel="noopener noreferrer">{routeDetails.enlace_maps}</a>}</dd>
               <dt>Media de valoraciones:</dt>
               <dd>{routeDetails.media_valoraciones == null ? 'Sin valoraciones' : routeDetails.media_valoraciones + '/5'}</dd>
+              <dt>Cómo llegar:</dt>
+              <dd>{routeDetails.como_llegar}</dd>
+              <dt>Provincia:</dt>
+              <dd>{routeDetails.provincia}</dd>
+              <dt>Enlace a Google Maps:</dt>
+              <dd className="google-maps-link">{<a href={routeDetails.enlace_maps} target="_blank" rel="noopener noreferrer">{routeDetails.enlace_maps}</a>}</dd>
               <dt>Pendiente:</dt>
               <dd><Switch checked={pendientes} onChange={(checked) => manejarCambio(checked, 'pendientes')} /></dd>
               <dt>Completada:</dt>
