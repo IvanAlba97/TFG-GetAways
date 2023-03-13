@@ -122,6 +122,8 @@ function RouteDetail() {
             <p>{routeDetails.descripcion}</p>
             <img className='imagen' src={routeDetails.imagen} alt={routeDetails.nombre} />
             <dl>
+              <dt>Provincia:</dt>
+              <dd>{routeDetails.provincia}</dd>
               <dt>Longitud:</dt>
               <dd>{routeDetails.longitud} km</dd>
               <dt>Tipo:</dt>
@@ -131,7 +133,7 @@ function RouteDetail() {
               <dt>Cómo llegar:</dt>
               <dd>{routeDetails.como_llegar}</dd>
               <dt>Enlace a Google Maps:</dt>
-              <dd>{/* <a href={routeDetails.enlace_maps} target="_blank" rel="noopener noreferrer">{routeDetails.enlace_maps}</a> */}</dd>
+              <dd>{<a href={routeDetails.enlace_maps} target="_blank" rel="noopener noreferrer">{routeDetails.enlace_maps}</a>}</dd>
               <dt>Media de valoraciones:</dt>
               <dd>{routeDetails.media_valoraciones == null ? 'Sin valoraciones' : routeDetails.media_valoraciones + '/5'}</dd>
               <dt>Pendiente:</dt>
