@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Tarjeta from './Tarjeta';
 import Navbar from './Navbar';
 import Footer from './Footer';
+import '../estilos/AllRoutes.css';
 
 function AllRoutes() {
   const [rutas, setRutas] = useState([]);
@@ -50,9 +51,7 @@ function AllRoutes() {
       .then((response) => {
         if (response.ok) {
           return response.json();
-        }/*  else {
-          setProvincias(null);
-        } */
+        }
       })
       .then((data) => {
         if (data) {
@@ -73,7 +72,7 @@ function AllRoutes() {
         case 'valoraciones':
           setRutas(rutasDefault.slice().sort((a, b) => b.media_valoraciones - a.media_valoraciones));
           break;
-        case 'completadas':
+        case 'populares':
           setRutas(rutasDefault.slice().sort((a, b) => b.num_ocurrencias - a.num_ocurrencias));
           break;
       }
@@ -82,7 +81,7 @@ function AllRoutes() {
         case 'valoraciones':
           setRutas(rutasDefault.filter(ruta => ruta.id_provincia == ubicacion).slice().sort((a, b) => b.media_valoraciones - a.media_valoraciones));
           break;
-        case 'completadas':
+        case 'populares':
           setRutas(rutasDefault.filter(ruta => ruta.id_provincia == ubicacion).slice().sort((a, b) => b.num_ocurrencias - a.num_ocurrencias));
           break;
       }
@@ -92,24 +91,26 @@ function AllRoutes() {
   return (
     <div className='fondo'>
       <Navbar user={user} />
-      <div style={{ textAlign: 'center' }}>
-        <h1>Rutas</h1>
-        <div>
-          <label htmlFor="ubicacion">Ordenar por:</label>
-          <select id="ubicacion" value={ubicacion} onChange={(e) => setUbicacion(e.target.value)}>
-            <option value="default">Seleccionar una opción</option>
-            {provincias.map(provincia => (
-              <option key={provincia.id} value={provincia.id}>{provincia.nombre}</option>
-            ))}
-          </select>
-        </div>
-        <div>
-          <label htmlFor="orden">Ordenar por:</label>
-          <select id="orden" value={orden} onChange={(e) => setOrden(e.target.value)}>
-            <option value="default">Seleccionar una opción</option>
-            <option value="valoraciones">Mejor valoradas</option>
-            <option value="completadas">Más completadas</option>
-          </select>
+      <div className='contenedor'>
+        <h1>Rutas de senderismo</h1>
+        <div className='desplegables'>
+          <div className='desplegable-individual'>
+            <label htmlFor="ubicacion">Filtrar por provincia:</label>
+            <select id="ubicacion" value={ubicacion} onChange={(e) => setUbicacion(e.target.value)}>
+              <option value="default">Seleccionar una opción</option>
+              {provincias.map(provincia => (
+                <option key={provincia.id} value={provincia.id}>{provincia.nombre}</option>
+              ))}
+            </select>
+          </div>
+          <div className='desplegable-individual'>
+            <label htmlFor="orden">Ordenar por:</label>
+            <select id="orden" value={orden} onChange={(e) => setOrden(e.target.value)}>
+              <option value="default">Seleccionar una opción</option>
+              <option value="valoraciones">Mejor valoradas</option>
+              <option value="populares">Más populares</option>
+            </select>
+          </div>
         </div>
       </div>
       {rutas.map(ruta => (
