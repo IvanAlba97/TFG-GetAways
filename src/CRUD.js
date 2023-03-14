@@ -302,8 +302,8 @@ app.get('/session', (req, res) => {
 
 // Obtener todas las rutas de senderismo
 app.get('/ruta-senderismo', (req, res) => {
-  console.log('Ruta senderismo');
-  connection.query('SELECT * FROM ruta_senderismo', (error, results) => {
+  query = 'SELECT ruta_senderismo.*, provincia.nombre AS nombre_provincia, COUNT(ruta_completada.id_ruta) AS num_ocurrencias FROM ruta_senderismo INNER JOIN provincia ON ruta_senderismo.id_provincia = provincia.id LEFT JOIN ruta_completada ON ruta_senderismo.id = ruta_completada.id_ruta GROUP BY ruta_senderismo.id';
+  connection.query(query, (error, results) => {
     if (error) throw error;
     res.send(results);
   });
@@ -658,29 +658,16 @@ app.put('/actualizar-media-valoraciones', (req, res) => {
   });
 });
 
-// Ruta para obtener la tabla ruta_completada
-app.get('/ruta_completada', (req, res) => {
-  console.log('Ruta completadas');
-  const query = `
-    SELECT rs.*, COUNT(rc.id_ruta) AS num_ocurrencias
-    FROM ruta_senderismo rs
-    LEFT JOIN ruta_completada rc ON rc.id_ruta = rs.id
-    GROUP BY rs.id;
-  `;
-
+app.get('/provincias', (req, res) => {
+  const query = 'SELECT * FROM provincia';
   connection.query(query, (error, results) => {
-    if (error) {
-      res.status(500).send('Error al obtener la tabla ruta_completada');
+    if(error) {
+      res.status(500).send('Error al obtener la tabla provincia');
     } else {
       res.status(200).send(results);
     }
-  });
-});
-
-
-
-
-
+  })
+})
 
 
 

@@ -5,8 +5,11 @@ import Footer from './Footer';
 
 function AllRoutes() {
   const [rutas, setRutas] = useState([]);
-  const [orden, setOrden] = useState(''); // Nuevo estado para almacenar el ordenamiento seleccionado
+  const [rutasDefault, setRutasDefault] = useState([]);
+  const [orden, setOrden] = useState('default');
   const [user, setUser] = useState(null);
+  const [provincias, setProvincias] = useState([]);
+  const [ubicacion, setUbicacion] = useState('default');
 
   useEffect(() => {
     fetch('http://localhost:3333/user', { credentials: 'include' })
@@ -15,67 +18,95 @@ function AllRoutes() {
           return response.json();
         } else {
           setUser(null);
-          console.warn('No se ha iniciado sesión');
         }
       })
       .then((data) => {
         if (data) {
           setUser(data.user);
-          console.log('User');
         }
       })
       .catch((error) => console.error(error));
   }, []);
 
   useEffect(() => {
-    switch (orden) {
-      case 'valoraciones':
-        fetch('http://localhost:3333/ruta-senderismo')
-          .then(res => res.json())
-          .then(data => {
-            data.sort((a, b) => b.media_valoraciones - a.media_valoraciones);
-            setRutas(data);
-            console.log('Valoraciones');
-          })
-          .catch(error => {
-            console.error('Error al obtener datos:', error);
-          });
-        break;
-      case 'completadas':
-        fetch('http://localhost:3333/ruta_completada')
-          .then(res => res.json())
-          .then(data => {
-            data.sort((a, b) => b.num_ocurrencias - a.num_ocurrencias);
-            setRutas(data);
-            console.log('Completadas');
-          })
-          .catch(error => {
-            console.error('Error al obtener datos:', error);
-          });
-        break;
-      default:
-        fetch('http://localhost:3333/ruta-senderismo')
-          .then(res => res.json())
-          .then(data => {
-            setRutas(data);
-            console.log('Default');
-          })
-          .catch(error => {
-            console.error('Error al obtener datos:', error);
-          });
-        break;
+    fetch('http://localhost:3333/ruta-senderismo')
+      .then((response) => {
+        if (response.ok) {
+          return response.json();
+        } else {
+          throw new Error('Error al obtener las rutas');
+        }
+      })
+      .then((data) => {
+        setRutas(data);
+        setRutasDefault(data);
+      })
+      .catch((error) => console.error(error));
+  }, []);
+
+
+  useEffect(() => {
+    fetch('http://localhost:3333/provincias')
+      .then((response) => {
+        if (response.ok) {
+          return response.json();
+        }/*  else {
+          setProvincias(null);
+        } */
+      })
+      .then((data) => {
+        if (data) {
+          setProvincias(data);
+        }
+      })
+      .catch((error) => console.error(error));
+  }, []);
+
+  useEffect(() => {
+    if (orden == 'default' && ubicacion == 'default') {
+      setRutas(rutasDefault);
+    } else if (orden == 'default') {
+      setRutas(rutasDefault.filter(ruta => ruta.id_provincia == ubicacion));
+    } else if (ubicacion == 'default') {
+      console.log('Ordenación');
+      switch (orden) {
+        case 'valoraciones':
+          setRutas(rutasDefault.slice().sort((a, b) => b.media_valoraciones - a.media_valoraciones));
+          break;
+        case 'completadas':
+          setRutas(rutasDefault.slice().sort((a, b) => b.num_ocurrencias - a.num_ocurrencias));
+          break;
+      }
+    } else {
+      switch (orden) {
+        case 'valoraciones':
+          setRutas(rutasDefault.filter(ruta => ruta.id_provincia == ubicacion).slice().sort((a, b) => b.media_valoraciones - a.media_valoraciones));
+          break;
+        case 'completadas':
+          setRutas(rutasDefault.filter(ruta => ruta.id_provincia == ubicacion).slice().sort((a, b) => b.num_ocurrencias - a.num_ocurrencias));
+          break;
+      }
     }
-  }, [orden, setRutas]);
+  }, [orden, ubicacion]);
 
   return (
     <div className='fondo'>
       <Navbar user={user} />
       <div style={{ textAlign: 'center' }}>
-        <h1>Todas las rutas</h1>
+        <h1>Rutas</h1>
+        <div>
+          <label htmlFor="ubicacion">Ordenar por:</label>
+          <select id="ubicacion" value={ubicacion} onChange={(e) => setUbicacion(e.target.value)}>
+            <option value="default">Seleccionar una opción</option>
+            {provincias.map(provincia => (
+              <option key={provincia.id} value={provincia.id}>{provincia.nombre}</option>
+            ))}
+          </select>
+        </div>
         <div>
           <label htmlFor="orden">Ordenar por:</label>
           <select id="orden" value={orden} onChange={(e) => setOrden(e.target.value)}>
-            <option value="">Seleccionar una opción</option>
+            <option value="default">Seleccionar una opción</option>
             <option value="valoraciones">Mejor valoradas</option>
             <option value="completadas">Más completadas</option>
           </select>
