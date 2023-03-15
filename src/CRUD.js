@@ -3,7 +3,7 @@ const app = express();
 const port = 3333;
 
 const mysql = require('mysql2');
-
+const nodemailer = require('nodemailer');
 const { check, validationResult } = require('express-validator');
 
 
@@ -80,8 +80,6 @@ app.post('/auth/login', (req, res) => {
   });
 });
 
-
-
 app.post('/auth/logout', (req, res) => {
   req.session.destroy(error => {
     if (error) {
@@ -95,6 +93,15 @@ app.post('/auth/logout', (req, res) => {
   });
 });
 
+const transporter = nodemailer.createTransport({
+  host: 'smtp.gmail.com',
+  port: 465,
+  secure: true,
+  auth: {
+    user: 'getaways.tfg@gmail.com',
+    pass: 'zycsaykkjisspfvs'
+  }
+});
 
 authRouter.post('/register', (req, res) => {
   const { username, email, password } = req.body;
@@ -111,6 +118,21 @@ authRouter.post('/register', (req, res) => {
         if (error) {
           res.status(500).send('Error al registrar usuario');
         } else {
+
+          const mailOptions = {
+            from: 'getaways.tfg@gmail.com',
+            to: email,
+            subject: '¡Bienvenido a GetAways!',
+            text: `Hola ${username},\n\n¡Bienvenido a GetAways! Gracias por registrarte en nuestra aplicación para la valoración de rutas de senderismo.\n\nEn GetAways podrás encontrar toda la información que necesitas sobre las mejores rutas de senderismo de la zona, así como compartir tus experiencias y opiniones con otros usuarios. Además, podrás marcar tus rutas favoritas y recibir notificaciones sobre nuevas rutas y eventos relacionados con el senderismo.\n\nSi necesitas ayuda o tienes alguna pregunta, no dudes en contactar con nuestro equipo de soporte.\n\n¡Que disfrutes de tus aventuras en la naturaleza con GetAways!\n\nSaludos cordiales,\nEl equipo de GetAways`
+          };
+          transporter.sendMail(mailOptions, function(error, info){
+            if (error) {
+              console.log(error);
+            } else {
+              console.log('Email enviado: ' + info.response);
+            }
+          });
+
           res.send('Registro exitoso');
         }
       });
