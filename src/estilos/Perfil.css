@@ -7,7 +7,7 @@
   min-height: 50vh;
   max-width: 900px;
   margin: 0 auto;
-  padding: 2rem;
+  /* padding: 2rem; */
   background-color: #fff;
   border-radius: 10px;
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
@@ -15,6 +15,8 @@
   margin-bottom: 30px;
   display: flex;
   flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
 .titulo {
@@ -51,6 +53,7 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    margin: 20px 10px 20px 10px;
   }
 }
 
@@ -75,8 +78,8 @@
 }
 
 .perfil-button {
-  background-color: #28a745;
-  color: #fff;
+  background-color: #E8D2B1;
+  color: #5e451e;
   border-radius: 5px;
   padding: 0.5rem 1rem;
   border: none;
@@ -88,10 +91,39 @@
 }
 
 .perfil-button:hover {
-  background-color: #218838;
+  background-color: #c1af93;
+}
+
+.perfil-button-submit {
+  background-color: #E8D2B1;
 }
 
 .error-message {
   color: red;
   margin-top: 0.5rem;
+}
+
+.btn-delete-account {
+  background-color: rgb(255, 104, 104);
+  margin: 30px;
+  transition: background-color 0.2s ease-in-out;
+}
+
+.btn-delete-account:hover {
+  background-color: darkred;
+}
+
+.btn-accept {
+  margin: 30px;
+  transition: background-color 0.2s ease-in-out;
+}
+
+.btn-cancel {
+  margin: 30px;
+  transition: background-color 0.2s ease-in-out;
+  background-color: rgb(255, 104, 104);
+}
+
+.btn-cancel:hover {
+  background-color: darkred;
 }

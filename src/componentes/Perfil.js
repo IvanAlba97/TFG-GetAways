@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Navbar from './Navbar';
 import Footer from './Footer';
+import DeleteAccount from './DeleteAccount';
 import '../estilos/Perfil.css';
 
 function Perfil() {
@@ -175,7 +176,7 @@ function Perfil() {
                 <input type="text" value={nuevoNombre} onChange={event => setNuevoNombre(event.target.value)} />
                 {nombreError && <p className="error-message">{errorMessage}</p>}
                 {actualizacionNombreExitosa && <p>{successfulNameMessage}</p>}
-                <button className="perfil-button" onClick={actualizarNombre}>Actualizar nombre</button>
+                <button className="perfil-button-submit" onClick={actualizarNombre}>Actualizar nombre</button>
               </div>}
           </div>
           <div className='contenedor-boton-individual'>
@@ -190,7 +191,7 @@ function Perfil() {
                 <input type="email" value={nuevoCorreo} onChange={event => setNuevoCorreo(event.target.value)} />
                 {correoError && <p className="error-message">{errorMessage}</p>}
                 {actualizacionCorreoExitosa && <p>{successfulEmailMessage}</p>}
-                <button className="perfil-button" onClick={actualizarCorreo}>Actualizar correo</button>
+                <button className="perfil-button-submit" onClick={actualizarCorreo}>Actualizar correo</button>
               </div>}
           </div>
           <div className='contenedor-boton-individual'>
@@ -207,10 +208,13 @@ function Perfil() {
                 <input type="password" value={contrasenaNuevaRepetida} onChange={event => setContrasenaNuevaRepetida(event.target.value)} />
                 {contrasenaError && <p className="error-message">{errorMessage}</p>}
                 {actualizacionContrasenaExitosa && <p>{successfulPasswordMessage}</p>}
-                <button className="perfil-button" onClick={actualizarContrasena}>Actualizar contraseña</button>
+                <button className="perfil-button-submit" onClick={actualizarContrasena}>Actualizar contraseña</button>
               </div>}
           </div>
         </div>
+
+
+      <DeleteAccount />
       </div>
       <Footer />
     </div>

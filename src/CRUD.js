@@ -669,6 +669,54 @@ app.get('/provincias', (req, res) => {
   })
 })
 
+app.delete("/eliminar-cuenta", (req, res) => {
+  // Recuperar el id_usuario de la sesión
+  const idUsuario = req.session.user?.id;
+  // Eliminar registros de la tabla lista_revisar
+  connection.query(
+    "DELETE FROM lista_revisar WHERE id_usuario = ?",
+    [idUsuario],
+    (error, results) => {
+      if (error) throw error;
+      // Eliminar registros de la tabla valoracion
+      connection.query(
+        "DELETE FROM valoracion WHERE id_usuario = ?",
+        [idUsuario],
+        (error, results) => {
+          if (error) throw error;
+          // Eliminar registros de la tabla ruta_pendiente
+          connection.query(
+            "DELETE FROM ruta_pendiente WHERE id_usuario = ?",
+            [idUsuario],
+            (error, results) => {
+              if (error) throw error;
+              // Eliminar registros de la tabla ruta_completada
+              connection.query(
+                "DELETE FROM ruta_completada WHERE id_usuario = ?",
+                [idUsuario],
+                (error, results) => {
+                  if (error) throw error;
+                  // Eliminar registro de la tabla Usuario
+                  connection.query(
+                    "DELETE FROM Usuario WHERE id = ?",
+                    [idUsuario],
+                    (error, results) => {
+                      if (error) throw error;
+                      // Enviar una respuesta exitosa al cliente
+                      res.sendStatus(200);
+                    }
+                  );
+                }
+              );
+            }
+          );
+        }
+      );
+    }
+  );
+  req.session.destroy();
+});
+
 
 
 app.listen(port, () => {
