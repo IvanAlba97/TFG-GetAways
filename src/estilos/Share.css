@@ -1,0 +1,26 @@
+.share-container {
+  display: flex;
+  align-items: center;
+}
+
+.share-button {
+  margin-right: 8px;
+}
+
+.share-input {
+  flex: 1;
+  margin-right: 8px;
+}
+
+.btn {
+  color: #725d3f;
+  background-color: #E8D2B1;
+}
+
+.btn:hover {
+  background-color: #c1af93;
+}
+
+.copy-url-message {
+  text-align: center;
+}

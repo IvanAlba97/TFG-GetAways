@@ -3,10 +3,11 @@ import { useParams } from 'react-router-dom';
 import Navbar from "./Navbar";
 import Footer from "./Footer";
 import Switch from 'react-switch';
-import '../estilos/RouteDetail.css';
 import CommentBox from './CommentBox.js';
 import NewComment from './NewComment.js';
 import EditComment from './EditComment';
+import Share from './Share';
+import '../estilos/RouteDetail.css';
 
 function RouteDetail() {
 
@@ -141,6 +142,9 @@ function RouteDetail() {
               <dt>Completada:</dt>
               <dd><Switch checked={completadas} onChange={(checked) => manejarCambio(checked, 'completadas')} /></dd>
             </dl>
+
+            <Share />
+
           </div>
         )}
       </div>
