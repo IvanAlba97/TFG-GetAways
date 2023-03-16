@@ -146,33 +146,23 @@ app.get('/', (req, res) => {
   res.send('Página principal');
 });
 
-// Middleware para manejar los errores de validación de los datos recibidos en el cuerpo de las peticiones
-function validarDatos(req, res, next) {
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) {
-    return res.status(400).json({ errors: errors.array() });
-  }
-  next();
-}
-
 // Ruta para actualizar el nombre del usuario
-app.post('/actualizar-nombre', (req, res) => {
-  const { nombre } = req.body;
-  const { id } = req.session.user;
-
+app.post('/update-username', (req, res) => {
+  const { username } = req.body;
+  const userId = req.session.user?.id;
   // Comprobar si el nombre está vacío
-  if (!nombre) {
+  if (!username) {
     return res.status(400).json({ message: 'El campo nombre es obligatorio.' });
   }
 
-  connection.query('UPDATE usuario SET nombre = ? WHERE id = ?', [nombre, id], (err, result) => {
+  connection.query('UPDATE usuario SET nombre = ? WHERE id = ?', [username, userId], (err, result) => {
     if (err) {
       console.error(err);
       return res.status(500).json({ message: 'Error al actualizar el nombre' });
     }
 
     // Actualizar el valor de la sesión con el nuevo nombre
-    req.session.user.nombre = nombre;
+    req.session.user.nombre = username;
 
     res.json({ user: req.session.user, message: 'Usuario actualizado correctamente' });
   });
@@ -180,32 +170,31 @@ app.post('/actualizar-nombre', (req, res) => {
 
 
 // Ruta para actualizar el correo del usuario
-app.post('/actualizar-correo', (req, res) => {
-  const { correo, correoAntiguo } = req.body;
-  const { id, correo: correoActual } = req.session.user;
-
+app.post('/update-email', (req, res) => {
+  const { newEmail, oldEmail } = req.body;
+  const { id, correo: currentEmail } = req.session.user;
   // Comprobar si el correo y el correoAntiguo no están vacíos
-  if (!correo || !correoAntiguo) {
+  if (!newEmail || !oldEmail) {
     return res.status(400).json({ message: 'Los campos correo antiguo y correo nuevo son obligatorios.' });
   }
 
   // Comprobar si el correo y el correoAntiguo son válidos
-  if (!isValidEmail(correo) || !isValidEmail(correoAntiguo)) {
+  if (!isValidEmail(newEmail) || !isValidEmail(oldEmail)) {
     return res.status(400).json({ message: 'El correo antiguo y el correo nuevo deben ser válidos' });
   }
 
-  // Comprobar si el correoAntiguo es igual al correoActual
-  if (correoAntiguo !== correoActual) {
+  // Comprobar si el correoAntiguo es igual al currentEmail
+  if (oldEmail !== currentEmail) {
     return res.status(400).json({ message: 'El correo antiguo no coincide con el correo actual del usuario' });
   }
 
-  connection.query('UPDATE usuario SET correo = ? WHERE id = ?', [correo, id], (err, result) => {
+  connection.query('UPDATE usuario SET correo = ? WHERE id = ?', [newEmail, id], (err, result) => {
     if (err) {
       console.error(err);
       return res.status(500).json({ message: 'Error al actualizar el correo' });
     }
     // Actualizar el valor de la sesión con el nuevo correo
-    req.session.user.correo = correo;
+    req.session.user.correo = newEmail;
 
     res.json({ user: req.session.user, message: 'Correo actualizado correctamente' });
   });
@@ -220,12 +209,12 @@ function isValidEmail(email) {
 }
 
 // Ruta para actualizar la contraseña del usuario
-app.post('/actualizar-contrasena', (req, res) => {
-  const { contrasenaAntigua, contrasenaNueva, contrasenaNuevaRepetida } = req.body;
+app.post('/update-password', (req, res) => {
+  const { oldPassword, newPassword, newRepeatedPassword } = req.body;
   const { id } = req.session.user;
 
   // Comprobar si la contraseña y la contraseñaNueva no están vacías
-  if (!contrasenaAntigua || !contrasenaNueva || !contrasenaNuevaRepetida) {
+  if (!oldPassword || !newPassword || !newRepeatedPassword) {
     return res.status(400).json({ message: 'Todos los campos referentes a la contraseña son obligatorios.' });
   }
 
@@ -243,7 +232,7 @@ app.post('/actualizar-contrasena', (req, res) => {
     const hashedPassword = result[0].contraseña;
 
     // Comparar la contraseña antigua con la existente en la base de datos
-    bcrypt.compare(contrasenaAntigua, hashedPassword, (err, isMatch) => {
+    bcrypt.compare(oldPassword, hashedPassword, (err, isMatch) => {
       if (err) {
         console.error(err);
         return res.status(500).json({ message: 'Error al actualizar la contraseña' });
@@ -254,12 +243,12 @@ app.post('/actualizar-contrasena', (req, res) => {
       }
 
       // Comprobar si la nueva contraseña se repite correctamente
-      if (contrasenaNueva !== contrasenaNuevaRepetida) {
+      if (newPassword !== newRepeatedPassword) {
         return res.status(400).json({ message: 'La nueva contraseña y su repetición no coinciden' });
       }
 
       // Actualizar la contraseña del usuario
-      bcrypt.hash(contrasenaNueva, 10, (err, hashedNewPassword) => {
+      bcrypt.hash(newPassword, 10, (err, hashedNewPassword) => {
         if (err) {
           console.error(err);
           return res.status(500).json({ message: 'Error al actualizar la contraseña' });
@@ -278,16 +267,6 @@ app.post('/actualizar-contrasena', (req, res) => {
     });
   });
 });
-
-
-
-function isValidPassword(password) {
-  // Expresión regular para validar el formato de la contraseña
-  const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/;
-
-  // Devuelve true si la contraseña coincide con el formato de la expresión regular
-  return passwordRegex.test(password);
-}
 
 app.get('/user', (req, res) => {
   if (req.session.user) {
@@ -323,7 +302,7 @@ app.get('/session', (req, res) => {
 });
 
 // Obtener todas las rutas de senderismo
-app.get('/ruta-senderismo', (req, res) => {
+app.get('/hiking-route', (req, res) => {
   query = 'SELECT ruta_senderismo.*, provincia.nombre AS nombre_provincia, COUNT(ruta_completada.id_ruta) AS num_ocurrencias FROM ruta_senderismo INNER JOIN provincia ON ruta_senderismo.id_provincia = provincia.id LEFT JOIN ruta_completada ON ruta_senderismo.id = ruta_completada.id_ruta GROUP BY ruta_senderismo.id';
   connection.query(query, (error, results) => {
     if (error) throw error;
@@ -332,7 +311,7 @@ app.get('/ruta-senderismo', (req, res) => {
 });
 
 // Obtener una ruta de senderismo por su ID
-app.get('/ruta_senderismo/:id', (req, res) => {
+app.get('/hiking-route/:id', (req, res) => {
   const id = req.params.id;
   connection.query('SELECT ruta_senderismo.*, provincia.nombre AS provincia FROM ruta_senderismo JOIN provincia ON ruta_senderismo.id_provincia = provincia.id WHERE ruta_senderismo.id = ?', [id], (error, results) => {
     if (error) throw error;
@@ -342,7 +321,7 @@ app.get('/ruta_senderismo/:id', (req, res) => {
 
 
 // Crear una nueva ruta de senderismo
-app.post('/ruta_senderismo', (req, res) => {
+app.post('/hiking-route', (req, res) => {
   const ruta = req.body;
   connection.query('INSERT INTO ruta_senderismo SET ?', ruta, (error, results) => {
     if (error) throw error;
@@ -351,7 +330,7 @@ app.post('/ruta_senderismo', (req, res) => {
 });
 
 // Actualizar una ruta de senderismo
-app.put('/ruta_senderismo/:id', (req, res) => {
+app.put('/hiking-route/:id', (req, res) => {
   const id = req.params.id;
   const ruta = req.body;
   connection.query('UPDATE ruta_senderismo SET ? WHERE id = ?', [ruta, id], (error, results) => {
@@ -361,7 +340,7 @@ app.put('/ruta_senderismo/:id', (req, res) => {
 });
 
 // Eliminar una ruta de senderismo
-app.delete('/ruta_senderismo/:id', (req, res) => {
+app.delete('/hiking-route/:id', (req, res) => {
   const id = req.params.id;
   connection.query('DELETE FROM ruta_senderismo WHERE id = ?', [id], (error, results) => {
     if (error) throw error;
@@ -377,8 +356,8 @@ app.get('/carrusel', (req, res) => {
   });
 });
 
-app.get('/search', (req, res) => {
-  const { busqueda } = req.query;
+app.get('/search/:busqueda', (req, res) => {
+  const { busqueda } = req.params;
   const query = `SELECT * FROM ruta_senderismo WHERE nombre LIKE '%${busqueda}%'`;
 
   connection.query(query, (err, results) => {
@@ -387,7 +366,7 @@ app.get('/search', (req, res) => {
   });
 });
 
-app.get('/equipaje', (req, res) => {
+app.get('/baggage', (req, res) => {
   const userId = req.session.user?.id;
   if (!userId) {
     res.sendStatus(401);
@@ -403,7 +382,7 @@ app.get('/equipaje', (req, res) => {
 
     const items = result.map(row => ({
       id: row.id,
-      elemento: row.elemento,
+      item: row.elemento,
       checked: row.marcado === 1
     }));
 
@@ -411,36 +390,36 @@ app.get('/equipaje', (req, res) => {
   });
 });
 
-app.post('/equipaje', (req, res) => {
+app.post('/baggage', (req, res) => {
   const userId = req.session.user?.id;
 
   if (!userId) {
     return res.status(401).json({ error: 'No se ha iniciado sesión' });
   }
 
-  const elemento = req.body.elemento;
-  if (!elemento) {
+  const item = req.body.item;
+  if (!item) {
     return res.status(400).json({ error: 'El elemento es requerido' });
   }
 
   connection.query(
     'INSERT INTO lista_revisar (id_usuario, elemento, marcado) VALUES (?, ?, ?)',
-    [userId, elemento, false],
+    [userId, item, false],
     (error, result) => {
       if (error) {
         console.error('Error al insertar elemento en la base de datos', error);
         return res.status(500).json({ error: 'Error al insertar elemento en la base de datos' });
       }
 
-      const nuevoId = result.insertId;
-      const nuevoElemento = { id: nuevoId, elemento: elemento, marcado: false };
-      res.json(nuevoElemento);
+      const newId = result.insertId;
+      const newItem = { id: newId, elemento: item, marcado: false };
+      res.json(newItem);
     }
   );
 });
 
 // Endpoint para actualizar el estado de un elemento
-app.put('/equipaje/:id', (req, res) => {
+app.put('/baggage/:id', (req, res) => {
   const { id } = req.params;
   const { checked } = req.body;
 
@@ -457,7 +436,7 @@ app.put('/equipaje/:id', (req, res) => {
 });
 
 // Definir la ruta para manejar la solicitud DELETE
-app.delete('/equipaje/:itemId', (req, res) => {
+app.delete('/baggage/:itemId', (req, res) => {
   const itemId = req.params.itemId;
 
   const query = 'DELETE FROM lista_revisar WHERE id = ?';
@@ -472,7 +451,7 @@ app.delete('/equipaje/:itemId', (req, res) => {
   });
 });
 
-app.get('/ruta-pendiente', (req, res) => {
+app.get('/pending-route', (req, res) => {
   if (!req.session.user) {
     //res.status(401).json({ error: 'No autorizado' });
   } else {
@@ -486,7 +465,7 @@ app.get('/ruta-pendiente', (req, res) => {
 
 
 // Consulta si existe una ruta pendiente para el usuario con el id especificado
-app.get('/ruta-pendiente/:id', (req, res) => {
+app.get('/pending-route/:id', (req, res) => {
   if (!req.session.user) {
     //res.status(401).json({ error: 'No autorizado' });
   } else {
@@ -499,7 +478,7 @@ app.get('/ruta-pendiente/:id', (req, res) => {
 });
 
 // Actualiza el estado de la ruta pendiente
-app.post('/actualizar-pendientes', (req, res) => {
+app.post('/update-pendings', (req, res) => {
   const { id } = req.body;
   const id_ruta = id;
   /* const checked_ruta = checked; */
@@ -529,7 +508,7 @@ app.post('/actualizar-pendientes', (req, res) => {
   });
 });
 
-app.get('/ruta-completada', (req, res) => {
+app.get('/completed-route', (req, res) => {
   if (!req.session.user) {
     //res.status(401).json({ error: 'No autorizado' });
   } else {
@@ -542,7 +521,7 @@ app.get('/ruta-completada', (req, res) => {
 });
 
 // Consulta si existe una ruta completada para el usuario con el id especificado
-app.get('/ruta-completada/:id', (req, res) => {
+app.get('/completed-route/:id', (req, res) => {
   if (!req.session.user) {
     //res.status(401).json({ error: 'No autorizado' });
   } else {
@@ -555,7 +534,7 @@ app.get('/ruta-completada/:id', (req, res) => {
 });
 
 // Actualiza el estado de la ruta completada
-app.post('/actualizar-completadas', (req, res) => {
+app.post('/update-completed', (req, res) => {
   const { id } = req.body;
   const id_ruta = id;
   const id_usuario = req.session.user.id;
@@ -585,15 +564,15 @@ app.post('/actualizar-completadas', (req, res) => {
 });
 
 // Manejador para obtener todas las valoraciones
-app.get('/comments/:id_ruta', (req, res) => {
-  const { id_ruta } = req.params;
+app.get('/comments/:routeId', (req, res) => {
+  const { routeId } = req.params;
   let query = 'SELECT v.*, u.nombre FROM valoracion v JOIN usuario u ON v.id_usuario = u.id WHERE v.id_ruta = ?';
-  const queryParams = [id_ruta];
+  const queryParams = [routeId];
 
   if (req.session.user) {
-    const id_usuario = req.session.user.id;
+    const userId = req.session.user.id;
     query += ' AND v.id_usuario <> ?';
-    queryParams.push(id_usuario);
+    queryParams.push(userId);
   }
 
   connection.query(query, queryParams, (err, results) => {
@@ -605,13 +584,12 @@ app.get('/comments/:id_ruta', (req, res) => {
   });
 });
 
-app.get('/my-comment/:id_ruta', (req, res) => {
+app.get('/my-comment/:routeId', (req, res) => {
   if (req.session.user) {
-    const { id_ruta } = req.params;
-    const id_usuario = req.session.user.id;
+    const { routeId } = req.params;
+    const userId = req.session.user.id;
     let query = 'SELECT v.*, u.nombre FROM valoracion v JOIN usuario u ON v.id_usuario = u.id WHERE v.id_ruta = ? AND v.id_usuario = ?';
-    query += ' AND v.id_usuario = ?';
-    connection.query(query, [id_ruta, id_usuario, id_usuario], (err, results) => {
+    connection.query(query, [routeId, userId], (err, results) => {
       if (err) {
         console.error('Error executing MySQL query: ' + err.stack);
         return res.status(500).json({ message: 'Internal server error' });
@@ -652,13 +630,13 @@ app.delete('/delete-my-comment/:id', (req, res) => {
 
 
 // Ruta para agregar nuevos comentarios
-app.post('/nuevo-comentario', (req, res) => {
-  const id_usuario = req.session.user.id;
+app.post('/new-comment', (req, res) => {
+  const userId = req.session.user.id;
   // Obtiene los datos del comentario desde el cuerpo de la solicitud
-  const { id_ruta, valoracion, comentario, publica } = req.body;
+  const { routeId, rating, comment, public_ } = req.body;
 
   // Crea una nueva entrada en la tabla valoracion con los datos del comentario
-  const query = `INSERT INTO valoracion (id_usuario, id_ruta, valoracion, comentario, publica) VALUES (${id_usuario}, ${id_ruta}, ${valoracion}, '${comentario}', ${publica})`;
+  const query = `INSERT INTO valoracion (id_usuario, id_ruta, valoracion, comentario, publica) VALUES (${userId}, ${routeId}, ${rating}, '${comment}', ${public_})`;
 
   connection.query(query, (error, results, fields) => {
     if (error) {
@@ -670,17 +648,17 @@ app.post('/nuevo-comentario', (req, res) => {
   });
 });
 
-app.put('/actualizar-media-valoraciones', (req, res) => {
-  const { id_ruta } = req.body;
+app.put('/update-average-rating', (req, res) => {
+  const { routeId } = req.body;
   const sql = `UPDATE ruta_senderismo SET media_valoraciones = (SELECT ROUND(AVG(valoracion), 2) as media_valoraciones FROM valoracion WHERE id_ruta = ? GROUP BY id_ruta) WHERE id = ?`;
 
-  connection.query(sql, [id_ruta, id_ruta], (err, result) => {
+  connection.query(sql, [routeId, routeId], (err, result) => {
     if (err) throw err;
     res.send('Media de valoraciones actualizada correctamente');
   });
 });
 
-app.get('/provincias', (req, res) => {
+app.get('/provinces', (req, res) => {
   const query = 'SELECT * FROM provincia';
   connection.query(query, (error, results) => {
     if(error) {
@@ -691,37 +669,37 @@ app.get('/provincias', (req, res) => {
   })
 })
 
-app.delete("/eliminar-cuenta", (req, res) => {
+app.delete("/delete-account", (req, res) => {
   // Recuperar el id_usuario de la sesión
-  const idUsuario = req.session.user?.id;
+  const userId = req.session.user?.id;
   // Eliminar registros de la tabla lista_revisar
   connection.query(
     "DELETE FROM lista_revisar WHERE id_usuario = ?",
-    [idUsuario],
+    [userId],
     (error, results) => {
       if (error) throw error;
       // Eliminar registros de la tabla valoracion
       connection.query(
         "DELETE FROM valoracion WHERE id_usuario = ?",
-        [idUsuario],
+        [userId],
         (error, results) => {
           if (error) throw error;
           // Eliminar registros de la tabla ruta_pendiente
           connection.query(
             "DELETE FROM ruta_pendiente WHERE id_usuario = ?",
-            [idUsuario],
+            [userId],
             (error, results) => {
               if (error) throw error;
               // Eliminar registros de la tabla ruta_completada
               connection.query(
                 "DELETE FROM ruta_completada WHERE id_usuario = ?",
-                [idUsuario],
+                [userId],
                 (error, results) => {
                   if (error) throw error;
                   // Eliminar registro de la tabla Usuario
                   connection.query(
                     "DELETE FROM Usuario WHERE id = ?",
-                    [idUsuario],
+                    [userId],
                     (error, results) => {
                       if (error) throw error;
                       // Enviar una respuesta exitosa al cliente

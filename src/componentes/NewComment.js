@@ -3,55 +3,55 @@ import Switch from 'react-switch';
 import '../estilos/NewComment.css'
 
 function NewComment(props) {
-  const [comentario, setComentario] = useState('');
-  const [valoracion, setValoracion] = useState('');
-  const [publico, setPublico] = useState(true);
+  const [comment, setComment] = useState('');
+  const [rating, setRating] = useState('');
+  const [public_, setPublic_] = useState(true);
   const [error, setError] = useState('');
 
   const handleSubmit = (event) => {
     event.preventDefault();
 
-    // Verifica que se haya ingresado un comentario y una valoración antes de enviar el formulario
-    if (!comentario.trim() || !valoracion) {
+    // Verifica que se haya ingresado un comment y una valoración antes de enviar el formulario
+    if (!comment.trim() || !rating) {
       setError('Por favor, complete todos los campos obligatorios.');
       return;
     }
 
     // Obtiene el ID de ruta desde las propiedades de los componentes
-    const id_ruta = props.id_ruta;
+    const routeId = props.routeId;
 
-    // Crea un objeto con los datos del comentario
-    const nuevoComentario = {
-      id_ruta: id_ruta,
-      valoracion: valoracion,
-      comentario: comentario,
-      publica: publico
+    // Crea un objeto con los datos del comment
+    const newComment = {
+      routeId: routeId,
+      rating: rating,
+      comment: comment,
+      public_: public_
     };
 
-    // Envía los datos del comentario al servidor Node.js
-    fetch('http://localhost:3333/nuevo-comentario', {
+    // Envía los datos del comment al servidor Node.js
+    fetch('http://localhost:3333/new-comment', {
       method: 'POST',
       credentials: 'include',
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify(nuevoComentario)
+      body: JSON.stringify(newComment)
     })
       .then((response) => {
         console.log(response.data);
-        setComentario('');
-        setValoracion('');
-        setPublico(false);
+        setComment('');
+        setRating('');
+        setPublic_(false);
         setError('');
 
-        // Llama a la ruta /actualizar-media-valoraciones después de realizar correctamente un nuevo comentario
-        fetch(`http://localhost:3333/actualizar-media-valoraciones`, {
+        // Llama a la ruta /actualizar-media-ratinges después de realizar correctamente un nuevo comment
+        fetch(`http://localhost:3333/update-average-rating`, {
           method: 'PUT',
           credentials: 'include',
           headers: {
             'Content-Type': 'application/json'
           },
-          body: JSON.stringify({ id_ruta: id_ruta })
+          body: JSON.stringify({ routeId: routeId })
         })
           .then((response) => {
             console.log(response);
@@ -69,7 +69,7 @@ function NewComment(props) {
 
 
   const handleSwitchChange = (checked) => {
-    setPublico(checked);
+    setPublic_(checked);
   };
 
   return (
@@ -77,12 +77,12 @@ function NewComment(props) {
       <h2>Agregar comentario</h2>
       <form onSubmit={handleSubmit}>
         <div>
-          <label htmlFor="comentario">Comentario:</label>
-          <textarea id="comentario" value={comentario} onChange={(event) => setComentario(event.target.value)} />
+          <label htmlFor="comment">Comentario:</label>
+          <textarea id="comment" value={comment} onChange={(event) => setComment(event.target.value)} />
         </div>
         <div>
-          <label htmlFor="valoracion">Valoración:</label>
-          <select id="valoracion" onChange={(event) => setValoracion(event.target.value)}>
+          <label htmlFor="rating">Valoración:</label>
+          <select id="rating" onChange={(event) => setRating(event.target.value)}>
             {<option value="">Seleccionar valoración</option>}
             <option value="1">1 estrella</option>
             <option value="2">2 estrellas</option>
@@ -92,8 +92,8 @@ function NewComment(props) {
           </select>
         </div>
         <div>
-          <label htmlFor="publico">Público:</label>
-          <Switch id="publico" checked={publico} onChange={handleSwitchChange} />
+          <label htmlFor="public">Público:</label>
+          <Switch id="public" checked={public_} onChange={handleSwitchChange} />
         </div>
         {error && <div style={{ color: 'red' }}>{error}</div>}
         <button type="submit">Enviar</button>

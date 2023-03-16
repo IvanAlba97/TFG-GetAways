@@ -8,10 +8,10 @@ function EditComment(props) {
   const [isEditing, setIsEditing] = useState(false);
   const [newComment, setNewComment] = useState('');
   const [newRating, setNewRating] = useState(undefined);
-  const [publico, setPublico] = useState(true);
+  const [public_, setpublic_] = useState(true);  // No puedo usar simplemente 'public' porque es una palabra reservada.
 
   useEffect(() => {
-    fetch(`http://localhost:3333/my-comment/${props.id_ruta}`, {
+    fetch(`http://localhost:3333/my-comment/${props.routeId}`, {
       credentials: 'include'
     })
       .then(res => {
@@ -26,13 +26,13 @@ function EditComment(props) {
       .catch(err => {
         console.error(err);
       });
-  }, [props.id_ruta]);
+  }, [props.routeId]);
 
   const handleEdit = (comment) => {
     setIsEditing(true);
     setNewComment(comment.comentario);
     setNewRating(comment.valoracion);
-    setPublico(comment.publica);
+    setpublic_(comment.publica);
   };
 
   const handleSave = (commentId) => {
@@ -42,7 +42,7 @@ function EditComment(props) {
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({ commentId, newComment, newRating, publico })
+      body: JSON.stringify({ commentId, newComment, newRating, public_ })
     })
       .then(res => {
         if (res.ok) {
@@ -51,7 +51,7 @@ function EditComment(props) {
         throw new Error('Network response was not ok.');
       })
       .then(() => {
-        return fetch(`http://localhost:3333/my-comment/${props.id_ruta}`, {
+        return fetch(`http://localhost:3333/my-comment/${props.routeId}`, {
           credentials: 'include'
         });
       })
@@ -67,13 +67,13 @@ function EditComment(props) {
         setNewRating(undefined);
         setIsEditing(false);
         try {
-          const response = await fetch('http://localhost:3333/actualizar-media-valoraciones', {
+          const response = await fetch('http://localhost:3333/update-average-rating', {
             method: 'PUT',
             credentials: 'include',
             headers: {
               'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ id_ruta: props.id_ruta })
+            body: JSON.stringify({ routeId: props.routeId })
           });
           console.log(response);
         } catch (error) {
@@ -86,8 +86,8 @@ function EditComment(props) {
       });
   };
 
-  const handleDelete = (commentId) => {
-    fetch(`http://localhost:3333/delete-my-comment/${commentId.id}`, {
+  const handleDelete = (comment) => {
+    fetch(`http://localhost:3333/delete-my-comment/${comment.id}`, {
       method: 'DELETE',
       credentials: 'include',
       headers: {
@@ -102,13 +102,13 @@ function EditComment(props) {
       })
       .then(async () => {
         try {
-          const response = await fetch('http://localhost:3333/actualizar-media-valoraciones', {
+          const response = await fetch('http://localhost:3333/update-average-rating', {
             method: 'PUT',
             credentials: 'include',
             headers: {
               'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ id_ruta: props.id_ruta })
+            body: JSON.stringify({ routeId: props.routeId })
           });
           console.log(response);
         } catch (error) {
@@ -119,7 +119,7 @@ function EditComment(props) {
   };
 
   const handleSwitchChange = (checked) => {
-    setPublico(checked);
+    setpublic_(checked);
   };
 
   return (
@@ -133,7 +133,7 @@ function EditComment(props) {
                 value={newComment}
                 onChange={(e) => setNewComment(e.target.value)}
               />
-              <select id="valoracion" value={newRating} onChange={(e) => setNewRating(parseInt(e.target.value))}>
+              <select id="rating" value={newRating} onChange={(e) => setNewRating(parseInt(e.target.value))}>
                 {/* <option value="">Seleccionar valoración</option> */}
                 <option value="1">1 estrella</option>
                 <option value="2">2 estrellas</option>
@@ -142,8 +142,8 @@ function EditComment(props) {
                 <option value="5">5 estrellas</option>
               </select>
               <div>
-                <label htmlFor="publico">Público:</label>
-                <Switch id="publico" checked={publico ? true : false} onChange={handleSwitchChange} />
+                <label htmlFor="public">Público:</label>
+                <Switch id="public" checked={public_ ? true : false} onChange={handleSwitchChange} />
               </div>
               <button className='buttom' onClick={() => handleSave(comment.id)}>Publicar</button>
             </div>
@@ -156,7 +156,7 @@ function EditComment(props) {
                   <span key={i}>★</span>
                 ))}
               </p>
-              {/* <p className='comment-public'>Pública: {comment.publica === 1 ? 'Sí' : 'No'}</p> */}
+              {/* <p className='comment-public_'>Pública: {comment.publica === 1 ? 'Sí' : 'No'}</p> */}
               <button onClick={() => handleEdit(comment)}>Editar</button>
               <button className='btn-delete' onClick={() => handleDelete(comment)}>Eliminar</button>
               <p className="comment-date">Fecha: {comment.fecha}</p>

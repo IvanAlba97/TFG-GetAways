@@ -9,9 +9,11 @@ function BarraBusqueda() {
   const [focused, setFocused] = useState(false);
 
   const handleBusqueda = async () => {
-    const response = await axios.get(`http://localhost:3333/search?busqueda=${busqueda}`);
-    setRutas(response.data);
+    const response = await fetch(`http://localhost:3333/search/${busqueda}`);
+    const data = await response.json();
+    setRutas(data);
   };
+  
 
   return (
     <div className='contenedor-busqueda' onFocus={() => setFocused(true)} onBlur={() => setFocused(false)}>

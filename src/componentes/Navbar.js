@@ -35,7 +35,7 @@ const Navbar = ({ user }) => {
       <a href='/'>
         <img src={Logo} alt="Logo" />
       </a>
-      {/* <BarraBusqueda className='barra-busqueda' /> */}
+      {<BarraBusqueda className='barra-busqueda' />}
       <div className='contenedor-perfil'>
         {user ? (
           <div className='contenedor-perfil' onClick={mostrarOcultarDesplegable}>

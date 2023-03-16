@@ -9,7 +9,7 @@ function DeleteAccount() {
   };
 
   const handleAcceptClick = () => {
-    fetch("http://localhost:3333/eliminar-cuenta", {
+    fetch("http://localhost:3333/delete-account", {
       method: "DELETE",
       credentials: 'include'
     }).then(() => {

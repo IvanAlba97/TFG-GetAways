@@ -16,7 +16,7 @@ function RouteDetail() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   useEffect(() => {
-    fetch(`http://localhost:3333/ruta_senderismo/${id}`)
+    fetch(`http://localhost:3333/hiking-route/${id}`)
       .then(response => response.json())
       .then(data => setRouteDetails(data))
       .catch(error => console.error(error));
@@ -43,42 +43,42 @@ function RouteDetail() {
       })
   }, []);
 
-  const [pendientes, setPendientes] = useState(false);
-  const [completadas, setCompletadas] = useState(false);
+  const [pendings, setPendings] = useState(false);
+  const [completed, setCompleted] = useState(false);
   const [commentExists, setCommentExists] = useState(false);
 
   useEffect(() => {
-    async function obtenerDatos() {
+    async function getData() {
       try {
-        const resPendientes = await fetch(`http://localhost:3333/ruta-pendiente/${id}`, {
+        const resPendings = await fetch(`http://localhost:3333/pending-route/${id}`, {
           credentials: 'include'
         });
-        const { existe: pendientesExiste } = await resPendientes.json();
-        setPendientes(Boolean(pendientesExiste));
+        const { exists: pendingsExists } = await resPendings.json();
+        setPendings(Boolean(pendingsExists));
 
-        const resCompletada = await fetch(`http://localhost:3333/ruta-completada/${id}`, {
+        const resCompleted = await fetch(`http://localhost:3333/completed-route/${id}`, {
           credentials: 'include'
         });
-        const { existe: completadaExiste } = await resCompletada.json();
-        setCompletadas(Boolean(completadaExiste));
+        const { exists: completadaExists } = await resCompleted.json();
+        setCompleted(Boolean(completadaExists));
 
         const resMyComment = await fetch(`http://localhost:3333/my-comment/${routeDetails.id}`, {
           credentials: 'include'
         });
-        const comentarios = await resMyComment.json();
-        setCommentExists(comentarios.length > 0);
+        const comments = await resMyComment.json();
+        setCommentExists(comments.length > 0);
       } catch (error) {
         setCommentExists(false);
       }
     }
-    obtenerDatos();
+    getData();
   }, [id, routeDetails]);
 
 
 
-  async function manejarCambio(checked, tipo) {
+  async function handleChange(checked, type) {
     if (isAuthenticated) {
-      const endpoint = tipo === 'pendientes' ? 'actualizar-pendientes' : 'actualizar-completadas';
+      const endpoint = type === 'pendings' ? 'update-pendings' : 'update-completed';
       try {
         const res = await fetch(`http://localhost:3333/${endpoint}`, {
           method: 'POST',
@@ -92,10 +92,10 @@ function RouteDetail() {
           credentials: 'include'
         });
         if (res.ok) {
-          if (tipo === 'pendientes') {
-            setPendientes(checked);
+          if (type === 'pendings') {
+            setPendings(checked);
           } else {
-            setCompletadas(checked);
+            setCompleted(checked);
           }
         } else {
           console.error('Error updating data');
@@ -124,7 +124,7 @@ function RouteDetail() {
             <img className='imagen' src={routeDetails.imagen} alt={routeDetails.nombre} />
             <dl>
               <dt>Tipo:</dt>
-              <dd>{routeDetails.tipo}</dd>
+              <dd>{routeDetails.type}</dd>
               <dt>Longitud:</dt>
               <dd>{routeDetails.longitud} km</dd>
               <dt>Permiso necesario:</dt>
@@ -138,23 +138,21 @@ function RouteDetail() {
               <dt>Enlace a Google Maps:</dt>
               <dd className="google-maps-link">{<a href={routeDetails.enlace_maps} target="_blank" rel="noopener noreferrer">{routeDetails.enlace_maps}</a>}</dd>
               <dt>Pendiente:</dt>
-              <dd><Switch checked={pendientes} onChange={(checked) => manejarCambio(checked, 'pendientes')} /></dd>
+              <dd><Switch checked={pendings} onChange={(checked) => handleChange(checked, 'pendings')} /></dd>
               <dt>Completada:</dt>
-              <dd><Switch checked={completadas} onChange={(checked) => manejarCambio(checked, 'completadas')} /></dd>
+              <dd><Switch checked={completed} onChange={(checked) => handleChange(checked, 'completed')} /></dd>
             </dl>
-
             <Share />
-
           </div>
         )}
       </div>
       <div className='comments'>
         <h3>Comentarios</h3>
         {isAuthenticated ?
-          (commentExists ? <EditComment id_ruta={id} /> : <NewComment id_ruta={id} />)
+          (commentExists ? <EditComment routeId={id} /> : <NewComment routeId={id} />)
           : null
         }
-        <CommentBox id_ruta={id} />
+        <CommentBox routeId={id} />
       </div>
       <Footer />
     </div>

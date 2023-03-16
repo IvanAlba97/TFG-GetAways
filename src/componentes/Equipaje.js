@@ -15,13 +15,13 @@ function Equipaje() {
 
   const handleNewItemSubmit = (event) => {
     event.preventDefault();
-    fetch('http://localhost:3333/equipaje', {
+    fetch('http://localhost:3333/baggage', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
       credentials: 'include',
-      body: JSON.stringify({ elemento: newItem })
+      body: JSON.stringify({ item: newItem })
     })
       .then((response) => {
         if (response.ok) {
@@ -31,7 +31,7 @@ function Equipaje() {
         }
       })
       .then(() => {
-        return fetch('http://localhost:3333/equipaje', { credentials: 'include' });
+        return fetch('http://localhost:3333/baggage', { credentials: 'include' });
       })
       .then((response) => {
         if (response.ok) {
@@ -53,7 +53,7 @@ function Equipaje() {
     });
     setItems(updatedItems);
 
-    fetch(`http://localhost:3333/equipaje/${itemId}`, {
+    fetch(`http://localhost:3333/baggage/${itemId}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
@@ -62,7 +62,7 @@ function Equipaje() {
       body: JSON.stringify({ checked: !updatedItems.find((item) => item.id === itemId).checked }),
     })
       .then(() => {
-        return fetch('http://localhost:3333/equipaje', { credentials: 'include' });
+        return fetch('http://localhost:3333/baggage', { credentials: 'include' });
       })
       .then((response) => {
         if (response.ok) {
@@ -78,12 +78,12 @@ function Equipaje() {
   };
 
   const handleItemDelete = (itemId) => {
-    fetch(`http://localhost:3333/equipaje/${itemId}`, {
+    fetch(`http://localhost:3333/baggage/${itemId}`, {
       method: 'DELETE',
       credentials: 'include',
     })
       .then(() => {
-        return fetch('http://localhost:3333/equipaje', { credentials: 'include' });
+        return fetch('http://localhost:3333/baggage', { credentials: 'include' });
       })
       .then((response) => {
         if (response.ok) {
@@ -102,7 +102,7 @@ function Equipaje() {
   const [user, setUser] = useState(null);
 
   useEffect(() => {
-    fetch('http://localhost:3333/equipaje', { credentials: 'include' })
+    fetch('http://localhost:3333/baggage', { credentials: 'include' })
       .then((response) => {
         if (response.ok) {
           return response.json();
@@ -144,7 +144,7 @@ function Equipaje() {
                   onChange={() => handleItemCheck(item.id)}
                 />
               </label>
-              <p>{item.elemento}</p>
+              <p>{item.item}</p>
               <button className="btn-eliminar" onClick={() => handleItemDelete(item.id)}>Eliminar</button>
             </li>
           ))}

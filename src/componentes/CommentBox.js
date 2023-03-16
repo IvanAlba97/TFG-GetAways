@@ -6,7 +6,7 @@ function CommentBox(props) {
   const [comments, setComments] = useState([]);
 
   useEffect(() => {
-    fetch(`http://localhost:3333/comments/${props.id_ruta}`, {
+    fetch(`http://localhost:3333/comments/${props.routeId}`, {
       credentials: 'include'
     })
       .then(res => {
@@ -24,7 +24,7 @@ function CommentBox(props) {
       .catch(err => {
         console.error(err);
       });
-  }, [props.id_ruta]);
+  }, [props.routeId]);
 
   return (
     <div style={{width: '100%'}}>

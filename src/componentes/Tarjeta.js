@@ -4,24 +4,24 @@ import '../estilos/Tarjeta.css';
 import TextTruncator from "./TextTruncator.js";
 
 function Tarjeta(props) {
-  const [pendientes, setPendientes] = useState(false);
-  const [completadas, setCompletadas] = useState(false);
+  const [pendings, setPendings] = useState(false);
+  const [completed, setCompleted] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   useEffect(() => {
-    async function obtenerDatos() {
+    async function getData() {
       try {
-        const resPendientes = await fetch(`http://localhost:3333/ruta-pendiente/${props.id}`, {
+        const resPendings = await fetch(`http://localhost:3333/pending-route/${props.id}`, {
           credentials: 'include'
         });
-        const { existe: pendientesExiste } = await resPendientes.json();
-        setPendientes(Boolean(pendientesExiste));
+        const { exists: pendingsExists } = await resPendings.json();
+        setPendings(Boolean(pendingsExists));
 
-        const resCompletada = await fetch(`http://localhost:3333/ruta-completada/${props.id}`, {
+        const resCompleted = await fetch(`http://localhost:3333/completed-route/${props.id}`, {
           credentials: 'include'
         });
-        const { existe: completadaExiste } = await resCompletada.json();
-        setCompletadas(Boolean(completadaExiste));
+        const { exists: completadaexists } = await resCompleted.json();
+        setCompleted(Boolean(completadaexists));
 
         const resUser = await fetch(`http://localhost:3333/user`, {
           credentials: 'include'
@@ -32,18 +32,16 @@ function Tarjeta(props) {
           setIsAuthenticated(false);
         }
       } catch (error) {
-        // Si se produce un error al obtener la información del usuario,
-        // es posible que el usuario no esté autenticado
         setIsAuthenticated(false);
       }
     }
 
-    obtenerDatos();
+    getData();
   }, [props.id]);
 
-  async function manejarCambio(checked, tipo) {
+  async function handleChange(checked, type) {
     if (isAuthenticated) {
-      const endpoint = tipo === 'pendientes' ? 'actualizar-pendientes' : 'actualizar-completadas';
+      const endpoint = type === 'pendings' ? 'update-pendings' : 'update-completed';
       try {
         const res = await fetch(`http://localhost:3333/${endpoint}`, {
           method: 'POST',
@@ -57,10 +55,10 @@ function Tarjeta(props) {
           credentials: 'include'
         });
         if (res.ok) {
-          if (tipo === 'pendientes') {
-            setPendientes(checked);
+          if (type === 'pendings') {
+            setPendings(checked);
           } else {
-            setCompletadas(checked);
+            setCompleted(checked);
           }
         } else {
           console.error('Error updating data');
@@ -77,23 +75,23 @@ function Tarjeta(props) {
     <div className='contenedor-tarjeta'>
       <a href={`http://localhost:3000/ruta/${props.id}`}>
         <img className='imagen-tarjeta'
-          src={props.imagen}
+          src={props.image}
           alt='Foto de ruta' />
       </a>
       <div className='contenedor-informacion-general'>
         <a href={`http://localhost:3000/ruta/${props.id}`}>
-          <h2>{props.nombre}</h2>
+          <h2>{props.name}</h2>
         </a>
         <div>
-          <TextTruncator text={props.descripcion} maxLength={300} />
+          <TextTruncator text={props.description} maxLength={300} />
         </div>
       </div>
       <div className='contenedor-interaccion'>
         <dl>
           <dt>Media de valoraciones</dt>
-          <dd>{props.media_valoraciones == null ? 'Sin valoraciones' :
+          <dd>{props.averageRating == null ? 'Sin valoraciones' :
             <>
-              {Array.from({ length: Math.round(props.media_valoraciones) }, (_, i) => (
+              {Array.from({ length: Math.round(props.averageRating) }, (_, i) => (
                 <span key={i}>★</span>
               ))}
             </>
@@ -101,10 +99,10 @@ function Tarjeta(props) {
           </dd>
           <dt>Pendiente</dt>
           <dd>{isAuthenticated ?
-            <Switch checked={pendientes} onChange={(checked) => manejarCambio(checked, 'pendientes')} />
-            : <Switch checked={pendientes} onClick={() => window.location.href = '/access'} onChange={(checked) => manejarCambio(checked, 'pendientes')} />}</dd>
+            <Switch checked={pendings} onChange={(checked) => handleChange(checked, 'pendings')} />
+            : <Switch checked={pendings} onClick={() => window.location.href = '/access'} onChange={(checked) => handleChange(checked, 'pendings')} />}</dd>
           <dt>Completada</dt>
-          <dd><Switch checked={completadas} onChange={(checked) => manejarCambio(checked, 'completadas')} /></dd>
+          <dd><Switch checked={completed} onChange={(checked) => handleChange(checked, 'completed')} /></dd>
 
         </dl>
       </div>

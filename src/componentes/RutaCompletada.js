@@ -3,13 +3,13 @@ import Tarjeta from './Tarjeta';
 import Navbar from './Navbar';
 import Footer from './Footer';
 
-function RutaPendiente() {
-  const [rutas, setRutas] = useState([]);
+function RutaCompletada() {
+  const [routes, setRoutes] = useState([]);
 
   useEffect(() => {
-    fetch('http://localhost:3333/ruta-completada', { credentials: 'include' })
+    fetch('http://localhost:3333/completed-route', { credentials: 'include' })
       .then(res => res.json())
-      .then(data => setRutas(data));
+      .then(data => setRoutes(data));
   }, []);
 
   const [user, setUser] = useState(null);
@@ -33,20 +33,20 @@ function RutaPendiente() {
     <div className='fondo'>
       <Navbar user={user} />
       <div style={{ textAlign: 'center' }}>
-        <h1>Rutas Completadas</h1>
+        <h1>Rutas completadas</h1>
       </div>
-      {rutas.map(ruta => (
+      {routes.map(route => (
         <Tarjeta
-          key={ruta.id}
-          id={ruta.id}
-          nombre={ruta.nombre}
-          descripcion={ruta.descripcion}
-          imagen={ruta.imagen}
-          media_valoraciones={ruta.media_valoraciones} />
+          key={route.id}
+          id={route.id}
+          name={route.nombre}
+          description={route.descripcion}
+          image={route.imagen}
+          averageRating={route.media_valoraciones} />
       ))}
       <Footer />
     </div>
   );
 }
 
-export default RutaPendiente;
+export default RutaCompletada;

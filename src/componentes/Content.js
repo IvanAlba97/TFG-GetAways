@@ -8,8 +8,6 @@ const Content = () => {
   return (
     <div className="content">
       <div className="column-1">
-        {/* <p>Contenido de la columna 1</p> */}
-        {/* <ItemList /> */}
         <Carrusel />
         {/* <Map /> */}
         <div className='todas-las-rutas'>
@@ -17,7 +15,6 @@ const Content = () => {
         </div>
       </div>
       <div className="column-2">
-        {/* <p>Contenido de la columna 2</p> */}
         <Intro />
       </div>
     </div>
