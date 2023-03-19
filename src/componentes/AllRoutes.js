@@ -91,7 +91,7 @@ function AllRoutes() {
     <div className='fondo'>
       <Navbar user={user} />
       <div className='contenedor'>
-        <h1>routes de senderismo</h1>
+        <h1>Rutas de senderismo</h1>
         <div className='desplegables'>
           <div className='desplegable-individual'>
             <label htmlFor="location">Filtrar por provincia:</label>

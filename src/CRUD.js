@@ -605,9 +605,9 @@ app.get('/my-comment/:routeId', (req, res) => {
 });
 
 app.put('/edit-my-comment', (req, res) => {
-  const { commentId, newComment, newRating, publico } = req.body;
+  const { commentId, newComment, newRating, public_ } = req.body;
   const query = 'UPDATE valoracion SET valoracion = ?, comentario = ?, publica = ? WHERE id = ?';
-  connection.query(query, [newRating, newComment, publico, commentId], (err, results) => {
+  connection.query(query, [newRating, newComment, public_, commentId], (err, results) => {
     if (err) {
       console.error('Error executing MySQL query: ' + err.stack);
       return res.status(500).json({ message: 'Internal server error' });
