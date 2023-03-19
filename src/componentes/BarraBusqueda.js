@@ -1,33 +1,54 @@
-import React, { useState } from 'react';
-import axios from 'axios';
+import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import '../estilos/BarraBusqueda.css';
 
 function BarraBusqueda() {
-  const [busqueda, setBusqueda] = useState('');
-  const [rutas, setRutas] = useState([]);
-  const [focused, setFocused] = useState(false);
+  const [search, setSearch] = useState('');
+  const [routes, setRoutes] = useState([]);
+  const [showResults, setShowResults] = useState(false);
+  const searchContainerRef = useRef(null);
+  const searchResultsRef = useRef(null);
 
-  const handleBusqueda = async () => {
-    const response = await fetch(`http://localhost:3333/search/${busqueda}`);
+  const handleSearch = async () => {
+    const response = await fetch(`http://localhost:3333/search/${search}`);
     const data = await response.json();
-    setRutas(data);
+    setRoutes(data);
+    setShowResults(true);
   };
-  
+
+  useEffect(() => {
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
+
+  const handleClickOutside = (event) => {
+    if (
+      searchContainerRef.current &&
+      !searchContainerRef.current.contains(event.target) &&
+      searchResultsRef.current &&
+      !searchResultsRef.current.contains(event.target)
+    ) {
+      setShowResults(false);
+    }
+  };
 
   return (
-    <div className='contenedor-busqueda' onFocus={() => setFocused(true)} onBlur={() => setFocused(false)}>
-      <input type="text" value={busqueda} onChange={(e) => setBusqueda(e.target.value)} onKeyUp={handleBusqueda} />
-      <div className={`resultados-busqueda ${focused ? '' : 'hidden'}`}>
-        {rutas.map((ruta) => (
-          <Link key={ruta.id} to={`/ruta/${ruta.id}`} className='enlace-ruta'>
-            <div className='contenedor-individual'>{ruta.nombre}</div>
-          </Link>
-        ))}
-      </div>
+    <div className='contenedor-busqueda' ref={searchContainerRef}>
+      <input type="text" value={search} onChange={(e) => setSearch(e.target.value)} onKeyUp={handleSearch} />
+      {showResults && (
+        <div className='resultados-busqueda' ref={searchResultsRef}>
+          {routes.map((route) => (
+            <Link key={route.id} to={`/ruta/${route.id}`} className='enlace-ruta'>
+          <div className='contenedor-individual'>{route.nombre}</div>
+        </Link>
+      ))}
     </div>
-  );
+  )
 }
-
+</div >
+);
+}
 
 export default BarraBusqueda;

@@ -356,9 +356,9 @@ app.get('/carrusel', (req, res) => {
   });
 });
 
-app.get('/search/:busqueda', (req, res) => {
-  const { busqueda } = req.params;
-  const query = `SELECT * FROM ruta_senderismo WHERE nombre LIKE '%${busqueda}%'`;
+app.get('/search/:search', (req, res) => {
+  const { search } = req.params;
+  const query = `SELECT * FROM ruta_senderismo WHERE nombre LIKE '%${search}%'`;
 
   connection.query(query, (err, results) => {
     if (err) throw err;
