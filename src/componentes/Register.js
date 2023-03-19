@@ -5,6 +5,7 @@ const Register = () => {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState('');
   const [showErrorMessage, setShowErrorMessage] = useState(false);
 
@@ -16,7 +17,7 @@ const Register = () => {
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({ username, email, password })
+      body: JSON.stringify({ username, email, password, confirmPassword })
     })
       .then(async response => {
         if (response.ok) {
@@ -24,6 +25,7 @@ const Register = () => {
           setUsername('');
           setEmail('');
           setPassword('');
+          setConfirmPassword('');
           setShowErrorMessage(false);
 
           fetch('http://localhost:3333/auth/login', {
@@ -79,6 +81,12 @@ const Register = () => {
         placeholder="Contraseña"
         value={password}
         onChange={event => setPassword(event.target.value)}
+      />
+      <input
+        type="password"
+        placeholder="Confirmar contraseña"
+        value={confirmPassword}
+        onChange={event => setConfirmPassword(event.target.value)}
       />
       <div className='error-message'>
         {showErrorMessage ? errorMessage : ''}
