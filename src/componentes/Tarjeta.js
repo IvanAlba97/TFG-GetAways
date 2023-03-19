@@ -14,14 +14,14 @@ function Tarjeta(props) {
         const resPendings = await fetch(`http://localhost:3333/pending-route/${props.id}`, {
           credentials: 'include'
         });
-        const { exists: pendingsExists } = await resPendings.json();
+        const { exists_: pendingsExists } = await resPendings.json();
         setPendings(Boolean(pendingsExists));
 
         const resCompleted = await fetch(`http://localhost:3333/completed-route/${props.id}`, {
           credentials: 'include'
         });
-        const { exists: completadaexists } = await resCompleted.json();
-        setCompleted(Boolean(completadaexists));
+        const { exists_: completedExists } = await resCompleted.json();
+        setCompleted(Boolean(completedExists));
 
         const resUser = await fetch(`http://localhost:3333/user`, {
           credentials: 'include'
@@ -50,7 +50,7 @@ function Tarjeta(props) {
           },
           body: JSON.stringify({
             id: props.id,
-            checked: checked
+            /* checked: checked */
           }),
           credentials: 'include'
         });

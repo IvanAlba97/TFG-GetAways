@@ -119,7 +119,7 @@ function AllRoutes() {
           name={ruta.nombre}
           description={ruta.descripcion}
           image={ruta.imagen}
-          averageRatings={ruta.media_valoraciones} />
+          averageRating={ruta.media_valoraciones} />
       ))}
       <Footer />
     </div>

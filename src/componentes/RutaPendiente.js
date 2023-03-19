@@ -33,7 +33,7 @@ function RutaPendiente() {
     <div className='fondo'>
       <Navbar user={user} />
       <div style={{ textAlign: 'center' }}>
-        <h1>Rutas pendientes</h1>
+        <h1 style={{color: '#5e451e'}}>Rutas pendientes</h1>
       </div>
       {routes.map(route => (
         <Tarjeta

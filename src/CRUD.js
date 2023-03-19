@@ -455,8 +455,8 @@ app.get('/pending-route', (req, res) => {
   if (!req.session.user) {
     //res.status(401).json({ error: 'No autorizado' });
   } else {
-    const idUsuario = req.session.user.id;
-    connection.query('SELECT ruta.id, ruta.nombre, ruta.descripcion, ruta.imagen, ruta.longitud, ruta.tipo, ruta.dificultad, ruta.permiso_necesario, ruta.como_llegar, ruta.enlace_maps, ruta.media_valoraciones FROM ruta_senderismo AS ruta JOIN ruta_pendiente AS pendiente ON ruta.id = pendiente.id_ruta WHERE pendiente.id_usuario = ?', [idUsuario], (error, results) => {
+    const userId = req.session.user.id;
+    connection.query('SELECT ruta.id, ruta.nombre, ruta.descripcion, ruta.imagen, ruta.longitud, ruta.tipo, ruta.dificultad, ruta.permiso_necesario, ruta.como_llegar, ruta.enlace_maps, ruta.media_valoraciones FROM ruta_senderismo AS ruta JOIN ruta_pendiente AS pendiente ON ruta.id = pendiente.id_ruta WHERE pendiente.id_usuario = ?', [userId], (error, results) => {
       if (error) throw error;
       res.json(results);
     });
@@ -469,8 +469,8 @@ app.get('/pending-route/:id', (req, res) => {
   if (!req.session.user) {
     //res.status(401).json({ error: 'No autorizado' });
   } else {
-    const idUsuario = req.session.user.id;
-    connection.query('SELECT EXISTS(SELECT * FROM ruta_pendiente WHERE id_usuario = ? AND id_ruta = ?) AS existe', [idUsuario, req.params.id], (error, results) => {
+    const userId = req.session.user.id;
+    connection.query('SELECT EXISTS(SELECT * FROM ruta_pendiente WHERE id_usuario = ? AND id_ruta = ?) AS exists_', [userId, req.params.id], (error, results) => {
       if (error) throw error;
       res.json(results[0]);
     });
@@ -480,24 +480,24 @@ app.get('/pending-route/:id', (req, res) => {
 // Actualiza el estado de la ruta pendiente
 app.post('/update-pendings', (req, res) => {
   const { id } = req.body;
-  const id_ruta = id;
+  const routeId = id;
   /* const checked_ruta = checked; */
-  const id_usuario = req.session.user.id;
+  const userId = req.session.user.id;
   let query;
   let values;
 
   // Consulta si existe una ruta pendiente para el usuario con el id especificado
-  connection.query('SELECT EXISTS(SELECT * FROM ruta_pendiente WHERE id_usuario = ? AND id_ruta = ?) AS existe', [id_usuario, id_ruta], (error, results) => {
+  connection.query('SELECT EXISTS(SELECT * FROM ruta_pendiente WHERE id_usuario = ? AND id_ruta = ?) AS exists_', [userId, routeId], (error, results) => {
     if (error) throw error;
 
     // Si existe la ruta pendiente, actualiza su estado
     if (results[0].existe) {
       query = 'DELETE FROM ruta_pendiente WHERE id_usuario = ? AND id_ruta = ?';
-      values = [id_usuario, id_ruta];
+      values = [userId, routeId];
     } else {
       // Si no existe la ruta pendiente, la crea con el estado especificado
       query = 'INSERT INTO ruta_pendiente (id_usuario, id_ruta) VALUES (?, ?)';
-      values = [id_usuario, id_ruta];
+      values = [userId, routeId];
     }
 
     // Ejecuta la consulta
@@ -512,8 +512,8 @@ app.get('/completed-route', (req, res) => {
   if (!req.session.user) {
     //res.status(401).json({ error: 'No autorizado' });
   } else {
-    const idUsuario = req.session.user.id;
-    connection.query('SELECT ruta.id, ruta.nombre, ruta.descripcion, ruta.imagen, ruta.longitud, ruta.tipo, ruta.dificultad, ruta.permiso_necesario, ruta.como_llegar, ruta.enlace_maps, ruta.media_valoraciones FROM ruta_senderismo AS ruta JOIN ruta_completada AS completada ON ruta.id = completada.id_ruta WHERE completada.id_usuario = ?', [idUsuario], (error, results) => {
+    const userId = req.session.user.id;
+    connection.query('SELECT ruta.id, ruta.nombre, ruta.descripcion, ruta.imagen, ruta.longitud, ruta.tipo, ruta.dificultad, ruta.permiso_necesario, ruta.como_llegar, ruta.enlace_maps, ruta.media_valoraciones FROM ruta_senderismo AS ruta JOIN ruta_completada AS completada ON ruta.id = completada.id_ruta WHERE completada.id_usuario = ?', [userId], (error, results) => {
       if (error) throw error;
       res.json(results);
     });
@@ -525,8 +525,8 @@ app.get('/completed-route/:id', (req, res) => {
   if (!req.session.user) {
     //res.status(401).json({ error: 'No autorizado' });
   } else {
-    const idUsuario = req.session.user.id;
-    connection.query('SELECT EXISTS(SELECT * FROM ruta_completada WHERE id_usuario = ? AND id_ruta = ?) AS existe', [idUsuario, req.params.id], (error, results) => {
+    const userId = req.session.user.id;
+    connection.query('SELECT EXISTS(SELECT * FROM ruta_completada WHERE id_usuario = ? AND id_ruta = ?) AS exists_', [userId, req.params.id], (error, results) => {
       if (error) throw error;
       res.json(results[0]);
     });
@@ -536,23 +536,23 @@ app.get('/completed-route/:id', (req, res) => {
 // Actualiza el estado de la ruta completada
 app.post('/update-completed', (req, res) => {
   const { id } = req.body;
-  const id_ruta = id;
-  const id_usuario = req.session.user.id;
+  const routeId = id;
+  const userId = req.session.user.id;
   let query;
   let values;
 
   // Consulta si existe una ruta completada para el usuario con el id especificado
-  connection.query('SELECT EXISTS(SELECT * FROM ruta_completada WHERE id_usuario = ? AND id_ruta = ?) AS existe', [id_usuario, id_ruta], (error, results) => {
+  connection.query('SELECT EXISTS(SELECT * FROM ruta_completada WHERE id_usuario = ? AND id_ruta = ?) AS existe', [userId, routeId], (error, results) => {
     if (error) throw error;
 
     // Si existe la ruta completada, actualiza su estado
     if (results[0].existe) {
       query = 'DELETE FROM ruta_completada WHERE id_usuario = ? AND id_ruta = ?';
-      values = [id_usuario, id_ruta];
+      values = [userId, routeId];
     } else {
       // Si no existe la ruta completada, la crea con el estado especificado
       query = 'INSERT INTO ruta_completada (id_usuario, id_ruta) VALUES (?, ?)';
-      values = [id_usuario, id_ruta];
+      values = [userId, routeId];
     }
 
     // Ejecuta la consulta

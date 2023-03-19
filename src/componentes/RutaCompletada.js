@@ -33,7 +33,7 @@ function RutaCompletada() {
     <div className='fondo'>
       <Navbar user={user} />
       <div style={{ textAlign: 'center' }}>
-        <h1>Rutas completadas</h1>
+        <h1 style={{color: '#5e451e'}}>Rutas completadas</h1>
       </div>
       {routes.map(route => (
         <Tarjeta

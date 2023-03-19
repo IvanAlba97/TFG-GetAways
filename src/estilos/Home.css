@@ -9,18 +9,15 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  /* background-color: lightblue; */
 }
 
 .column-2 {
   width: 0%;
-  /* background-color: lightskyblue; */
 }
 
 .todas-las-rutas {
   width: 100%;
   min-height: 300px;
-  border: 1px solid black;
   border-radius: 10px;
   display: flex;
   justify-content: center;
@@ -29,6 +26,7 @@
   font-size: 40px;
   background-image: url('../img/pano.png');
   background-size: cover;
+  box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.2);
 }
 
 .column-1 a {
@@ -41,14 +39,15 @@
 .contenedor-intro {
   width: calc(75% - 90px);
   height: auto;
-  border: 1px solid black;
+  border: 1px solid #ddd;
   margin: 20px;
   border-radius: 10px;
   padding: 25px;
-  background-color:lightgoldenrodyellow;
   font-size: 15px;
   text-align: justify;
-  background-color: #f8f2ce;
+  color: #5e451e;
+  background-color: #f7f7f7;
+  box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.2);
 }
 
 /* Media query para reducir el tamaño de fuente en pantallas más pequeñas */

@@ -31,6 +31,18 @@ option {
   flex-direction: column;
 }
 
+.contenedor h1 {
+  color: #5e451e;
+}
+
+.desplegable-individual label {
+  color: #5e451e;
+}
+
+.desplegable-individual option {
+  color: #5e451e;
+}
+
 @media screen and (max-width: 768px) {
   .desplegables {
     flex-direction: column;
