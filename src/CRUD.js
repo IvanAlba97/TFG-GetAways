@@ -566,7 +566,7 @@ app.post('/update-completed', (req, res) => {
 // Manejador para obtener todas las valoraciones
 app.get('/comments/:routeId', (req, res) => {
   const { routeId } = req.params;
-  let query = 'SELECT v.*, u.nombre FROM valoracion v JOIN usuario u ON v.id_usuario = u.id WHERE v.id_ruta = ?';
+  let query = 'SELECT v.*, u.nombre FROM valoracion v JOIN usuario u ON v.id_usuario = u.id WHERE v.id_ruta = ? AND v.publica = 1';
   const queryParams = [routeId];
 
   if (req.session.user) {
