@@ -38,11 +38,17 @@ function BarraBusqueda() {
 
   const handleToggleSearch = () => {
     setShowFullSearch(!showFullSearch);
-  }; // nuevo evento
+  };
+
+  const handleLinkClick = () => {
+    setSearch('');
+    setShowResults(false);
+    setShowFullSearch(!showFullSearch);
+  };
 
   return (
     <div>
-      <div className='contenedor-lupa'> { }
+      <div className='contenedor-lupa'>
         <img src={lupaIcono} alt="icono de búsqueda" onClick={handleToggleSearch} />
         {showFullSearch ?
           <div className='contenedor-busqueda-full' ref={searchContainerRef}>
@@ -50,7 +56,7 @@ function BarraBusqueda() {
             {showResults && (
               <div className='resultados-busqueda-full' ref={searchResultsRef}>
                 {routes.map((route) => (
-                  <Link key={route.id} to={`/ruta/${route.id}`} className='enlace-ruta'>
+                  <Link key={route.id} to={`/ruta/${route.id}`} className='enlace-ruta' onClick={handleLinkClick}>
                     <div className='contenedor-individual'>{route.nombre}</div>
                   </Link>
                 ))}
@@ -65,7 +71,7 @@ function BarraBusqueda() {
         {showResults && (
           <div className='resultados-busqueda' ref={searchResultsRef}>
             {routes.map((route) => (
-              <Link key={route.id} to={`/ruta/${route.id}`} className='enlace-ruta'>
+              <Link key={route.id} to={`/ruta/${route.id}`} className='enlace-ruta' onClick={handleLinkClick}>
                 <div className='contenedor-individual'>{route.nombre}</div>
               </Link>
             ))}
@@ -74,6 +80,7 @@ function BarraBusqueda() {
       </div>
     </div>
   );
+
 }
 
 export default BarraBusqueda;
