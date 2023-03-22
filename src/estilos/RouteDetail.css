@@ -104,14 +104,14 @@ span {
 }
 
 .btn-delete {
-  background-color: red;
+  background-color: rgb(255, 104, 104);
   color: white;
   cursor: pointer;
   margin: 10px;
 }
 
 .btn-delete:hover {
-  background-color: rgb(200, 0, 0);
+  background-color: darkred;
 }
 
 .google-maps-link {
