@@ -43,7 +43,7 @@ function BarraBusqueda() {
   const handleLinkClick = () => {
     setSearch('');
     setShowResults(false);
-    setShowFullSearch(!showFullSearch);
+    setShowFullSearch(false);
   };
 
   return (
