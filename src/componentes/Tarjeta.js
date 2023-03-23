@@ -73,11 +73,13 @@ function Tarjeta(props) {
 
   return (
     <div className='contenedor-tarjeta'>
-      <a href={`http://localhost:3000/ruta/${props.id}`}>
-        <img className='imagen-tarjeta'
-          src={props.image}
-          alt='Foto de ruta' />
-      </a>
+      <div className='contenedor-imagen'>
+        <a href={`http://localhost:3000/ruta/${props.id}`}>
+          <img className='imagen-tarjeta'
+            src={props.image}
+            alt='Foto de ruta' />
+        </a>
+      </div>
       <div className='contenedor-informacion-general'>
         <a href={`http://localhost:3000/ruta/${props.id}`}>
           <h2>{props.name}</h2>
