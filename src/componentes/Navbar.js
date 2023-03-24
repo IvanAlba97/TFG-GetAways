@@ -3,12 +3,13 @@ import '../estilos/Navbar.css';
 import Logo from '../img/Logo2.1.png';
 import Profile from '../img/profile-icon.ico';
 import BarraBusqueda from './BarraBusqueda';
+import { useEffect } from 'react';
 
 const Navbar = ({ user }) => {
-  const [mostrarDesplegable, setMostrarDesplegable] = useState(false);
+  const [showDropdown, setShowDropdown] = useState(false);
 
   const mostrarOcultarDesplegable = () => {
-    setMostrarDesplegable(!mostrarDesplegable);
+    setShowDropdown(!showDropdown);
   };
 
   const handleLogout = async () => {
@@ -29,6 +30,19 @@ const Navbar = ({ user }) => {
     }
   };
   
+  const handleOutsideClick = (event) => {
+    if (showDropdown && !event.target.closest('.contenedor-perfil')) {
+      setShowDropdown(false);
+    }
+  };
+
+  useEffect(() => {
+    document.body.addEventListener('click', handleOutsideClick);
+    return () => {
+      document.body.removeEventListener('click', handleOutsideClick);
+    };
+  }, [showDropdown]);
+
 
   return (
     <nav>
@@ -41,7 +55,7 @@ const Navbar = ({ user }) => {
           <div className='contenedor-perfil' onClick={mostrarOcultarDesplegable}>
             <span>{user.nombre}</span>
             <img className="contenedor-icono" src={Profile} alt="Profile" />
-            {mostrarDesplegable && (
+            {showDropdown && (
               <div className="desplegable">
                 <a href='/perfil'>Perfil</a>
                 <a href='/equipaje'>Equipaje</a>
