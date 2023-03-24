@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import Switch from 'react-switch';
+import StarRatings from 'react-star-ratings';
 import '../estilos/NewComment.css'
 
 function NewComment(props) {
   const [comment, setComment] = useState('');
-  const [rating, setRating] = useState('');
+  const [rating, setRating] = useState(0);
   const [public_, setPublic_] = useState(true);
   const [error, setError] = useState('');
 
@@ -40,7 +41,7 @@ function NewComment(props) {
       .then((response) => {
         console.log(response.data);
         setComment('');
-        setRating('');
+        setRating(0);
         setPublic_(false);
         setError('');
 
@@ -64,7 +65,7 @@ function NewComment(props) {
       .catch((error) => {
         console.error(error);
       });
-      window.location.reload();
+    window.location.reload();
   };
 
 
@@ -72,24 +73,28 @@ function NewComment(props) {
     setPublic_(checked);
   };
 
+  const handleRatingChange = (newRating) => {
+    setRating(newRating);
+  }
+
   return (
     <div className='container-new-comment'>
       <h2>Agregar comentario</h2>
       <form onSubmit={handleSubmit}>
         <div>
+          <label htmlFor="rating">Valoración:</label>
+          <StarRatings
+            rating={rating}
+            starRatedColor="orange"
+            changeRating={handleRatingChange}
+            numberOfStars={5}
+            name='rating'
+            starDimension="20px"
+          />
+        </div>
+        <div style={{ width: '100%', height: '200px'}}>
           <label htmlFor="comment">Comentario:</label>
           <textarea id="comment" value={comment} onChange={(event) => setComment(event.target.value)} />
-        </div>
-        <div>
-          <label htmlFor="rating">Valoración:</label>
-          <select id="rating" onChange={(event) => setRating(event.target.value)}>
-            {<option value="">Seleccionar valoración</option>}
-            <option value="1">1 estrella</option>
-            <option value="2">2 estrellas</option>
-            <option value="3">3 estrellas</option>
-            <option value="4">4 estrellas</option>
-            <option value="5">5 estrellas</option>
-          </select>
         </div>
         <div>
           <label htmlFor="public">Público:</label>

@@ -40,18 +40,17 @@ li {
   justify-content: space-between;
   padding: 2px;
   border-radius: 10px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   background-color: #f9f9f9;
   transition: all 0.1s;
   font-weight: 600;
-  color: #222;
   margin: 10px;
   cursor: pointer;
 }
 
 li:hover {
   transform: scale(1.03);
-  box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
 }
 
 li input[type="checkbox"] {
@@ -112,7 +111,7 @@ button[type="submit"] {
 }
 
 button[type="submit"]:hover {
-  background-color: #c1af93;
+  background-color: #d2bd9f;
 }
 
 @media only screen and (max-width: 768px) {
@@ -153,6 +152,5 @@ button[type="submit"]:hover {
 
 .btn-eliminar:hover {
   background-color: darkred;
-  /* transform: rotate(10deg); */
 }
 

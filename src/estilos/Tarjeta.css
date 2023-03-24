@@ -89,9 +89,10 @@ p {
 
 @media only screen and (max-width: 1024px) {
   .contenedor-tarjeta {
-    width: calc(100% - 50px);
+    width: calc(100% - 60px);
     flex-direction: column;
     padding-bottom: 0px;
+    margin: 25px 10px;
   }
 
   .imagen-tarjeta {

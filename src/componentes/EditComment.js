@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Switch from 'react-switch';
-import '../estilos/CommentBox.css';
+import '../estilos/EditComment.css';
+import StarRatings from 'react-star-ratings';
 import Profile from '../img/profile-icon.ico';
 
 function EditComment(props) {
@@ -122,31 +123,37 @@ function EditComment(props) {
     setpublic_(checked);
   };
 
+  const handleRatingChange = (newRating) => {
+    setNewRating(newRating);
+  }
+
   return (
     <div style={{ width: '100%' }}>
       {comment.map(comment => (
         <div className="comment" key={comment.id}>
           {isEditing ? (
-            <div className='new-comment'>
-              <input
-                type="text"
-                value={newComment}
-                onChange={(e) => setNewComment(e.target.value)}
-              />
-              <select id="rating" value={newRating} onChange={(e) => setNewRating(parseInt(e.target.value))}>
-                {/* <option value="">Seleccionar valoración</option> */}
-                <option value="1">1 estrella</option>
-                <option value="2">2 estrellas</option>
-                <option value="3">3 estrellas</option>
-                <option value="4">4 estrellas</option>
-                <option value="5">5 estrellas</option>
-              </select>
+            <form onSubmit={handleSave}>
+              <div>
+                <label htmlFor="rating">Valoración:</label>
+                <StarRatings
+                  rating={newRating}
+                  starRatedColor="orange"
+                  changeRating={handleRatingChange}
+                  numberOfStars={5}
+                  name='rating'
+                  starDimension="20px"
+                />
+              </div>
+              <div style={{ width: '100%', height: '200px' }}>
+                <label htmlFor="comment">Comentario:</label>
+                <textarea id="comment" value={newComment} onChange={(event) => setNewComment(event.target.value)} />
+              </div>
               <div>
                 <label htmlFor="public">Público:</label>
                 <Switch id="public" checked={public_ ? true : false} onChange={handleSwitchChange} />
               </div>
-              <button className='buttom' onClick={() => handleSave(comment.id)}>Publicar</button>
-            </div>
+              <button type='submit' onClick={() => handleSave(comment.id)}>Publicar</button>
+            </form>
           ) : (
             <>
               <h3 className="comment-title">{comment.comentario}</h3>

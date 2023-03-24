@@ -14,6 +14,9 @@ function RouteDetail() {
   const { id } = useParams();
   const [routeDetails, setRouteDetails] = useState(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [pendings, setPendings] = useState(false);
+  const [completed, setCompleted] = useState(false);
+  const [commentExists, setCommentExists] = useState(false);
 
   useEffect(() => {
     fetch(`http://localhost:3333/hiking-route/${id}`)
@@ -42,10 +45,6 @@ function RouteDetail() {
         setIsAuthenticated(false);
       })
   }, []);
-
-  const [pendings, setPendings] = useState(false);
-  const [completed, setCompleted] = useState(false);
-  const [commentExists, setCommentExists] = useState(false);
 
   useEffect(() => {
     async function getData() {
@@ -124,7 +123,7 @@ function RouteDetail() {
             <img className='imagen' src={routeDetails.imagen} alt={routeDetails.nombre} />
             <dl>
               <dt>Tipo:</dt>
-              <dd>{routeDetails.type}</dd>
+              <dd>{routeDetails.tipo}</dd>
               <dt>Longitud:</dt>
               <dd>{routeDetails.longitud} km</dd>
               <dt>Permiso necesario:</dt>
