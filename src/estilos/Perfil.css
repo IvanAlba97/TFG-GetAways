@@ -58,13 +58,6 @@
   }
 }
 
-/* h1 {
-  display: flex;
-  justify-content: center;
-  font-size: 2rem;
-  margin-bottom: 1rem;
-} */
-
 .perfil-input-container {
   display: flex;
   flex-direction: column;

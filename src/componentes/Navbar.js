@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import '../estilos/Navbar.css';
-import Logo from '../img/logo.png';
+import Logo from '../img/Logo2.1.png';
 import Profile from '../img/profile-icon.ico';
 import BarraBusqueda from './BarraBusqueda';
 

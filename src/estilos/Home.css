@@ -36,20 +36,6 @@
   margin: 30px;
 }
 
-.contenedor-intro {
-  width: calc(75% - 90px);
-  height: auto;
-  border: 1px solid #ddd;
-  margin: 20px;
-  border-radius: 10px;
-  padding: 25px;
-  font-size: 15px;
-  text-align: justify;
-  color: #5e451e;
-  background-color: #f7f7f7;
-  box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.2);
-}
-
 /* Media query para reducir el tamaño de fuente en pantallas más pequeñas */
 @media (max-width: 768px) {
   .content {
@@ -68,10 +54,6 @@
 
   .column-1 a {
     width: calc(100% - 30px);
-  }
-
-  .contenedor-intro {
-    width: calc(100% - 80px);
   }
 }
 
