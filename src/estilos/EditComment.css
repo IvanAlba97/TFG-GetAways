@@ -18,4 +18,33 @@ textarea {
   display: flex;
   align-items: center;
   flex-direction: column;
+  align-items: center;
+}
+
+.buttons {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.btn-delete {
+  background-color: rgb(255, 104, 104);
+  color: white;
+  cursor: pointer;
+  margin: 10px;
+}
+
+.btn-delete:hover {
+  background-color: darkred;
+}
+
+.btn-edit {
+  background-color: #E8D2B1;
+  color: #5e451e;
+  cursor: pointer;
+  margin: 10px;
+}
+
+.btn-edit:hover {
+  background-color: #d2bd9f;
 }

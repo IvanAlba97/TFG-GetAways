@@ -104,17 +104,6 @@ span {
   width: calc(100% - 20px);
 }
 
-.btn-delete {
-  background-color: rgb(255, 104, 104);
-  color: white;
-  cursor: pointer;
-  margin: 10px;
-}
-
-.btn-delete:hover {
-  background-color: darkred;
-}
-
 .google-maps-link {
   word-break: break-all;
 }

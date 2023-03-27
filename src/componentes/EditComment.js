@@ -69,7 +69,7 @@ function EditComment(props) {
     } catch (error) {
       console.error(error);
     }
-  };  
+  };
 
   const handleDelete = (comment) => {
     fetch(`http://localhost:3333/delete-my-comment/${comment.id}`, {
@@ -147,9 +147,10 @@ function EditComment(props) {
                   <span key={i}>★</span>
                 ))}
               </p>
-              {/* <p className='comment-public_'>Pública: {comment.publica === 1 ? 'Sí' : 'No'}</p> */}
-              <button onClick={() => handleEdit(comment)}>Editar</button>
-              <button className='btn-delete' onClick={() => handleDelete(comment)}>Eliminar</button>
+              <div className='buttons'>
+                <button className='btn-edit' onClick={() => handleEdit(comment)}>Editar</button>
+                <button className='btn-delete' onClick={() => handleDelete(comment)}>Eliminar</button>
+              </div>
               <p className="comment-date">Fecha: {comment.fecha}</p>
             </>
           )}

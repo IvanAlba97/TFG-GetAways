@@ -89,8 +89,12 @@
 }
 
 .perfil-button-submit {
-  background-color: #E8D2B1;
-  color: white;
+  background-color: lightgreen;
+  color: darkgreen;
+}
+
+.perfil-button-submit:hover {
+  background-color: rgb(116, 191, 116);
 }
 
 .error-message {
@@ -112,13 +116,13 @@
 .btn-accept {
   margin: 30px;
   transition: background-color 0.2s ease-in-out;
-  background-color: #E8D2B1;
-  color: white;
+  background-color: lightgreen;
+  color: darkgreen;
 }
 
 .btn-accept:hover {
   transition: background-color 0.2s ease-in-out;
-  background-color: #d2bd9f;
+  background-color: rgb(116, 191, 116);
 }
 
 .btn-cancel {
