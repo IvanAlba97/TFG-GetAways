@@ -60,3 +60,19 @@
   height: 20px;
   margin-right: 5px;
 }
+
+.no-comments {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.no-comments button {
+  background-color: #E8D2B1;
+  color: #5e451e;
+}
+
+.no-comments button:hover {
+  background-color: #d2bd9f;
+}
