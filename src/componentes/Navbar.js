@@ -4,6 +4,7 @@ import Logo from '../img/Logo2.1.png';
 import Profile from '../img/profile-icon.ico';
 import BarraBusqueda from './BarraBusqueda';
 import { useEffect } from 'react';
+import { Link } from 'react-router-dom';
 
 const Navbar = ({ user }) => {
   const [showDropdown, setShowDropdown] = useState(false);
@@ -18,18 +19,18 @@ const Navbar = ({ user }) => {
         method: 'POST',
         credentials: 'include',
       });
-  
+
       if (!response.ok) {
         throw new Error('Error al cerrar sesión');
       }
-  
+
       sessionStorage.removeItem('session');
       window.location.href = '/';
     } catch (error) {
       console.error(error);
     }
   };
-  
+
   const handleOutsideClick = (event) => {
     if (showDropdown && !event.target.closest('.contenedor-perfil')) {
       setShowDropdown(false);
@@ -46,9 +47,9 @@ const Navbar = ({ user }) => {
 
   return (
     <nav>
-      <a href='/'>
+      <Link to='/'>
         <img src={Logo} alt="Logo" />
-      </a>
+      </Link>
       <BarraBusqueda className='barra-busqueda' />
       <div className='contenedor-perfil'>
         {user ? (
@@ -57,19 +58,19 @@ const Navbar = ({ user }) => {
             <img className="contenedor-icono" src={Profile} alt="Profile" />
             {showDropdown && (
               <div className="desplegable">
-                <a href='/perfil'>Perfil</a>
-                <a href='/equipaje'>Equipaje</a>
-                <a href='/rutas-pendientes'>Rutas pendientes</a>
-                <a href='/rutas-completadas'>Rutas completadas</a>
-                <a href='#' onClick={handleLogout}>Cerrar sesión</a>
+                <Link to='/perfil'>Perfil</Link>
+                <Link to='/equipaje'>Equipaje</Link>
+                <Link to='/rutas-pendientes'>Rutas pendientes</Link>
+                <Link to='/rutas-completadas'>Rutas completadas</Link>
+                <Link to='#' onClick={handleLogout}>Cerrar sesión</Link>
               </div>
             )}
           </div>
         ) : (
           <div>
-            <a href="/access">
+            <Link to="/access">
               <img className="contenedor-icono" src={Profile} alt="Profile" />
-            </a>
+            </Link>
           </div>
         )
         }

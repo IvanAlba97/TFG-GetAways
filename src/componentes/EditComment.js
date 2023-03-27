@@ -36,56 +36,40 @@ function EditComment(props) {
     setpublic_(comment.publica);
   };
 
-  const handleSave = (commentId) => {
-    fetch('http://localhost:3333/edit-my-comment', {
-      method: 'PUT',
-      credentials: 'include',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({ commentId, newComment, newRating, public_ })
-    })
-      .then(res => {
-        if (res.ok) {
-          return res.json();
-        }
-        throw new Error('Network response was not ok.');
-      })
-      .then(() => {
-        return fetch(`http://localhost:3333/my-comment/${props.routeId}`, {
-          credentials: 'include'
-        });
-      })
-      .then(res => {
-        if (res.ok) {
-          return res.json();
-        }
-        throw new Error('Network response was not ok.');
-      })
-      .then(async (data) => {
-        setComment(data);
-        setNewComment('');
-        setNewRating(undefined);
-        setIsEditing(false);
-        try {
-          const response = await fetch('http://localhost:3333/update-average-rating', {
-            method: 'PUT',
-            credentials: 'include',
-            headers: {
-              'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ routeId: props.routeId })
-          });
-          console.log(response);
-        } catch (error) {
-          console.error(error);
-        }
-        window.location.reload();
-      })
-      .catch(error => {
-        console.error(error);
+  const handleSave = async (commentId) => {
+    try {
+      const response = await fetch('http://localhost:3333/edit-my-comment', {
+        method: 'PUT',
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ commentId, newComment, newRating, public_ })
       });
-  };
+      if (!response.ok) {
+        throw new Error('Network response was not ok.');
+      }
+      const data = await response.json();
+      setComment(data);
+      setNewComment('');
+      setNewRating(undefined);
+      setIsEditing(false);
+      const ratingResponse = await fetch('http://localhost:3333/update-average-rating', {
+        method: 'PUT',
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ routeId: props.routeId })
+      });
+      if (!ratingResponse.ok) {
+        throw new Error('Network response was not ok.');
+      }
+      window.location.reload();
+    } catch (error) {
+      console.error(error);
+    }
+  };  
 
   const handleDelete = (comment) => {
     fetch(`http://localhost:3333/delete-my-comment/${comment.id}`, {
@@ -132,7 +116,7 @@ function EditComment(props) {
       {comment.map(comment => (
         <div className="comment" key={comment.id}>
           {isEditing ? (
-            <form onSubmit={handleSave}>
+            <form>
               <div>
                 <label htmlFor="rating">Valoración:</label>
                 <StarRatings

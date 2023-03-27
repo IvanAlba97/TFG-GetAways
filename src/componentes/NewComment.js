@@ -44,28 +44,26 @@ function NewComment(props) {
         setRating(0);
         setPublic_(false);
         setError('');
-
-        // Llama a la ruta /actualizar-media-ratinges después de realizar correctamente un nuevo comment
-        fetch(`http://localhost:3333/update-average-rating`, {
-          method: 'PUT',
-          credentials: 'include',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({ routeId: routeId })
-        })
-          .then((response) => {
-            console.log(response);
-          })
-
-          .catch((error) => {
-            console.error(error);
+      })
+      .then(async () => {
+        try {
+          const response = await fetch('http://localhost:3333/update-average-rating', {
+            method: 'PUT',
+            credentials: 'include',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ routeId: routeId })
           });
+          console.log(response);
+        } catch (error) {
+          console.error(error);
+        }
+        window.location.reload();
       })
       .catch((error) => {
         console.error(error);
       });
-    window.location.reload();
   };
 
 
