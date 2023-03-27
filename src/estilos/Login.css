@@ -19,16 +19,11 @@ form {
     border-radius: 5px;
     font-size: 16px;
     font-weight: bold;
-    color: white;
-    background-color: #4CAF50;
     border: none;
     cursor: pointer;
   }
-  
-  button:hover {
-    background-color: #3e8e41;
-  }
-  
+
+
   .error-message {
     color: red;
     margin-top: 0.5rem;

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import Tarjeta from './Tarjeta';
-import Navbar from './Navbar';
-import Footer from './Footer';
+import Tarjeta from './Tarjeta.js';
+import Navbar from './Navbar.js';
+import Footer from './Footer.js';
 import '../estilos/AllRoutes.css';
 
 function AllRoutes() {
@@ -11,6 +11,12 @@ function AllRoutes() {
   const [user, setUser] = useState(null);
   const [provinces, setProvinces] = useState([]);
   const [location, setLocation] = useState('default');
+  const [currentPage, setCurrentPage] = useState(1);
+  const [routesPerPage, setRoutesPerPage] = useState(3);
+  const indexOfLastRoute = currentPage * routesPerPage;
+  const indexOfFirstRoute = indexOfLastRoute - routesPerPage;
+  const currentRoutes = routes.slice(indexOfFirstRoute, indexOfLastRoute);
+
 
   useEffect(() => {
     fetch('http://localhost:3333/user', { credentials: 'include' })
@@ -87,6 +93,11 @@ function AllRoutes() {
     }
   }, [order, location]);
 
+  const pageNumbers = [];
+  for (let i = 1; i <= Math.ceil(routes.length / routesPerPage); i++) {
+    pageNumbers.push(i);
+  }
+
   return (
     <div className='fondo'>
       <Navbar user={user} />
@@ -112,7 +123,7 @@ function AllRoutes() {
           </div>
         </div>
       </div>
-      {routes.map(ruta => (
+      {currentRoutes.map(ruta => (
         <Tarjeta
           key={ruta.id}
           id={ruta.id}
@@ -121,9 +132,21 @@ function AllRoutes() {
           image={ruta.imagen}
           averageRating={ruta.media_valoraciones} />
       ))}
+      <div className='pagination'>
+        {pageNumbers.map(number => (
+          <button
+            key={number}
+            onClick={() => setCurrentPage(number)}
+            className={currentPage === number ? 'currentPage' : 'no-currentPage'}
+          >
+            {number}
+          </button>
+        ))}
+      </div>
       <Footer />
     </div>
   );
+
 }
 
 export default AllRoutes;

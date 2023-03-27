@@ -15,7 +15,7 @@
   margin-bottom: 30px;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
 }
 
@@ -90,6 +90,7 @@
 
 .perfil-button-submit {
   background-color: #E8D2B1;
+  color: white;
 }
 
 .error-message {
@@ -101,6 +102,7 @@
   background-color: rgb(255, 104, 104);
   margin: 30px;
   transition: background-color 0.2s ease-in-out;
+  color: white;
 }
 
 .btn-delete-account:hover {
@@ -110,11 +112,19 @@
 .btn-accept {
   margin: 30px;
   transition: background-color 0.2s ease-in-out;
+  background-color: #E8D2B1;
+  color: white;
+}
+
+.btn-accept:hover {
+  transition: background-color 0.2s ease-in-out;
+  background-color: #d2bd9f;
 }
 
 .btn-cancel {
   margin: 30px;
   transition: background-color 0.2s ease-in-out;
+  color: white;
   background-color: rgb(255, 104, 104);
 }
 
