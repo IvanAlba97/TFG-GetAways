@@ -1,13 +1,13 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import Access from './componentes/Access.js';
-import Home from './componentes/Home.js';
-import RouteDetail from './componentes/RouteDetail.js';
-import Equipaje from './componentes/Equipaje.js';
-import RutaPendiente from './componentes/RutaPendiente.js';
-import RutaCompletada from './componentes/RutaCompletada.js';
-import AllRoutes from './componentes/AllRoutes.js';
-import Perfil from './componentes/Perfil.js';
+import Access from './components/Access.js';
+import Home from './components/Home.js';
+import RouteDetail from './components/RouteDetail.js';
+import Baggage from './components/Baggage.js';
+import PendingRoute from './components/PendingRoute.js';
+import CompletedRoute from './components/CompletedRoute.js';
+import AllRoutes from './components/AllRoutes.js';
+import Profile from './components/Profile.js';
 
 const App = () => {
   return (
@@ -16,11 +16,11 @@ const App = () => {
         <Route exact path="*" element={<Home />} />
         <Route path="/access" element={<Access />} />
         <Route path="/ruta/:id" element={<RouteDetail />} />
-        <Route path="/equipaje" element={<Equipaje />} />
-        <Route path="/rutas-pendientes" element={<RutaPendiente />} />
-        <Route path="/rutas-completadas" element={<RutaCompletada />} />
+        <Route path="/equipaje" element={<Baggage />} />
+        <Route path="/rutas-pendientes" element={<PendingRoute />} />
+        <Route path="/rutas-completadas" element={<CompletedRoute />} />
         <Route path="/rutas" element={<AllRoutes />} />
-        <Route path="/perfil" element={<Perfil />} />
+        <Route path="/perfil" element={<Profile />} />
       </Routes>
     </Router>
   );

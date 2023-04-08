@@ -3,7 +3,7 @@ import { Route, Routes } from 'react-router-dom';
 import Navbar from './Navbar.js';
 import Footer from './Footer.js';
 import Access from './Access.js';
-import '../estilos/Home.css';
+import '../styles/Home.css';
 import Intro from './Intro.js';
 import Carousel from './Carousel';
 import { Link } from 'react-router-dom';
