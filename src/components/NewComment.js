@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Switch from 'react-switch';
 import StarRatings from 'react-star-ratings';
-import '../estilos/NewComment.css'
+import '../styles/NewComment.css'
 
 function NewComment(props) {
   const [comment, setComment] = useState('');

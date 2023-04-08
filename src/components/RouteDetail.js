@@ -7,7 +7,7 @@ import CommentBox from './CommentBox.js';
 import NewComment from './NewComment.js';
 import EditComment from './EditComment';
 import Share from './Share';
-import '../estilos/RouteDetail.css';
+import '../styles/RouteDetail.css';
 
 function RouteDetail() {
 

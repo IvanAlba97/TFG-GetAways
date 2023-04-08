@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import '../estilos/Equipaje.css';
+import '../styles/Baggage.css';
 import Navbar from './Navbar.js';
 import Footer from './Footer.js';
 
 
-function Equipaje() {
+function Baggage() {
 
   const [items, setItems] = useState([]);
   const [newItem, setNewItem] = useState('');
@@ -132,7 +132,7 @@ function Equipaje() {
   return (
     <div className='fondo'>
       <Navbar user={user} />
-      <div className="equipaje">
+      <div className="Baggage">
         <h2>Equipaje para la ruta de senderismo:</h2>
         <ul>
           {items.map((item) => (
@@ -166,4 +166,4 @@ function Equipaje() {
   );
 }
 
-export default Equipaje;
+export default Baggage;

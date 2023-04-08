@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import lupaIcono from '../img/lupa.png';
-import '../estilos/BarraBusqueda.css';
+import '../styles/SearchBar.css';
 
-function BarraBusqueda() {
+function SearchBar() {
   const [search, setSearch] = useState('');
   const [routes, setRoutes] = useState([]);
   const [showResults, setShowResults] = useState(false);
@@ -83,4 +83,4 @@ function BarraBusqueda() {
 
 }
 
-export default BarraBusqueda;
+export default SearchBar;

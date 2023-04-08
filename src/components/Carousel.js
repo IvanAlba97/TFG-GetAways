@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import "../estilos/Carrusel.css";
+import "../styles/Carousel.css";
 
-const Carrusel = () => {
+const Carousel = () => {
 
   const [Images, setImages] = useState([]);
 
@@ -33,4 +33,4 @@ const Carrusel = () => {
   );
 };
 
-export default Carrusel;
+export default Carousel;

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import '../estilos/Perfil.css';
+import '../styles/Profile.css';
 
 function DeleteAccount() {
   const [showConfirm, setShowConfirm] = useState(false);

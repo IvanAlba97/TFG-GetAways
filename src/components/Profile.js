@@ -2,9 +2,9 @@ import React, { useState, useEffect } from 'react';
 import Navbar from './Navbar';
 import Footer from './Footer';
 import DeleteAccount from './DeleteAccount';
-import '../estilos/Perfil.css';
+import '../styles/Profile.css';
 
-function Perfil() {
+function Profile() {
 
   /* USUARIO */
   const [user, setUser] = useState({});
@@ -220,4 +220,4 @@ function Perfil() {
   );
 }
 
-export default Perfil;
+export default Profile;

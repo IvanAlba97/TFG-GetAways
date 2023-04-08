@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import '../estilos/CommentBox.css';
+import '../styles/CommentBox.css';
 import Profile from '../img/profile-icon.ico';
 import { Link } from 'react-router-dom';
 

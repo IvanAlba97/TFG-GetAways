@@ -9,7 +9,7 @@ import {
   TwitterIcon,
   WhatsappIcon,
 } from "react-share";
-import '../estilos/Share.css';
+import '../styles/Share.css';
 
 const Share = () => {
   const url = window.location.href;

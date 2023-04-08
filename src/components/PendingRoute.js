@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import Tarjeta from './Tarjeta';
+import Card from './Card';
 import Navbar from './Navbar';
 import Footer from './Footer';
 
-function RutaCompletada() {
+function RutaPendiente() {
   const [routes, setRoutes] = useState([]);
 
   useEffect(() => {
-    fetch('http://localhost:3333/completed-route', { credentials: 'include' })
+    fetch('http://localhost:3333/pending-route', { credentials: 'include' })
       .then(res => res.json())
       .then(data => setRoutes(data));
   }, []);
@@ -33,10 +33,10 @@ function RutaCompletada() {
     <div className='fondo'>
       <Navbar user={user} />
       <div style={{ textAlign: 'center' }}>
-        <h1 style={{color: '#5e451e'}}>Rutas completadas</h1>
+        <h1 style={{color: '#5e451e'}}>Rutas pendientes</h1>
       </div>
       {routes.map(route => (
-        <Tarjeta
+        <Card
           key={route.id}
           id={route.id}
           name={route.nombre}
@@ -49,4 +49,4 @@ function RutaCompletada() {
   );
 }
 
-export default RutaCompletada;
+export default RutaPendiente;

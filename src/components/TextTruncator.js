@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import '../estilos/TextTruncator.css';
+import '../styles/TextTruncator.css';
 
 const TextTruncator = ({ text, maxLength = 100 }) => {
   const [isExpanded, setExpanded] = useState(false);

@@ -1,5 +1,5 @@
 import React from "react";
-import "../estilos/Access.css";
+import "../styles/Access.css";
 import Login from "./Login.js";
 import Register from "./Register.js";
 import Navbar from "./Navbar";

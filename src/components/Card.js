@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import Switch from 'react-switch';
-import '../estilos/Tarjeta.css';
+import '../styles/Card.css';
 import TextTruncator from "./TextTruncator.js";
 
-function Tarjeta(props) {
+function Card(props) {
   const [pendings, setPendings] = useState(false);
   const [completed, setCompleted] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -112,4 +112,4 @@ function Tarjeta(props) {
   );
 }
 
-export default Tarjeta;
+export default Card;

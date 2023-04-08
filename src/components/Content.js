@@ -1,6 +1,6 @@
 import React from 'react';
-import '../estilos/Content.css';
-import Carrusel from './Carrusel';
+import '../styles/Content.css';
+import Carrusel from './Carousel';
 /* import Map from './Map'; */
 import Intro from './Intro.js';
 

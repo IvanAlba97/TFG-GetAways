@@ -5,7 +5,7 @@ import Footer from './Footer.js';
 import Access from './Access.js';
 import '../estilos/Home.css';
 import Intro from './Intro.js';
-import Carrusel from './Carrusel';
+import Carousel from './Carousel';
 import { Link } from 'react-router-dom';
 /* import Map from './Map.js'; */
 
@@ -37,7 +37,7 @@ function Home() {
       <div className="content">
         <div className="column-1">
           <Intro />
-          <Carrusel />
+          <Carousel />
           <Link to='/rutas'>
             <div className='todas-las-rutas'>
               Todas las rutas

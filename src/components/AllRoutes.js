@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import Tarjeta from './Tarjeta.js';
+import Card from './Card.js';
 import Navbar from './Navbar.js';
 import Footer from './Footer.js';
-import '../estilos/AllRoutes.css';
+import '../styles/AllRoutes.css';
 
 function AllRoutes() {
   const [routes, setRoutes] = useState([]);
@@ -124,7 +124,7 @@ function AllRoutes() {
         </div>
       </div>
       {currentRoutes.map(ruta => (
-        <Tarjeta
+        <Card
           key={ruta.id}
           id={ruta.id}
           name={ruta.nombre}

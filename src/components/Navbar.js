@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import '../estilos/Navbar.css';
+import '../styles/Navbar.css';
 import Logo from '../img/Logo2.1.png';
 import Profile from '../img/profile-icon.ico';
-import BarraBusqueda from './BarraBusqueda';
+import SearchBar from './SearchBar';
 import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 
@@ -50,7 +50,7 @@ const Navbar = ({ user }) => {
       <Link to='/'>
         <img src={Logo} alt="Logo" />
       </Link>
-      <BarraBusqueda className='barra-busqueda' />
+      <SearchBar className='barra-busqueda' />
       <div className='contenedor-perfil'>
         {user ? (
           <div className='contenedor-perfil' onClick={mostrarOcultarDesplegable}>

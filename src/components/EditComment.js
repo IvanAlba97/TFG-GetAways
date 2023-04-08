@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Switch from 'react-switch';
-import '../estilos/EditComment.css';
+import '../styles/EditComment.css';
 import StarRatings from 'react-star-ratings';
 import Profile from '../img/profile-icon.ico';
 
