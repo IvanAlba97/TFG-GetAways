@@ -4,6 +4,7 @@ const port = 3333;
 
 const mysql = require('mysql2');
 const nodemailer = require('nodemailer');
+const passwordValidator = require('password-validator');
 const { check, validationResult } = require('express-validator');
 
 
@@ -54,26 +55,26 @@ app.post('/auth/login', (req, res) => {
   const { identifier, password } = req.body;
 
   if (!identifier || !password) {
-    return res.status(2000).send({ message: 'Debes proporcionar un usuario y una contraseña' });
+    return res.status(550).send({ message: 'Debes proporcionar un usuario y una contraseña' });
   }
 
   connection.query('SELECT * FROM usuario WHERE nombre = ? OR correo = ?', [identifier, identifier], (error, results) => {
     if (error) {
-      res.status(2001).send('Error al buscar usuario');
+      res.status(551).send('Error al buscar usuario');
     } else if (results.length === 0) {
-      res.status(2002).send({ message: 'Usuario no encontrado' });
+      res.status(552).send({ message: 'Usuario no encontrado' });
     } else {
       const user = results[0];
       bcrypt.compare(password, user.contraseña, (error, result) => {
         if (error) {
-          res.status(2003).send('Error al comparar contraseñas');
+          res.status(553).send('Error al comparar contraseñas');
         } else if (result) {
           // Inicializar la sesión y almacenar la información del usuario en la sesión
           req.session.user = { id: user.id, nombre: user.nombre, correo: user.correo };
           req.session.cookie.maxAge = 30 * 60 * 1000; // 30 minutos
           res.json(req.session.user);
         } else {
-          res.status(2004).send({ message: 'Contraseña incorrecta' });
+          res.status(554).send({ message: 'Contraseña incorrecta' });
         }
       });
     }
@@ -84,7 +85,7 @@ app.post('/auth/logout', (req, res) => {
   req.session.destroy(error => {
     if (error) {
       console.log('Error al cerrar sesión:', error);
-      res.status(2005).json({ message: 'Error al cerrar sesión' });
+      res.status(555).json({ message: 'Error al cerrar sesión' });
     } else {
       res.clearCookie('connect.sid');
       res.json({ message: 'Sesión cerrada exitosamente' });
@@ -116,53 +117,67 @@ function checkEmail(email) {
   });
 }
 
-authRouter.post('/register', async (req, res) => {
-  const { username, email, password, confirmPassword } = req.body;
+const schema = new passwordValidator();
 
-  if (!username || !email || !password || !confirmPassword) {
-    return res.status(2006).send({ error: 'Debes completar todos los campos.' });
-  }
+// Configurar el esquema de validación de contraseña
+schema
+  .is().min(8) // Mínimo 8 caracteres
+  .is().max(100) // Máximo 100 caracteres
+  .has().uppercase() // Al menos una letra mayúscula
+  .has().lowercase() // Al menos una letra minúscula
+  .has().digits() // Al menos un número
+  .has().symbols() // Al menos un carácter especial
+  .is().not().oneOf(['Passw0rd', '12345678']); // No permitir contraseñas comunes
 
-  if (password != confirmPassword) {
-    res.status(2007).send({ error: 'Los campos contraseña y confirmar contraseña no coinciden.' });
-  } else {
-    try {
-      const results = await checkEmail(email);
-      if (results.length > 0) {
-        res.status(2008).send({ error: 'El correo ya se encuentra en uso.' });
-      } else {
-        bcrypt.hash(password, 10, (error, hash) => {
-          if (error) {
-            res.status(2009).send('Error al cifrar contraseña');
-          } else {
-            connection.query('INSERT INTO Usuario (nombre, correo, contraseña) VALUES (?, ?, ?)', [username, email, hash], (error, results) => {
-              if (error) {
-                res.status(2010).send('Error al registrar usuario');
-              } else {
-                const mailOptions = {
-                  from: 'getaways.tfg@gmail.com',
-                  to: email,
-                  subject: '¡Bienvenido a GetAways!',
-                  text: `Hola ${username},\n\n¡Bienvenido a GetAways! Gracias por registrarte en nuestra aplicación para la valoración de rutas de senderismo.\n\nEn GetAways podrás encontrar toda la información que necesitas sobre las mejores rutas de senderismo de la zona, así como compartir tus experiencias y opiniones con otros usuarios. Además, podrás marcar tus rutas favoritas y recibir notificaciones sobre nuevas rutas y eventos relacionados con el senderismo.\n\nSi necesitas ayuda o tienes alguna pregunta, no dudes en contactar con nuestro equipo de soporte.\n\n¡Que disfrutes de tus aventuras en la naturaleza con GetAways!\n\nSaludos cordiales,\nEl equipo de GetAways.`
-                };
-                transporter.sendMail(mailOptions, function (error, info) {
-                  if (error) {
-                    console.log(error);
-                  } else {
-                    console.log('Email enviado: ' + info.response);
-                  }
-                });
-                res.send('Registro exitoso');
-              }
-            });
-          }
-        });
-      }
-    } catch (error) {
-      res.status(2011).send('Error al verificar correo');
+  authRouter.post('/register', async (req, res) => {
+    const { username, email, password, confirmPassword } = req.body;
+  
+    if (!username || !email || !password || !confirmPassword) {
+      return res.status(556).send({ error: 'Debes completar todos los campos.' });
     }
-  }
-});
+  
+    if (password !== confirmPassword) {
+      res.status(557).send({ error: 'Los campos contraseña y confirmar contraseña no coinciden.' });
+    } else if (!schema.validate(password)) {
+      res.status(558).send({ error: 'La contraseña no cumple con los criterios de seguridad.' });
+    } else {
+      try {
+        const results = await checkEmail(email);
+        if (results.length > 0) {
+          res.status(559).send({ error: 'El correo ya se encuentra en uso.' });
+        } else {
+          bcrypt.hash(password, 10, (error, hash) => {
+            if (error) {
+              res.status(610).send('Error al cifrar contraseña');
+            } else {
+              connection.query('INSERT INTO Usuario (nombre, correo, contraseña) VALUES (?, ?, ?)', [username, email, hash], (error, results) => {
+                if (error) {
+                  res.status(561).send('Error al registrar usuario');
+                } else {
+                  const mailOptions = {
+                    from: 'getaways.tfg@gmail.com',
+                    to: email,
+                    subject: '¡Bienvenido a GetAways!',
+                    text: `Hola ${username},\n\n¡Bienvenido a GetAways! Gracias por registrarte en nuestra aplicación para la valoración de rutas de senderismo.\n\nEn GetAways podrás encontrar toda la información que necesitas sobre las mejores rutas de senderismo de la zona, así como compartir tus experiencias y opiniones con otros usuarios. Además, podrás marcar tus rutas favoritas y recibir notificaciones sobre nuevas rutas y eventos relacionados con el senderismo.\n\nSi necesitas ayuda o tienes alguna pregunta, no dudes en contactar con nuestro equipo de soporte.\n\n¡Que disfrutes de tus aventuras en la naturaleza con GetAways!\n\nSaludos cordiales,\nEl equipo de GetAways.`
+                  };
+                  transporter.sendMail(mailOptions, function (error, info) {
+                    if (error) {
+                      console.log(error);
+                    } else {
+                      console.log('Email enviado: ' + info.response);
+                    }
+                  });
+                  res.send('Registro exitoso');
+                }
+              });
+            }
+          });
+        }
+      } catch (error) {
+        res.status(512).send('Error al verificar correo');
+      }
+    }
+  });
 
 
 app.use('/auth', authRouter);
@@ -177,13 +192,13 @@ app.post('/update-username', (req, res) => {
   const userId = req.session.user?.id;
   // Comprobar si el nombre está vacío
   if (!username) {
-    return res.status(2012).json({ message: 'El campo nombre es obligatorio.' });
+    return res.status(513).json({ message: 'El campo nombre es obligatorio.' });
   }
 
   connection.query('UPDATE usuario SET nombre = ? WHERE id = ?', [username, userId], (err, result) => {
     if (err) {
       console.error(err);
-      return res.status(2013).json({ message: 'Error al actualizar el nombre' });
+      return res.status(514).json({ message: 'Error al actualizar el nombre' });
     }
 
     // Actualizar el valor de la sesión con el nuevo nombre
@@ -200,23 +215,23 @@ app.post('/update-email', (req, res) => {
   const { id, correo: currentEmail } = req.session.user;
   // Comprobar si el correo y el correoAntiguo no están vacíos
   if (!newEmail || !oldEmail) {
-    return res.status(2014).json({ message: 'Los campos correo antiguo y correo nuevo son obligatorios.' });
+    return res.status(515).json({ message: 'Los campos correo antiguo y correo nuevo son obligatorios.' });
   }
 
   // Comprobar si el correo y el correoAntiguo son válidos
   if (!isValidEmail(newEmail) || !isValidEmail(oldEmail)) {
-    return res.status(2015).json({ message: 'El correo antiguo y el correo nuevo deben ser válidos' });
+    return res.status(516).json({ message: 'El correo antiguo y el correo nuevo deben ser válidos' });
   }
 
   // Comprobar si el correoAntiguo es igual al currentEmail
   if (oldEmail !== currentEmail) {
-    return res.status(2016).json({ message: 'El correo antiguo no coincide con el correo actual del usuario' });
+    return res.status(517).json({ message: 'El correo antiguo no coincide con el correo actual del usuario' });
   }
 
   connection.query('UPDATE usuario SET correo = ? WHERE id = ?', [newEmail, id], (err, result) => {
     if (err) {
       console.error(err);
-      return res.status(2017).json({ message: 'Error al actualizar el correo' });
+      return res.status(518).json({ message: 'Error al actualizar el correo' });
     }
     // Actualizar el valor de la sesión con el nuevo correo
     req.session.user.correo = newEmail;
@@ -240,18 +255,18 @@ app.post('/update-password', (req, res) => {
 
   // Comprobar si la contraseña y la contraseñaNueva no están vacías
   if (!oldPassword || !newPassword || !newRepeatedPassword) {
-    return res.status(2018).json({ message: 'Todos los campos referentes a la contraseña son obligatorios.' });
+    return res.status(519).json({ message: 'Todos los campos referentes a la contraseña son obligatorios.' });
   }
 
   // Obtener la contraseña encriptada de la base de datos
   connection.query('SELECT contraseña FROM usuario WHERE id = ?', [id], (err, result) => {
     if (err) {
       console.error(err);
-      return res.status(2019).json({ message: 'Error al obtener la contraseña.' });
+      return res.status(520).json({ message: 'Error al obtener la contraseña.' });
     }
 
     if (result.length === 0) {
-      return res.status(2020).json({ message: 'El usuario no existe' });
+      return res.status(521).json({ message: 'El usuario no existe' });
     }
 
     const hashedPassword = result[0].contraseña;
@@ -260,29 +275,29 @@ app.post('/update-password', (req, res) => {
     bcrypt.compare(oldPassword, hashedPassword, (err, isMatch) => {
       if (err) {
         console.error(err);
-        return res.status(2021).json({ message: 'Error al actualizar la contraseña' });
+        return res.status(522).json({ message: 'Error al actualizar la contraseña' });
       }
 
       if (!isMatch) {
-        return res.status(2022).json({ message: 'La contraseña antigua no coincide con la contraseña actual del usuario' });
+        return res.status(523).json({ message: 'La contraseña antigua no coincide con la contraseña actual del usuario' });
       }
 
       // Comprobar si la nueva contraseña se repite correctamente
       if (newPassword !== newRepeatedPassword) {
-        return res.status(2007).json({ message: 'La nueva contraseña y su repetición no coinciden' });
+        return res.status(507).json({ message: 'La nueva contraseña y su repetición no coinciden' });
       }
 
       // Actualizar la contraseña del usuario
       bcrypt.hash(newPassword, 10, (err, hashedNewPassword) => {
         if (err) {
           console.error(err);
-          return res.status(2023).json({ message: 'Error al encriptar la contraseña' });
+          return res.status(524).json({ message: 'Error al encriptar la contraseña' });
         }
 
         connection.query('UPDATE usuario SET contraseña = ? WHERE id = ?', [hashedNewPassword, id], (err, result) => {
           if (err) {
             console.error(err);
-            return res.status(2021).json({ message: 'Error al actualizar la contraseña' });
+            return res.status(522).json({ message: 'Error al actualizar la contraseña' });
           }
 
           // Devolver respuesta exitosa
@@ -310,13 +325,13 @@ app.get('/user/:id', (req, res) => {
   connection.query(sql, (error, results) => {
     if (error) {
       console.error('Error al obtener los datos del usuario:', error);
-      res.status(2024).json({ error: 'Error al obtener los datos del usuario' });
+      res.status(525).json({ error: 'Error al obtener los datos del usuario' });
     } else {
       if (results.length > 0) {
         const user = results[0];
         res.json(user);
       } else {
-        res.status(2020).json({ error: 'Usuario no encontrado' });
+        res.status(521).json({ error: 'Usuario no encontrado' });
       }
     }
   });
@@ -394,14 +409,14 @@ app.get('/search/:search', (req, res) => {
 app.get('/baggage', (req, res) => {
   const userId = req.session.user?.id;
   if (!userId) {
-    res.sendStatus(2025);
+    res.sendStatus(526);
     return;
   }
 
   connection.query('SELECT * FROM lista_revisar WHERE id_usuario = ?', [userId], (err, result) => {
     if (err) {
       console.error(err);
-      res.sendStatus(2026);
+      res.sendStatus(527);
       return;
     }
 
@@ -419,12 +434,12 @@ app.post('/baggage', (req, res) => {
   const userId = req.session.user?.id;
 
   if (!userId) {
-    return res.status(2025).json({ error: 'No se ha iniciado sesión' });
+    return res.status(526).json({ error: 'No se ha iniciado sesión' });
   }
 
   const item = req.body.item;
   if (!item) {
-    return res.status(2027).json({ error: 'El elemento es requerido' });
+    return res.status(528).json({ error: 'El elemento es requerido' });
   }
 
   connection.query(
@@ -433,7 +448,7 @@ app.post('/baggage', (req, res) => {
     (error, result) => {
       if (error) {
         console.error('Error al insertar elemento en la base de datos', error);
-        return res.status(2028).json({ error: 'Error al insertar elemento en la base de datos' });
+        return res.status(529).json({ error: 'Error al insertar elemento en la base de datos' });
       }
 
       const newId = result.insertId;
@@ -453,7 +468,7 @@ app.put('/baggage/:id', (req, res) => {
   connection.query(query, [checked, id], (err, result) => {
     if (err) {
       console.error(err);
-      res.status(2029).send('Error al actualizar el estado del elemento');
+      res.status(530).send('Error al actualizar el estado del elemento');
     } else {
       res.send('Estado del elemento actualizado correctamente');
     }
@@ -469,7 +484,7 @@ app.delete('/baggage/:itemId', (req, res) => {
   connection.query(query, [itemId], (err, result) => {
     if (err) {
       console.error(err);
-      res.status(2030).send('Error al eliminar el elemento');
+      res.status(531).send('Error al eliminar el elemento');
     } else {
       res.send('Elemento eliminado correctamente');
     }
@@ -478,7 +493,7 @@ app.delete('/baggage/:itemId', (req, res) => {
 
 app.get('/pending-route', (req, res) => {
   if (!req.session.user) {
-    //res.status(2025).json({ error: 'No autorizado' });
+    //res.status(526).json({ error: 'No autorizado' });
   } else {
     const userId = req.session.user.id;
     connection.query('SELECT ruta.id, ruta.nombre, ruta.descripcion, ruta.imagen, ruta.longitud, ruta.tipo, ruta.dificultad, ruta.permiso_necesario, ruta.como_llegar, ruta.enlace_maps, ruta.media_valoraciones FROM ruta_senderismo AS ruta JOIN ruta_pendiente AS pendiente ON ruta.id = pendiente.id_ruta WHERE pendiente.id_usuario = ?', [userId], (error, results) => {
@@ -492,7 +507,7 @@ app.get('/pending-route', (req, res) => {
 // Consulta si existe una ruta pendiente para el usuario con el id especificado
 app.get('/pending-route/:id', (req, res) => {
   if (!req.session.user) {
-    //res.status(2025).json({ error: 'No autorizado' });
+    //res.status(526).json({ error: 'No autorizado' });
   } else {
     const userId = req.session.user.id;
     connection.query('SELECT EXISTS(SELECT * FROM ruta_pendiente WHERE id_usuario = ? AND id_ruta = ?) AS exists_', [userId, req.params.id], (error, results) => {
@@ -535,7 +550,7 @@ app.post('/update-pendings', (req, res) => {
 
 app.get('/completed-route', (req, res) => {
   if (!req.session.user) {
-    //res.status(2025).json({ error: 'No autorizado' });
+    //res.status(526).json({ error: 'No autorizado' });
   } else {
     const userId = req.session.user.id;
     connection.query('SELECT ruta.id, ruta.nombre, ruta.descripcion, ruta.imagen, ruta.longitud, ruta.tipo, ruta.dificultad, ruta.permiso_necesario, ruta.como_llegar, ruta.enlace_maps, ruta.media_valoraciones FROM ruta_senderismo AS ruta JOIN ruta_completada AS completada ON ruta.id = completada.id_ruta WHERE completada.id_usuario = ?', [userId], (error, results) => {
@@ -603,7 +618,7 @@ app.get('/comments/:routeId', (req, res) => {
   connection.query(query, queryParams, (err, results) => {
     if (err) {
       console.error('Error executing MySQL query: ' + err.stack);
-      return res.status(2031).json({ message: 'Error al obtener los comentarios.' });
+      return res.status(532).json({ message: 'Error al obtener los comentarios.' });
     }
     res.json(results);
   });
@@ -617,7 +632,7 @@ app.get('/my-comment/:routeId', (req, res) => {
     connection.query(query, [routeId, userId], (err, results) => {
       if (err) {
         console.error('Error executing MySQL query: ' + err.stack);
-        return res.status(2031).json({ message: 'Error al obtener el comentario del usuario autenticado.' });
+        return res.status(532).json({ message: 'Error al obtener el comentario del usuario autenticado.' });
       }
       if (results.length !== 0) {
         res.json(results);
@@ -635,7 +650,7 @@ app.put('/edit-my-comment', (req, res) => {
   connection.query(query, [newRating, newComment, public_, commentId], (err, results) => {
     if (err) {
       console.error('Error executing MySQL query: ' + err.stack);
-      return res.status(2032).json({ message: 'Internal server error' });
+      return res.status(533).json({ message: 'Internal server error' });
     }
     res.json({ message: 'Comment updated successfully' });
   });
@@ -647,7 +662,7 @@ app.delete('/delete-my-comment/:id', (req, res) => {
   connection.query(query, [id], (err, results) => {
     if (err) {
       console.error('Error executing MySQL query: ' + err.stack);
-      return res.status(2033).json({ message: 'Internal server error' });
+      return res.status(534).json({ message: 'Internal server error' });
     }
     res.json({ message: 'Comment deleted successfully' });
   });
@@ -666,7 +681,7 @@ app.post('/new-comment', (req, res) => {
   connection.query(query, (error, results, fields) => {
     if (error) {
       console.error(error);
-      res.status(2034).send('Error al añadir el comentario');
+      res.status(535).send('Error al añadir el comentario');
     } else {
       res/* .status(200) */.send('Comentario añadido correctamente');
     }
@@ -687,9 +702,9 @@ app.get('/provinces', (req, res) => {
   const query = 'SELECT * FROM provincia';
   connection.query(query, (error, results) => {
     if (error) {
-      res.status(2035).send('Error al obtener la tabla provincia');
+      res.status(536).send('Error al obtener la tabla provincia');
     } else {
-      res/*   */.send(results);
+      res.send(results);
     }
   })
 })
