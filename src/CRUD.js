@@ -139,7 +139,7 @@ schema
     if (password !== confirmPassword) {
       res.status(557).send({ error: 'Los campos contraseña y confirmar contraseña no coinciden.' });
     } else if (!schema.validate(password)) {
-      res.status(558).send({ error: 'La contraseña no cumple con los criterios de seguridad.' });
+      res.status(558).send({ error: 'La contraseña no cumple con los criterios de seguridad. Debe tener mínimo 8 y máximo 100 caracteres, al menos una letra mayúscula, una letra minúscula, un número, un carácter especial, y no puede ser una contraseña común como Passw0rd o 12345678.' });
     } else {
       try {
         const results = await checkEmail(email);
