@@ -17,7 +17,23 @@
   padding: 30px;
 }
 
+.contenedor li {
+  font-size: 20px;
+  line-height: 1.5;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 2px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  background-color: #f9f9f9;
+  transition: all 0.1s;
+  font-weight: 600;
+  cursor: pointer;
+}
+
 .user-item {
+  width: 100%;
   margin-bottom: 16px;
   padding: 8px;
   background-color: #f0f0f0;
@@ -29,11 +45,13 @@
 }
 
 .user-name {
+  width: auto;
   cursor: pointer;
   flex-grow: 1;
 }
 
 .user-form {
+  width: 70%;
   margin-top: 8px;
   margin: 30px;
 }
@@ -47,35 +65,18 @@
   border-radius: 4px;
 }
 
-.form-button {
-  padding: 8px 16px;
-  margin-right: 8px;
-  border: none;
-  border-radius: 4px;
-  color: #fff;
-  cursor: pointer;
-  font-weight: bold;
-  transition: background-color 0.3s ease;
-}
-
-.update-button {
-  background-color: #007bff;
-}
-
-.delete-button {
-  background-color: #dc3545;
-}
-
-.form-button:hover {
-  background-color: #0056b3;
-}
-
-.form-button:active {
-  background-color: #004080;
-}
-
 @media screen and (max-width: 768px) {
   .user-item {
     flex-direction: column;
+  }
+  .user-form {
+    width: auto;
+    margin: 0px;
+  }
+  .user-item {
+    padding: 0%;
+  }
+  .contenedor {
+    margin: 10px;
   }
 }

@@ -101,15 +101,15 @@ const UsersCRUD = () => {
                   />
                   <button
                     onClick={() => handleUpdateUser(u.id)}
-                    className="form-button update-button"
+                    className="button"
                   >
                     Actualizar
                   </button>
                   <button
                     onClick={() => handleDeleteUser(u.id)}
-                    className="form-button delete-button"
+                    className="btn-delete"
                   >
-                    Borrar
+                    Eliminar
                   </button>
                 </div>
               )}

@@ -44,20 +44,6 @@
   border-radius: 10px;
 }
 
-@media screen and (max-width: 768px) {
-  .contenedor-botones {
-    flex-direction: column;
-  }
-
-  .contenedor-boton-individual {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    margin: 20px 10px 20px 10px;
-  }
-}
-
 .perfil-input-container {
   display: flex;
   flex-direction: column;
@@ -134,4 +120,22 @@
 
 .btn-cancel:hover {
   background-color: darkred;
+}
+
+@media screen and (max-width: 768px) {
+  .contenedor-botones {
+    flex-direction: column;
+  }
+
+  .contenedor-boton-individual {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: 20px 10px 20px 10px;
+  }
+
+  .perfil-content {
+    margin: 10px;
+  }
 }
