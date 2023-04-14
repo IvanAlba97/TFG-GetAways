@@ -129,55 +129,55 @@ schema
   .has().symbols() // Al menos un carácter especial
   .is().not().oneOf(['Passw0rd', '12345678']); // No permitir contraseñas comunes
 
-  authRouter.post('/register', async (req, res) => {
-    const { username, email, password, confirmPassword } = req.body;
-  
-    if (!username || !email || !password || !confirmPassword) {
-      return res.status(556).send({ error: 'Debes completar todos los campos.' });
-    }
-  
-    if (password !== confirmPassword) {
-      res.status(557).send({ error: 'Los campos contraseña y confirmar contraseña no coinciden.' });
-    } else if (!schema.validate(password)) {
-      res.status(558).send({ error: 'La contraseña no cumple con los criterios de seguridad. Debe tener mínimo 8 y máximo 100 caracteres, al menos una letra mayúscula, una letra minúscula, un número, un carácter especial, y no puede ser una contraseña común como Passw0rd o 12345678.' });
-    } else {
-      try {
-        const results = await checkEmail(email);
-        if (results.length > 0) {
-          res.status(559).send({ error: 'El correo ya se encuentra en uso.' });
-        } else {
-          bcrypt.hash(password, 10, (error, hash) => {
-            if (error) {
-              res.status(560).send('Error al cifrar contraseña');
-            } else {
-              connection.query('INSERT INTO Usuario (nombre, correo, contraseña) VALUES (?, ?, ?)', [username, email, hash], (error, results) => {
-                if (error) {
-                  res.status(561).send('Error al registrar usuario');
-                } else {
-                  const mailOptions = {
-                    from: 'getaways.tfg@gmail.com',
-                    to: email,
-                    subject: '¡Bienvenido a GetAways!',
-                    text: `Hola ${username},\n\n¡Bienvenido a GetAways! Gracias por registrarte en nuestra aplicación para la valoración de rutas de senderismo.\n\nEn GetAways podrás encontrar toda la información que necesitas sobre las mejores rutas de senderismo de la zona, así como compartir tus experiencias y opiniones con otros usuarios. Además, podrás marcar tus rutas favoritas y recibir notificaciones sobre nuevas rutas y eventos relacionados con el senderismo.\n\nSi necesitas ayuda o tienes alguna pregunta, no dudes en contactar con nuestro equipo de soporte.\n\n¡Que disfrutes de tus aventuras en la naturaleza con GetAways!\n\nSaludos cordiales,\nEl equipo de GetAways.`
-                  };
-                  transporter.sendMail(mailOptions, function (error, info) {
-                    if (error) {
-                      console.log(error);
-                    } else {
-                      console.log('Email enviado: ' + info.response);
-                    }
-                  });
-                  res.send('Registro exitoso');
-                }
-              });
-            }
-          });
-        }
-      } catch (error) {
-        res.status(562).send('Error al verificar correo');
+authRouter.post('/register', async (req, res) => {
+  const { username, email, password, confirmPassword } = req.body;
+
+  if (!username || !email || !password || !confirmPassword) {
+    return res.status(556).send({ error: 'Debes completar todos los campos.' });
+  }
+
+  if (password !== confirmPassword) {
+    res.status(557).send({ error: 'Los campos contraseña y confirmar contraseña no coinciden.' });
+  } else if (!schema.validate(password)) {
+    res.status(558).send({ error: 'La contraseña no cumple con los criterios de seguridad. Debe tener mínimo 8 y máximo 100 caracteres, al menos una letra mayúscula, una letra minúscula, un número, un carácter especial, y no puede ser una contraseña común como Passw0rd o 12345678.' });
+  } else {
+    try {
+      const results = await checkEmail(email);
+      if (results.length > 0) {
+        res.status(559).send({ error: 'El correo ya se encuentra en uso.' });
+      } else {
+        bcrypt.hash(password, 10, (error, hash) => {
+          if (error) {
+            res.status(560).send('Error al cifrar contraseña');
+          } else {
+            connection.query('INSERT INTO Usuario (nombre, correo, contraseña) VALUES (?, ?, ?)', [username, email, hash], (error, results) => {
+              if (error) {
+                res.status(561).send('Error al registrar usuario');
+              } else {
+                const mailOptions = {
+                  from: 'getaways.tfg@gmail.com',
+                  to: email,
+                  subject: '¡Bienvenido a GetAways!',
+                  text: `Hola ${username},\n\n¡Bienvenido a GetAways! Gracias por registrarte en nuestra aplicación para la valoración de rutas de senderismo.\n\nEn GetAways podrás encontrar toda la información que necesitas sobre las mejores rutas de senderismo de la zona, así como compartir tus experiencias y opiniones con otros usuarios. Además, podrás marcar tus rutas favoritas y recibir notificaciones sobre nuevas rutas y eventos relacionados con el senderismo.\n\nSi necesitas ayuda o tienes alguna pregunta, no dudes en contactar con nuestro equipo de soporte.\n\n¡Que disfrutes de tus aventuras en la naturaleza con GetAways!\n\nSaludos cordiales,\nEl equipo de GetAways.`
+                };
+                transporter.sendMail(mailOptions, function (error, info) {
+                  if (error) {
+                    console.log(error);
+                  } else {
+                    console.log('Email enviado: ' + info.response);
+                  }
+                });
+                res.send('Registro exitoso');
+              }
+            });
+          }
+        });
       }
+    } catch (error) {
+      res.status(562).send('Error al verificar correo');
     }
-  });
+  }
+});
 
 
 app.use('/auth', authRouter);
@@ -317,7 +317,6 @@ app.get('/user', (req, res) => {
   }
 });
 
-// Definir la ruta para obtener los datos del usuario con el id dado
 app.get('/user/:id', (req, res) => {
   const userId = req.params.id;
   const sql = `SELECT * FROM Usuario WHERE id = ${userId}`;
@@ -756,6 +755,76 @@ app.delete("/delete-account", (req, res) => {
   );
   req.session.destroy();
 });
+
+app.get("/is-supervisor", (req, res) => {
+  if (req.session.user) {
+    const userId = req.session.user.id;
+    const query = `SELECT * FROM usuario WHERE id = ? AND es_supervisor = 1`;
+    connection.query(query, [userId], (err, result) => {
+      if (err) {
+        throw err;
+      }
+      if (result.length > 0) {
+        res.json({ isSupervisor: true });
+      } else {
+        res.json({ isSupervisor: false });
+      }
+    });
+  }
+})
+
+
+
+
+
+
+
+// Ruta para obtener la lista de usuarios
+app.get("/users", (req, res) => {
+  connection.query("SELECT * FROM usuario ORDER BY nombre ASC", (err, result) => {
+    if (err) throw err;
+    res.send(result);
+  });
+});
+
+/* // Ruta para crear un nuevo usuario
+app.post("/users", (req, res) => {
+  const { name, email } = req.body;
+  connection.query(
+    "INSERT INTO usuario (nombre, correo) VALUES (?, ?)",
+    [name, email],
+    (err, result) => {
+      if (err) throw err;
+      res.send(result);
+    }
+  );
+}); */
+
+// Ruta para actualizar un usuario existente
+app.put("/users/:id", (req, res) => {
+  const { id } = req.params;
+  const { newUser } = req.body;
+  connection.query(
+    "UPDATE usuario SET nombre = ?, correo = ? WHERE id = ?",
+    [newUser.nombre, newUser.correo, id],
+    (err, result) => {
+      if (err) throw err;
+      res.send(result);
+    }
+  );
+});
+
+// Ruta para borrar un usuario
+app.delete("/users/:id", (req, res) => {
+  const { id } = req.params;
+  connection.query("DELETE FROM usuario WHERE id = ?", [id], (err, result) => {
+    if (err) throw err;
+    res.send(result);
+  });
+});
+
+
+
 
 
 

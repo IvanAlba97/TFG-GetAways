@@ -1,0 +1,81 @@
+.fondo {
+  background-image: url(../img/retina_wood.png);
+  background-repeat: repeat;
+}
+
+.contenedor {
+  min-height: 70vh;
+  max-width: 900px;
+  margin: 0 auto;
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+  margin-top: 30px;
+  margin-bottom: 30px;
+  display: flex;
+  flex-direction: column;
+  padding: 30px;
+}
+
+.user-item {
+  margin-bottom: 16px;
+  padding: 8px;
+  background-color: #f0f0f0;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-direction: row;
+}
+
+.user-name {
+  cursor: pointer;
+  flex-grow: 1;
+}
+
+.user-form {
+  margin-top: 8px;
+  margin: 30px;
+}
+
+.form-input {
+  display: block;
+  width: 100%;
+  padding: 8px;
+  margin-bottom: 8px;
+  border: none;
+  border-radius: 4px;
+}
+
+.form-button {
+  padding: 8px 16px;
+  margin-right: 8px;
+  border: none;
+  border-radius: 4px;
+  color: #fff;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.3s ease;
+}
+
+.update-button {
+  background-color: #007bff;
+}
+
+.delete-button {
+  background-color: #dc3545;
+}
+
+.form-button:hover {
+  background-color: #0056b3;
+}
+
+.form-button:active {
+  background-color: #004080;
+}
+
+@media screen and (max-width: 768px) {
+  .user-item {
+    flex-direction: column;
+  }
+}

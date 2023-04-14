@@ -8,6 +8,7 @@ import PendingRoute from './components/PendingRoute.js';
 import CompletedRoute from './components/CompletedRoute.js';
 import AllRoutes from './components/AllRoutes.js';
 import Profile from './components/Profile.js';
+import UsersCRUD from './components/UsersCRUD.js';
 
 const App = () => {
   return (
@@ -21,6 +22,7 @@ const App = () => {
         <Route path="/rutas-completadas" element={<CompletedRoute />} />
         <Route path="/rutas" element={<AllRoutes />} />
         <Route path="/perfil" element={<Profile />} />
+        <Route path="/crud-usuarios" element={<UsersCRUD />} />
       </Routes>
     </Router>
   );

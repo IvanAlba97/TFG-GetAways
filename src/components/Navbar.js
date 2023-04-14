@@ -8,6 +8,26 @@ import { Link } from 'react-router-dom';
 
 const Navbar = ({ user }) => {
   const [showDropdown, setShowDropdown] = useState(false);
+  const [isSupervisor, setIsSupervisor] = useState(false);
+
+  useEffect(() => {
+    const isSupervisor = async () => {
+      try {
+        const response = await fetch(`http://localhost:3333/is-supervisor`, {
+          credentials: 'include'
+        });
+        if (response.ok) {
+          const data = await response.json();
+          setIsSupervisor(data.isSupervisor);
+        } else {
+          // manejar el error en la respuesta
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    isSupervisor();
+  }, []);
 
   const mostrarOcultarDesplegable = () => {
     setShowDropdown(!showDropdown);
@@ -62,6 +82,9 @@ const Navbar = ({ user }) => {
                 <Link to='/equipaje'>Equipaje</Link>
                 <Link to='/rutas-pendientes'>Rutas pendientes</Link>
                 <Link to='/rutas-completadas'>Rutas completadas</Link>
+                {isSupervisor &&
+                  <Link to='/crud-usuarios'>CRUD Usuarios</Link>
+                }
                 <Link to='#' onClick={handleLogout}>Cerrar sesión</Link>
               </div>
             )}
