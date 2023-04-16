@@ -828,6 +828,57 @@ app.delete("/users/:id", (req, res) => {
 
 
 
+
+
+// Ruta para obtener la lista de rutas de senderismo
+app.get("/routes", (req, res) => {
+  connection.query("SELECT * FROM ruta_senderismo ORDER BY nombre ASC", (err, result) => {
+    if (err) throw err;
+    res.send(result);
+  });
+});
+
+// Ruta para crear una nueva ruta de senderismo
+app.post("/routes", (req, res) => {
+  const { id_provincia, nombre, descripcion, imagen, longitud, tipo, dificultad, permiso_necesario, como_llegar, enlace_maps, media_valoraciones } = req.body;
+  connection.query(
+    "INSERT INTO ruta_senderismo (id_provincia, nombre, descripcion, imagen, longitud, tipo, dificultad, permiso_necesario, como_llegar, enlace_maps, media_valoraciones) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+    [id_provincia, nombre, descripcion, imagen, longitud, tipo, dificultad, permiso_necesario, como_llegar, enlace_maps, media_valoraciones],
+    (err, result) => {
+      if (err) throw err;
+      res.send(result);
+    }
+  );
+});
+
+// Ruta para actualizar una ruta de senderismo existente
+app.put("/routes/:id", (req, res) => {
+  const { id } = req.params;
+  const { newRoute } = req.body;
+  connection.query(
+    "UPDATE ruta_senderismo SET id_provincia = ?, nombre = ?, descripcion = ?, imagen = ?, longitud = ?, tipo = ?, dificultad = ?, permiso_necesario = ?, como_llegar = ?, enlace_maps = ? WHERE id = ?",
+    [newRoute.id_provincia, newRoute.nombre, newRoute.descripcion, newRoute.imagen, newRoute.longitud, newRoute.tipo, newRoute.dificultad, newRoute.permiso_necesario, newRoute.como_llegar, newRoute.enlace_maps, id],
+    (err, result) => {
+      if (err) throw err;
+      res.send(result);
+    }
+  );
+});
+
+// Ruta para borrar una ruta de senderismo
+app.delete("/routes/:id", (req, res) => {
+  const { id } = req.params;
+  connection.query("DELETE FROM ruta_senderismo WHERE id = ?", [id], (err, result) => {
+    if (err) throw err;
+    res.send(result);
+  });
+});
+
+
+
+
+
+
 app.listen(port, () => {
   console.log(`App listening at http://localhost:${port}`);
 });

@@ -83,7 +83,10 @@ const Navbar = ({ user }) => {
                 <Link to='/rutas-pendientes'>Rutas pendientes</Link>
                 <Link to='/rutas-completadas'>Rutas completadas</Link>
                 {isSupervisor &&
-                  <Link to='/crud-usuarios'>CRUD Usuarios</Link>
+                  <div>
+                    <Link to='/crud-usuarios'>Gestionar Usuarios</Link>
+                    <Link to='/crud-rutas'>Gestionar Rutas</Link>
+                  </div>
                 }
                 <Link to='#' onClick={handleLogout}>Cerrar sesión</Link>
               </div>

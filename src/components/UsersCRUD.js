@@ -73,7 +73,7 @@ const UsersCRUD = () => {
   return (
     <div className="fondo">
       <Navbar user={user} />
-      <div className="contenedor">
+      <div className="contenedor-crud">
         <h1>Usuarios</h1>
         <ul>
           {users.map((u) => (

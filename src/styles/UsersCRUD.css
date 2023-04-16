@@ -3,7 +3,7 @@
   background-repeat: repeat;
 }
 
-.contenedor {
+.contenedor-crud {
   min-height: 70vh;
   max-width: 900px;
   margin: 0 auto;
@@ -76,7 +76,7 @@
   .user-item {
     padding: 0%;
   }
-  .contenedor {
+  .contenedor-crud {
     margin: 10px;
   }
 }
