@@ -92,7 +92,7 @@ const UsersCRUD = () => {
                     className="form-input"
                   />
                   <input
-                    type="email"
+                    type="text"
                     name="correo"
                     placeholder={u.correo}
                     value={newUser.correo || ""}

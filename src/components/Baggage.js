@@ -133,7 +133,7 @@ function Baggage() {
     <div className='fondo'>
       <Navbar user={user} />
       <div className="equipaje">
-        <h2>Equipaje para la ruta de senderismo:</h2>
+        <h1>Equipaje para la ruta de senderismo:</h1>
         <ul>
           {items.map((item) => (
             <li key={item.id}>
