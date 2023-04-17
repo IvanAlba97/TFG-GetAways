@@ -817,10 +817,47 @@ app.put("/users/:id", (req, res) => {
 // Ruta para borrar un usuario
 app.delete("/users/:id", (req, res) => {
   const { id } = req.params;
-  connection.query("DELETE FROM usuario WHERE id = ?", [id], (err, result) => {
-    if (err) throw err;
-    res.send(result);
-  });
+  connection.query(
+    "DELETE FROM lista_revisar WHERE id_usuario = ?",
+    [id],
+    (error, results) => {
+      if (error) throw error;
+      // Eliminar registros de la tabla valoracion
+      connection.query(
+        "DELETE FROM valoracion WHERE id_usuario = ?",
+        [id],
+        (error, results) => {
+          if (error) throw error;
+          // Eliminar registros de la tabla ruta_pendiente
+          connection.query(
+            "DELETE FROM ruta_pendiente WHERE id_usuario = ?",
+            [id],
+            (error, results) => {
+              if (error) throw error;
+              // Eliminar registros de la tabla ruta_completada
+              connection.query(
+                "DELETE FROM ruta_completada WHERE id_usuario = ?",
+                [id],
+                (error, results) => {
+                  if (error) throw error;
+                  // Eliminar registro de la tabla Usuario
+                  connection.query(
+                    "DELETE FROM Usuario WHERE id = ?",
+                    [id],
+                    (error, results) => {
+                      if (error) throw error;
+                      // Enviar una respuesta exitosa al cliente
+                      res.sendStatus(200);
+                    }
+                  );
+                }
+              );
+            }
+          );
+        }
+      );
+    }
+  );
 });
 
 
@@ -868,11 +905,22 @@ app.put("/routes/:id", (req, res) => {
 // Ruta para borrar una ruta de senderismo
 app.delete("/routes/:id", (req, res) => {
   const { id } = req.params;
-  connection.query("DELETE FROM ruta_senderismo WHERE id = ?", [id], (err, result) => {
+  console.log('Hola: ' + id);
+  connection.query("DELETE FROM ruta_pendiente WHERE id_ruta = ?", [id], (err, result) => {
     if (err) throw err;
-    res.send(result);
+    connection.query("DELETE FROM ruta_completada WHERE id_ruta = ?", [id], (err, result) => {
+      if (err) throw err;
+      connection.query("DELETE FROM valoracion WHERE id_ruta = ?", [id], (err, result) => {
+        if (err) throw err;
+        connection.query("DELETE FROM ruta_senderismo WHERE id = ?", [id], (err, result) => {
+          if (err) throw err;
+          res.send(result);
+        });
+      });
+    });
   });
 });
+
 
 
 

@@ -99,7 +99,7 @@ const UsersCRUD = () => {
 
   const handlePermissionChange = (e) => {
     setNewRoute({ ...newRoute, permiso_necesario: e.target.checked });
-  };  
+  };
 
   const handleArriveChange = (e) => {
     setNewRoute({ ...newRoute, como_llegar: e.target.value });
@@ -154,7 +154,7 @@ const UsersCRUD = () => {
     <div className="fondo">
       <Navbar user={user} />
       <div className="contenedor-crud">
-        <h1>Rutas</h1>
+        <h1>Gestión de rutas</h1>
         <ul>
           {routes.map((r) => (
             <li key={r.id} className="user-item">

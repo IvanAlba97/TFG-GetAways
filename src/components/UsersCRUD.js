@@ -74,7 +74,7 @@ const UsersCRUD = () => {
     <div className="fondo">
       <Navbar user={user} />
       <div className="contenedor-crud">
-        <h1>Usuarios</h1>
+        <h1>Gestión de usuarios</h1>
         <ul>
           {users.map((u) => (
             <li key={u.id} className="user-item">
