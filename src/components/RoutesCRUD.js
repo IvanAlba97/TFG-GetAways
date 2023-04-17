@@ -30,6 +30,11 @@ const UsersCRUD = () => {
     Circular: 'Circular',
     Semicircular: 'Semicircular'
   };
+  const [currentPage, setCurrentPage] = useState(1);
+  const [routesPerPage, setRoutesPerPage] = useState(10);
+  const indexOfLastRoute = currentPage * routesPerPage;
+  const indexOfFirstRoute = indexOfLastRoute - routesPerPage;
+  const currentRoutes = routes.slice(indexOfFirstRoute, indexOfLastRoute);
 
   useEffect(() => {
     fetch('http://localhost:3333/user', { credentials: 'include' })
@@ -150,13 +155,18 @@ const UsersCRUD = () => {
     fetchRoutes();
   }, []);
 
+  const pageNumbers = [];
+  for (let i = 1; i <= Math.ceil(routes.length / routesPerPage); i++) {
+    pageNumbers.push(i);
+  }
+
   return (
     <div className="fondo">
       <Navbar user={user} />
       <div className="contenedor-crud">
         <h1>Gestión de rutas</h1>
         <ul>
-          {routes.map((r) => (
+          {currentRoutes.map((r) => (
             <li key={r.id} className="user-item">
               <span onClick={() => handleEditRoute(r.id)} className="user-name">
                 {r.nombre}
@@ -287,6 +297,17 @@ const UsersCRUD = () => {
             </li>
           ))}
         </ul>
+        <div className='pagination'>
+        {pageNumbers.map(number => (
+          <button
+            key={number}
+            onClick={() => setCurrentPage(number)}
+            className={currentPage === number ? 'currentPage' : 'no-currentPage'}
+          >
+            {number}
+          </button>
+        ))}
+        </div>
       </div>
     </div>
   );

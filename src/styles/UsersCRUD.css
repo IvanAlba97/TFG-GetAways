@@ -86,6 +86,32 @@
   font-size: 16px;
 }
 
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.no-currentPage {
+  background-color: #E8D2B1;
+  color: #5e451e;
+  margin: 5px;
+  box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.2);
+}
+
+.no-currentPage:hover {
+  background-color: #d2bd9f;
+}
+
+.currentPage {
+  background-color: #5e451e;
+  color: #d2bd9f;
+}
+
+.currentPage:hover {
+  background-color: #5e451e;
+}
+
 @media screen and (max-width: 768px) {
   .user-item {
     flex-direction: column;

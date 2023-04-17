@@ -8,6 +8,11 @@ const UsersCRUD = () => {
   const [newUser, setNewUser] = useState({ nombre: "", correo: "" });
   const [selectedUserId, setSelectedUserId] = useState(null);
   const [isFormVisible, setIsFormVisible] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [usersPerPage, setUsersPerPage] = useState(10);
+  const indexOfLastUser = currentPage * usersPerPage;
+  const indexOfFirstUser = indexOfLastUser - usersPerPage;
+  const currentUsers = users.slice(indexOfFirstUser, indexOfLastUser);
 
   useEffect(() => {
     fetch('http://localhost:3333/user', { credentials: 'include' })
@@ -70,13 +75,18 @@ const UsersCRUD = () => {
     fetchUsers();
   }, []);
 
+  const pageNumbers = [];
+  for (let i = 1; i <= Math.ceil(users.length / usersPerPage); i++) {
+    pageNumbers.push(i);
+  }
+
   return (
     <div className="fondo">
       <Navbar user={user} />
       <div className="contenedor-crud">
         <h1>Gestión de usuarios</h1>
         <ul>
-          {users.map((u) => (
+          {currentUsers.map((u) => (
             <li key={u.id} className="user-item">
               <span onClick={() => handleEditUser(u.id)} className="user-name">
                 {u.nombre} ({u.correo})
@@ -116,10 +126,21 @@ const UsersCRUD = () => {
             </li>
           ))}
         </ul>
+        <div className='pagination'>
+        {pageNumbers.map(number => (
+          <button
+            key={number}
+            onClick={() => setCurrentPage(number)}
+            className={currentPage === number ? 'currentPage' : 'no-currentPage'}
+          >
+            {number}
+          </button>
+        ))}
+        </div>
       </div>
     </div>
   );
-  
+
 };
 
 export default UsersCRUD;
