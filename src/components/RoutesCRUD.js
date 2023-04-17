@@ -116,7 +116,7 @@ const UsersCRUD = () => {
 
   const handleUpdateRoute = async (routeId) => {
     // Verificar si los campos están vacíos
-    if (!newRoute.nombre.trim() || !newRoute.descripcion.trim() || !newRoute.imagen.trim() || !newRoute.longitud.trim() || !newRoute.como_llegar.trim() || !newRoute.enlace_maps.trim()) {  // trim() elimina espacios al inicio y al final
+    if (!newRoute.nombre.trim() || !newRoute.descripcion.trim() || !newRoute.imagen.trim() || !newRoute.longitud || !newRoute.como_llegar.trim() || !newRoute.enlace_maps.trim()) {  // Verificar que newRoute.longitud no sea nulo o indefinido
       alert("Por favor, complete todos los campos.");
       return;
     }
@@ -126,7 +126,7 @@ const UsersCRUD = () => {
       body: JSON.stringify({ newRoute }),
     });
     fetchRoutes();
-  };
+  };  
 
   const handleDeleteRoute = async (routeId) => {
     const confirmDelete = window.confirm("¿Estás seguro de que quieres eliminar esta ruta?"); // Mostrar ventana de confirmación

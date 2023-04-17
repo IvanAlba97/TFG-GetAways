@@ -115,7 +115,7 @@ function RouteDetail() {
           <div className="route-details">
             <h3>{routeDetails.nombre}</h3>
             <div>
-            {Array.from({ length: Math.round(routeDetails.media_valoraciones) }, (_, i) => (
+              {Array.from({ length: Math.round(routeDetails.media_valoraciones) }, (_, i) => (
                 <span key={i}>★</span>
               ))}
             </div>
