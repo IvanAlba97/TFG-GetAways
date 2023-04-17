@@ -165,6 +165,16 @@ const UsersCRUD = () => {
     pageNumbers.push(i);
   }
 
+  const handlePageChange = (pageNumber) => {
+    // Configurar el desplazamiento suave con window.scrollTo()
+    window.scrollTo({
+      top: 0,
+      left: 0,
+      behavior: 'smooth'
+    });
+    setCurrentPage(pageNumber);
+  }
+
   return (
     <div className="fondo">
       <Navbar user={user} />
@@ -306,7 +316,7 @@ const UsersCRUD = () => {
         {pageNumbers.map(number => (
           <button
             key={number}
-            onClick={() => setCurrentPage(number)}
+            onClick={() => handlePageChange(number)}
             className={currentPage === number ? 'currentPage' : 'no-currentPage'}
           >
             {number}
