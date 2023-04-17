@@ -46,6 +46,12 @@ const UsersCRUD = () => {
   };
 
   const handleUpdateUser = async (userId) => {
+    // Verificar si los campos están vacíos
+    if (!newUser.nombre.trim() || !newUser.correo.trim()) {  // trim() elimina espacios al inicio y al final
+      alert("Por favor, complete todos los campos.");
+      return;
+    }
+  
     await fetch(`http://localhost:3333/users/${userId}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
@@ -53,6 +59,7 @@ const UsersCRUD = () => {
     });
     fetchUsers();
   };
+  
 
   const handleDeleteUser = async (userId) => {
     const confirmDelete = window.confirm("¿Estás seguro de que quieres eliminar este usuario?"); // Mostrar ventana de confirmación

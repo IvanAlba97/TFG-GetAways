@@ -115,6 +115,11 @@ const UsersCRUD = () => {
   };
 
   const handleUpdateRoute = async (routeId) => {
+    // Verificar si los campos están vacíos
+    if (!newRoute.nombre.trim() || !newRoute.descripcion.trim() || !newRoute.imagen.trim() || !newRoute.longitud.trim() || !newRoute.como_llegar.trim() || !newRoute.enlace_maps.trim()) {  // trim() elimina espacios al inicio y al final
+      alert("Por favor, complete todos los campos.");
+      return;
+    }
     await fetch(`http://localhost:3333/routes/${routeId}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
