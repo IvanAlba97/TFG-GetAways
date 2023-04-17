@@ -12,11 +12,18 @@ function SearchBar() {
   const searchResultsRef = useRef(null);
 
   const handleSearch = async () => {
+    if (search.trim() === '') {
+      // Si la barra de búsqueda está vacía, no hacemos la petición fetch
+      setRoutes([]);
+      setShowResults(false);
+      return;
+    }
     const response = await fetch(`http://localhost:3333/search/${search}`);
     const data = await response.json();
     setRoutes(data);
     setShowResults(true);
   };
+  
 
   useEffect(() => {
     document.addEventListener('mousedown', handleClickOutside);

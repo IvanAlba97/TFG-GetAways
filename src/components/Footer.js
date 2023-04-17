@@ -5,12 +5,12 @@ const Footer = () => {
   return (
     <footer>
       <div className="contact-info">
-        <h3>Contact Us</h3>
-        <p>Email: contact@example.com</p>
+        <h3>Contacto</h3>
+        <p>Email: getaways.tfg@gmail.con</p>
         <p>Phone: +1 123 456 7890</p>
       </div>
       <div className="social-media">
-        <h3>Follow Us</h3>
+        <h3>Síguenos</h3>
         <a href="#">Facebook</a>
         <a href="#">Twitter</a>
         <a href="#">Instagram</a>
