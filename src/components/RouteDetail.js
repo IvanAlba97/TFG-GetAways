@@ -17,6 +17,7 @@ function RouteDetail() {
   const [pendings, setPendings] = useState(false);
   const [completed, setCompleted] = useState(false);
   const [commentExists, setCommentExists] = useState(false);
+  const [user, setUser] = useState(null);
 
   useEffect(() => {
     fetch(`http://localhost:3333/hiking-route/${id}`)
@@ -24,8 +25,6 @@ function RouteDetail() {
       .then(data => setRouteDetails(data))
       .catch(error => console.error(error));
   }, [id]);
-
-  const [user, setUser] = useState(null);
 
   useEffect(() => {
     fetch('http://localhost:3333/user', { credentials: 'include' })

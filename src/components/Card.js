@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Switch from 'react-switch';
 import '../styles/Card.css';
 import TextTruncator from "./TextTruncator.js";
+import { Link } from 'react-router-dom';
 
 function Card(props) {
   const [pendings, setPendings] = useState(false);
@@ -74,16 +75,16 @@ function Card(props) {
   return (
     <div className='contenedor-tarjeta'>
       <div className='contenedor-imagen'>
-        <a href={`http://localhost:3000/ruta/${props.id}`}>
+        <Link to={`http://localhost:3000/ruta/${props.id}`}>
           <img className='imagen-tarjeta'
             src={props.image}
             alt='Foto de ruta' />
-        </a>
+        </Link>
       </div>
       <div className='contenedor-informacion-general'>
-        <a href={`http://localhost:3000/ruta/${props.id}`}>
+        <Link to={`http://localhost:3000/ruta/${props.id}`}>
           <h2>{props.name}</h2>
-        </a>
+        </Link>
         <div>
           <TextTruncator text={props.description} maxLength={300} />
         </div>
