@@ -153,4 +153,9 @@
   .user-item span {
     font-size: 16px;
   }
+
+  .addroute {
+    padding-left: 0;
+    padding-right: 0;
+  }
 }
