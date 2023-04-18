@@ -11,9 +11,9 @@ const Footer = () => {
       </div>
       <div className="social-media">
         <h3>Síguenos</h3>
-        <a href="#">Facebook</a>
-        <a href="#">Twitter</a>
-        <a href="#">Instagram</a>
+        {/* <a href="#"> */}<p>Facebook</p>{/* </a> */}
+        {/* <a href="#"> */}<p>Twitter</p>{/* </a> */}
+        {/* <a href="#"> */}<p>Instagram</p>{/* </a> */}
       </div>
       <p className="copyright">Copyright &copy; {new Date().getFullYear()}</p>
     </footer>
