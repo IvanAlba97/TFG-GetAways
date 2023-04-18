@@ -8,17 +8,17 @@ import { Link } from 'react-router-dom';
 
 const Navbar = ({ user }) => {
   const [showDropdown, setShowDropdown] = useState(false);
-  const [isSupervisor, setIsSupervisor] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
 
   useEffect(() => {
-    const isSupervisor = async () => {
+    const isAdmin = async () => {
       try {
-        const response = await fetch(`http://localhost:3333/is-supervisor`, {
+        const response = await fetch(`http://localhost:3333/is-admin`, {
           credentials: 'include'
         });
         if (response.ok) {
           const data = await response.json();
-          setIsSupervisor(data.isSupervisor);
+          setIsAdmin(data.isAdmin);
         } else {
           // manejar el error en la respuesta
         }
@@ -26,7 +26,7 @@ const Navbar = ({ user }) => {
         console.error(error);
       }
     };
-    isSupervisor();
+    isAdmin();
   }, []);
 
   const mostrarOcultarDesplegable = () => {
@@ -82,7 +82,7 @@ const Navbar = ({ user }) => {
                 <Link to='/equipaje'>Equipaje</Link>
                 <Link to='/rutas-pendientes'>Rutas pendientes</Link>
                 <Link to='/rutas-completadas'>Rutas completadas</Link>
-                {isSupervisor &&
+                {isAdmin &&
                   <div>
                     <Link to='/crud-usuarios'>Gestionar Usuarios</Link>
                     <Link to='/crud-rutas'>Gestionar Rutas</Link>

@@ -98,7 +98,7 @@ const AddRoute = () => {
     if (isNaN(parseFloat(newRoute.longitud))) {
       alert("La longitud debe ser un número");
       return;
-      }
+    }
     const response = await fetch("http://localhost:3333/routes", {
       method: "POST",
       headers: { "Content-Type": "application/json" },

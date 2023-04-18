@@ -13,6 +13,7 @@ const UsersCRUD = () => {
   const indexOfLastUser = currentPage * usersPerPage;
   const indexOfFirstUser = indexOfLastUser - usersPerPage;
   const currentUsers = users.slice(indexOfFirstUser, indexOfLastUser);
+  const [isAdmin, setIsAdmin] = useState(false);
 
   useEffect(() => {
     fetch('http://localhost:3333/user', { credentials: 'include' })
@@ -29,6 +30,25 @@ const UsersCRUD = () => {
       .catch((error) => {
         console.error(error);
       })
+  }, []);
+
+  useEffect(() => {
+    const isAdmin = async () => {
+      try {
+        const response = await fetch(`http://localhost:3333/is-admin`, {
+          credentials: 'include'
+        });
+        if (response.ok) {
+          const data = await response.json();
+          setIsAdmin(data.isAdmin);
+        } else {
+          // manejar el error en la respuesta
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    isAdmin();
   }, []);
 
   const fetchUsers = async () => {
@@ -51,7 +71,7 @@ const UsersCRUD = () => {
       alert("Por favor, complete todos los campos.");
       return;
     }
-  
+
     await fetch(`http://localhost:3333/users/${userId}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
@@ -59,7 +79,7 @@ const UsersCRUD = () => {
     });
     fetchUsers();
   };
-  
+
 
   const handleDeleteUser = async (userId) => {
     const confirmDelete = window.confirm("¿Estás seguro de que quieres eliminar este usuario?"); // Mostrar ventana de confirmación
@@ -100,61 +120,69 @@ const UsersCRUD = () => {
   return (
     <div className="fondo">
       <Navbar user={user} />
-      <div className="contenedor-crud">
-        <h1>Gestión de usuarios</h1>
-        <ul>
-          {currentUsers.map((u) => (
-            <li key={u.id} className="user-item">
-              <span onClick={() => handleEditUser(u.id)} className="user-name">
-                {u.nombre} ({u.correo})
-              </span>
-              {isFormVisible && selectedUserId === u.id && (
-                <div className="user-form">
-                  <input
-                    type="text"
-                    name="nombre"
-                    placeholder={u.nombre}
-                    value={newUser.nombre || ""}
-                    onChange={handleNameChange}
-                    className="form-input"
-                  />
-                  <input
-                    type="text"
-                    name="correo"
-                    placeholder={u.correo}
-                    value={newUser.correo || ""}
-                    onChange={handleEmailChange}
-                    className="form-input"
-                  />
-                  <button
-                    onClick={() => handleUpdateUser(u.id)}
-                    className="button"
-                  >
-                    Actualizar
-                  </button>
-                  <button
-                    onClick={() => handleDeleteUser(u.id)}
-                    className="btn-delete"
-                  >
-                    Eliminar
-                  </button>
-                </div>
-              )}
-            </li>
-          ))}
-        </ul>
-        <div className='pagination'>
-        {pageNumbers.map(number => (
-          <button
-            key={number}
-            onClick={() => handlePageChange(number)}
-            className={currentPage === number ? 'currentPage' : 'no-currentPage'}
-          >
-            {number}
-          </button>
-        ))}
+      {isAdmin &&
+        <div className="contenedor-crud">
+          <h1>Gestión de usuarios</h1>
+          <ul>
+            {currentUsers.map((u) => (
+              <li key={u.id} className="user-item">
+                <span onClick={() => handleEditUser(u.id)} className="user-name">
+                  {u.nombre} ({u.correo})
+                </span>
+                {isFormVisible && selectedUserId === u.id && (
+                  <div className="user-form">
+                    <input
+                      type="text"
+                      name="nombre"
+                      placeholder={u.nombre}
+                      value={newUser.nombre || ""}
+                      onChange={handleNameChange}
+                      className="form-input"
+                    />
+                    <input
+                      type="text"
+                      name="correo"
+                      placeholder={u.correo}
+                      value={newUser.correo || ""}
+                      onChange={handleEmailChange}
+                      className="form-input"
+                    />
+                    <button
+                      onClick={() => handleUpdateUser(u.id)}
+                      className="button"
+                    >
+                      Actualizar
+                    </button>
+                    <button
+                      onClick={() => handleDeleteUser(u.id)}
+                      className="btn-delete"
+                    >
+                      Eliminar
+                    </button>
+                  </div>
+                )}
+              </li>
+            ))}
+          </ul>
+          <div className='pagination'>
+            {pageNumbers.map(number => (
+              <button
+                key={number}
+                onClick={() => handlePageChange(number)}
+                className={currentPage === number ? 'currentPage' : 'no-currentPage'}
+              >
+                {number}
+              </button>
+            ))}
+          </div>
         </div>
-      </div>
+      }
+      {!isAdmin &&
+        <div>
+          <h2>Acceso no autorizado</h2>
+          <h2>Este apartado es solo para administradores</h2>
+        </div>
+      }
     </div>
   );
 

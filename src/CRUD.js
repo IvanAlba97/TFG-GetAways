@@ -756,18 +756,18 @@ app.delete("/delete-account", (req, res) => {
   req.session.destroy();
 });
 
-app.get("/is-supervisor", (req, res) => {
+app.get("/is-admin", (req, res) => {
   if (req.session.user) {
     const userId = req.session.user.id;
-    const query = `SELECT * FROM usuario WHERE id = ? AND es_supervisor = 1`;
+    const query = `SELECT * FROM usuario WHERE id = ? AND es_admin = 1`;
     connection.query(query, [userId], (err, result) => {
       if (err) {
         throw err;
       }
       if (result.length > 0) {
-        res.json({ isSupervisor: true });
+        res.json({ isAdmin: true });
       } else {
-        res.json({ isSupervisor: false });
+        res.json({ isAdmin: false });
       }
     });
   }

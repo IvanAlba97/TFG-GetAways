@@ -37,6 +37,7 @@ const UsersCRUD = () => {
   const indexOfLastRoute = currentPage * routesPerPage;
   const indexOfFirstRoute = indexOfLastRoute - routesPerPage;
   const currentRoutes = routes.slice(indexOfFirstRoute, indexOfLastRoute);
+  const [isAdmin, setIsAdmin] = useState(false);
 
   useEffect(() => {
     fetch('http://localhost:3333/user', { credentials: 'include' })
@@ -53,6 +54,25 @@ const UsersCRUD = () => {
       .catch((error) => {
         console.error(error);
       })
+  }, []);
+
+  useEffect(() => {
+    const isAdmin = async () => {
+      try {
+        const response = await fetch(`http://localhost:3333/is-admin`, {
+          credentials: 'include'
+        });
+        if (response.ok) {
+          const data = await response.json();
+          setIsAdmin(data.isAdmin);
+        } else {
+          // manejar el error en la respuesta
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    isAdmin();
   }, []);
 
   useEffect(() => {
@@ -122,6 +142,10 @@ const UsersCRUD = () => {
       alert("Por favor, complete todos los campos.");
       return;
     }
+    if (isNaN(parseFloat(newRoute.longitud))) {
+      alert("La longitud debe ser un número");
+      return;
+    }
     await fetch(`http://localhost:3333/routes/${routeId}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
@@ -181,151 +205,161 @@ const UsersCRUD = () => {
   return (
     <div className="fondo">
       <Navbar user={user} />
-      <div className="contenedor-crud">
-        <h1>Gestión de rutas</h1>
-        <ul>
-          {currentRoutes.map((r) => (
-            <li key={r.id} className="user-item">
-              <span onClick={() => handleEditRoute(r.id)} className="user-name">
-                {r.nombre}
-              </span>
-              {isFormVisible && selectedRouteId === r.id && (
-                <div className="user-form">
-                  <span>Nombre</span>
-                  <input
-                    type="text"
-                    name="nombre"
-                    placeholder={r.nombre}
-                    value={newRoute.nombre || ""}
-                    onChange={handleNameChange}
-                    className="form-input"
-                  />
-                  <span>Descripción</span>
-                  <textarea
-                    name="descripcion"
-                    placeholder={r.descripcion}
-                    value={newRoute.descripcion || ""}
-                    onChange={handleDescriptionChange}
-                    className="form-input"
-                  />
-                  <span>Provincia</span>
-                  <select
-                    name="provincia"
-                    value={newRoute.id_provincia}
-                    onChange={handleProvinceChange}
-                    className="form-input"
-                  >
-                    {provinces.map((provincia) => {
-                      return (
-                        <option key={provincia.id} value={provincia.id}>
-                          {provincia.nombre}
-                        </option>
-                      );
-                    })}
-                  </select>
-                  <span>Imagen</span>
-                  <input
-                    type="text"
-                    name="imagen"
-                    placeholder={r.imagen}
-                    value={newRoute.imagen || ""}
-                    onChange={handleImageChange}
-                    className="form-input"
-                  />
-                  <span>Longitud (Km)</span>
-                  <input
-                    type="text"
-                    name="longitud"
-                    placeholder={r.longitud}
-                    value={newRoute.longitud || ""}
-                    onChange={handleLengthChange}
-                    className="form-input"
-                  />
-                  <span>Tipo</span>
-                  <select
-                    name="tipo"
-                    value={newRoute.tipo}
-                    onChange={handleTypeChange}
-                    className="form-input"
-                  >
-                    {Object.values(tipo).map((t) => {
-                      return (
-                        <option key={t} value={t}>
-                          {t}
-                        </option>
-                      );
-                    })}
-                  </select>
-                  <span>Dificultad</span>
-                  <select
-                    name="dificultad"
-                    value={newRoute.dificultad}
-                    onChange={handleDifficultyChange}
-                    className="form-input"
-                  >
-                    {Object.values(dificultad).map((d) => {
-                      return (
-                        <option key={d} value={d}>
-                          {d}
-                        </option>
-                      );
-                    })}
-                  </select>
-                  <span>Permiso necesario</span>
-                  <input
-                    type="checkbox"
-                    name="permiso"
-                    checked={newRoute.permiso_necesario}
-                    onChange={handlePermissionChange}
-                    className="form-check"
-                  />
-                  <span>Cómo llegar</span>
-                  <textarea
-                    name="como-llegar"
-                    placeholder={r.como_llegar}
-                    value={newRoute.como_llegar || ""}
-                    onChange={handleArriveChange}
-                    className="form-input"
-                  />
-                  <span>Enlace Google Maps</span>
-                  <input
-                    type="text"
-                    name="enlace-maps"
-                    placeholder={r.enlace_maps}
-                    value={newRoute.enlace_maps || ""}
-                    onChange={handleMapsChange}
-                    className="form-input"
-                  />
-                  <button
-                    onClick={() => handleUpdateRoute(r.id)}
-                    className="button"
-                  >
-                    Actualizar
-                  </button>
-                  <button
-                    onClick={() => handleDeleteRoute(r.id)}
-                    className="btn-delete"
-                  >
-                    Eliminar
-                  </button>
-                </div>
-              )}
-            </li>
-          ))}
-        </ul>
-        <div className='pagination'>
-          {pageNumbers.map(number => (
-            <button
-              key={number}
-              onClick={() => handlePageChange(number)}
-              className={currentPage === number ? 'currentPage' : 'no-currentPage'}
-            >
-              {number}
-            </button>
-          ))}
+      {isAdmin &&
+        <div>
+          <div className="contenedor-crud">
+            <h1>Gestión de rutas</h1>
+            <ul>
+              {currentRoutes.map((r) => (
+                <li key={r.id} className="user-item">
+                  <span onClick={() => handleEditRoute(r.id)} className="user-name">
+                    {r.nombre}
+                  </span>
+                  {isFormVisible && selectedRouteId === r.id && (
+                    <div className="user-form">
+                      <span>Nombre</span>
+                      <input
+                        type="text"
+                        name="nombre"
+                        placeholder={r.nombre}
+                        value={newRoute.nombre || ""}
+                        onChange={handleNameChange}
+                        className="form-input"
+                      />
+                      <span>Descripción</span>
+                      <textarea
+                        name="descripcion"
+                        placeholder={r.descripcion}
+                        value={newRoute.descripcion || ""}
+                        onChange={handleDescriptionChange}
+                        className="form-input"
+                      />
+                      <span>Provincia</span>
+                      <select
+                        name="provincia"
+                        value={newRoute.id_provincia}
+                        onChange={handleProvinceChange}
+                        className="form-input"
+                      >
+                        {provinces.map((provincia) => {
+                          return (
+                            <option key={provincia.id} value={provincia.id}>
+                              {provincia.nombre}
+                            </option>
+                          );
+                        })}
+                      </select>
+                      <span>Imagen</span>
+                      <input
+                        type="text"
+                        name="imagen"
+                        placeholder={r.imagen}
+                        value={newRoute.imagen || ""}
+                        onChange={handleImageChange}
+                        className="form-input"
+                      />
+                      <span>Longitud (Km)</span>
+                      <input
+                        type="text"
+                        name="longitud"
+                        placeholder={r.longitud}
+                        value={newRoute.longitud || ""}
+                        onChange={handleLengthChange}
+                        className="form-input"
+                      />
+                      <span>Tipo</span>
+                      <select
+                        name="tipo"
+                        value={newRoute.tipo}
+                        onChange={handleTypeChange}
+                        className="form-input"
+                      >
+                        {Object.values(tipo).map((t) => {
+                          return (
+                            <option key={t} value={t}>
+                              {t}
+                            </option>
+                          );
+                        })}
+                      </select>
+                      <span>Dificultad</span>
+                      <select
+                        name="dificultad"
+                        value={newRoute.dificultad}
+                        onChange={handleDifficultyChange}
+                        className="form-input"
+                      >
+                        {Object.values(dificultad).map((d) => {
+                          return (
+                            <option key={d} value={d}>
+                              {d}
+                            </option>
+                          );
+                        })}
+                      </select>
+                      <span>Permiso necesario</span>
+                      <input
+                        type="checkbox"
+                        name="permiso"
+                        checked={newRoute.permiso_necesario}
+                        onChange={handlePermissionChange}
+                        className="form-check"
+                      />
+                      <span>Cómo llegar</span>
+                      <textarea
+                        name="como-llegar"
+                        placeholder={r.como_llegar}
+                        value={newRoute.como_llegar || ""}
+                        onChange={handleArriveChange}
+                        className="form-input"
+                      />
+                      <span>Enlace Google Maps</span>
+                      <input
+                        type="text"
+                        name="enlace-maps"
+                        placeholder={r.enlace_maps}
+                        value={newRoute.enlace_maps || ""}
+                        onChange={handleMapsChange}
+                        className="form-input"
+                      />
+                      <button
+                        onClick={() => handleUpdateRoute(r.id)}
+                        className="button"
+                      >
+                        Actualizar
+                      </button>
+                      <button
+                        onClick={() => handleDeleteRoute(r.id)}
+                        className="btn-delete"
+                      >
+                        Eliminar
+                      </button>
+                    </div>
+                  )}
+                </li>
+              ))}
+            </ul>
+            <div className='pagination'>
+              {pageNumbers.map(number => (
+                <button
+                  key={number}
+                  onClick={() => handlePageChange(number)}
+                  className={currentPage === number ? 'currentPage' : 'no-currentPage'}
+                >
+                  {number}
+                </button>
+              ))}
+            </div>
+          </div>
+          <AddRoute />
         </div>
-      </div>
-      <AddRoute />
+      }
+      {!isAdmin &&
+        <div>
+          <h2>Acceso no autorizado</h2>
+          <h2>Este apartado es solo para administradores</h2>
+        </div>
+      }
     </div>
   );
 
