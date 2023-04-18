@@ -905,7 +905,6 @@ app.put("/routes/:id", (req, res) => {
 // Ruta para borrar una ruta de senderismo
 app.delete("/routes/:id", (req, res) => {
   const { id } = req.params;
-  console.log('Hola: ' + id);
   connection.query("DELETE FROM ruta_pendiente WHERE id_ruta = ?", [id], (err, result) => {
     if (err) throw err;
     connection.query("DELETE FROM ruta_completada WHERE id_ruta = ?", [id], (err, result) => {

@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
-const UsersCRUD = () => {
+import '../styles/AddRoute.css';
+
+const AddRoute = () => {
   const [provinces, setProvinces] = useState([]);
   const [newRoute, setNewRoute] = useState({
     id_provincia: "",
@@ -93,6 +95,10 @@ const UsersCRUD = () => {
       alert("Por favor, complete todos los campos");
       return;
     }
+    if (isNaN(parseFloat(newRoute.longitud))) {
+      alert("La longitud debe ser un número");
+      return;
+      }
     const response = await fetch("http://localhost:3333/routes", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -117,12 +123,12 @@ const UsersCRUD = () => {
 
 
   return (
-    <div className="contenedor-crud">
+    <div className="contenedor-add">
       <h2>Añadir ruta</h2>
-      <form>
+      <div className="addroute-form">
         <label>
-          Provincia:
-          <select value={newRoute.id_provincia} onChange={handleProvinceChange}>
+          <span>Provincia:</span>
+          <select className="form-input" value={newRoute.id_provincia} onChange={handleProvinceChange}>
             <option value="">Seleccione una provincia</option>
             {provinces.map((province) => (
               <option key={province.id} value={province.id}>
@@ -132,31 +138,31 @@ const UsersCRUD = () => {
           </select>
         </label>
         <label>
-          Nombre:
-          <input type="text" value={newRoute.nombre} onChange={handleNameChange} />
+          <span>Nombre:</span>
+          <input className="form-input" type="text" value={newRoute.nombre} onChange={handleNameChange} />
         </label>
         <label>
-          Descripción:
-          <textarea
+          <span>Descripción:</span>
+          <textarea className="form-input"
             value={newRoute.descripcion}
             onChange={handleDescriptionChange}
           ></textarea>
         </label>
         <label>
-          Imagen:
-          <input type="text" value={newRoute.imagen} onChange={handleImageChange} />
+          <span>Imagen:</span>
+          <input className="form-input" type="text" value={newRoute.imagen} onChange={handleImageChange} />
         </label>
         <label>
-          Longitud:
-          <input
-            type="number"
+          <span>Longitud:</span>
+          <input className="form-input"
+            type="text"
             value={newRoute.longitud}
             onChange={handleLengthChange}
           />
         </label>
         <label>
-          Tipo:
-          <select value={newRoute.tipo} onChange={handleTypeChange}>
+          <span>Tipo:</span>
+          <select className="form-input" value={newRoute.tipo} onChange={handleTypeChange}>
             <option value="">Seleccione un tipo</option>
             {Object.keys(tipo).map((key) => (
               <option key={key} value={tipo[key]}>
@@ -166,8 +172,8 @@ const UsersCRUD = () => {
           </select>
         </label>
         <label>
-          Dificultad:
-          <select
+          <span>Dificultad:</span>
+          <select className="form-input"
             value={newRoute.dificultad}
             onChange={handleDifficultyChange}
           >
@@ -180,23 +186,23 @@ const UsersCRUD = () => {
           </select>
         </label>
         <label>
-          Permiso necesario:
-          <input
+          <span>Permiso necesario:</span>
+          <input className="form-check"
             type="checkbox"
             checked={newRoute.permiso_necesario}
             onChange={handlePermissionChange}
           />
         </label>
         <label>
-          Cómo llegar:
-          <textarea
+          <span>Cómo llegar:</span>
+          <textarea className="form-input"
             value={newRoute.como_llegar}
             onChange={handleArriveChange}
           ></textarea>
         </label>
         <label>
-          Enlace a Maps:
-          <input
+          <span>Enlace a Google Maps:</span>
+          <input className="form-input"
             type="text"
             value={newRoute.enlace_maps}
             onChange={handleMapsChange}
@@ -205,9 +211,9 @@ const UsersCRUD = () => {
         <button type="button" onClick={handleAddRoute}>
           Añadir ruta
         </button>
-      </form>
+      </div>
     </div>
   );
 };
 
-export default UsersCRUD;
+export default AddRoute;

@@ -15,7 +15,7 @@
 .contenedor-crud {
   max-width: 900px;
   margin: 0 auto;
-  padding: 30px;
+  padding: 15px;
   background-color: #fff;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   border-radius: 10px;
@@ -83,6 +83,17 @@
   border: none;
   border-radius: 4px;
   font-size: 16px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.user-form .form-check {
+  display: block;
+  width: 100%;
+  padding: 8px;
+  margin-bottom: 8px;
+  border: none;
+  border-radius: 4px;
+  font-size: 16px;
 }
 
 .pagination {
@@ -117,7 +128,7 @@
   }
 
   .user-form {
-    width: auto;
+    width: calc(100% - 80px);
     margin: 0px;
   }
 

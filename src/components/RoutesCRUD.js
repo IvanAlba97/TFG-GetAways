@@ -127,6 +127,7 @@ const UsersCRUD = () => {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ newRoute }),
     });
+    alert("Ruta modificada correctamente.");
     fetchRoutes();
   };
 
@@ -177,32 +178,6 @@ const UsersCRUD = () => {
     setCurrentPage(pageNumber);
   }
 
-  const handleAddRoute = async (e) => {
-    e.preventDefault();
-    const response = await fetch("http://localhost:3333/routes", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(newRoute),
-    });
-    if (response.ok) {
-      setNewRoute({
-        id_provincia: "",
-        nombre: "",
-        descripcion: "",
-        imagen: "",
-        longitud: "",
-        tipo: "",
-        dificultad: "",
-        permiso_necesario: "",
-        como_llegar: "",
-        enlace_maps: "",
-      });
-      setIsForm2Visible(false);
-      fetchRoutes();
-    }
-  };
-  
-
   return (
     <div className="fondo">
       <Navbar user={user} />
@@ -226,8 +201,7 @@ const UsersCRUD = () => {
                     className="form-input"
                   />
                   <span>Descripción</span>
-                  <input
-                    type="text"
+                  <textarea
                     name="descripcion"
                     placeholder={r.descripcion}
                     value={newRoute.descripcion || ""}
@@ -303,11 +277,10 @@ const UsersCRUD = () => {
                     name="permiso"
                     checked={newRoute.permiso_necesario}
                     onChange={handlePermissionChange}
-                    className="form-input"
+                    className="form-check"
                   />
                   <span>Cómo llegar</span>
-                  <input
-                    type="text"
+                  <textarea
                     name="como-llegar"
                     placeholder={r.como_llegar}
                     value={newRoute.como_llegar || ""}
