@@ -208,9 +208,11 @@ const AddRoute = () => {
             onChange={handleMapsChange}
           />
         </label>
-        <button type="button" onClick={handleAddRoute}>
-          Añadir ruta
-        </button>
+        <div className="addroute-button">
+          <button type="button" onClick={handleAddRoute}>
+            Añadir ruta
+          </button>
+        </div>
       </div>
     </div>
   );

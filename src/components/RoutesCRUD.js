@@ -351,7 +351,9 @@ const UsersCRUD = () => {
               ))}
             </div>
           </div>
-          <AddRoute />
+          <div className="addroute">
+            <AddRoute />
+          </div>
         </div>
       }
       {!isAdmin &&
