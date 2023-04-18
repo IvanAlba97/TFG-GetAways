@@ -530,7 +530,7 @@ app.post('/update-pendings', (req, res) => {
     if (error) throw error;
 
     // Si existe la ruta pendiente, actualiza su estado
-    if (results[0].existe) {
+    if (results[0].exists_) {
       query = 'DELETE FROM ruta_pendiente WHERE id_usuario = ? AND id_ruta = ?';
       values = [userId, routeId];
     } else {
@@ -581,11 +581,11 @@ app.post('/update-completed', (req, res) => {
   let values;
 
   // Consulta si existe una ruta completada para el usuario con el id especificado
-  connection.query('SELECT EXISTS(SELECT * FROM ruta_completada WHERE id_usuario = ? AND id_ruta = ?) AS existe', [userId, routeId], (error, results) => {
+  connection.query('SELECT EXISTS(SELECT * FROM ruta_completada WHERE id_usuario = ? AND id_ruta = ?) AS exists_', [userId, routeId], (error, results) => {
     if (error) throw error;
 
     // Si existe la ruta completada, actualiza su estado
-    if (results[0].existe) {
+    if (results[0].exists_) {
       query = 'DELETE FROM ruta_completada WHERE id_usuario = ? AND id_ruta = ?';
       values = [userId, routeId];
     } else {

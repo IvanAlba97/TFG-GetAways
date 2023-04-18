@@ -11,6 +11,8 @@ import '../styles/RouteDetail.css';
 
 function RouteDetail() {
 
+  /* const rutaActual = window.location.pathname;
+  const id = rutaActual.split('/')[2]; */
   const { id } = useParams();
   const [routeDetails, setRouteDetails] = useState(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -51,13 +53,13 @@ function RouteDetail() {
         const resPendings = await fetch(`http://localhost:3333/pending-route/${id}`, {
           credentials: 'include'
         });
-        const { exists: pendingsExists } = await resPendings.json();
+        const { exists_: pendingsExists } = await resPendings.json();
         setPendings(Boolean(pendingsExists));
 
         const resCompleted = await fetch(`http://localhost:3333/completed-route/${id}`, {
           credentials: 'include'
         });
-        const { exists: completadaExists } = await resCompleted.json();
+        const { exists_: completadaExists } = await resCompleted.json();
         setCompleted(Boolean(completadaExists));
 
         const resMyComment = await fetch(`http://localhost:3333/my-comment/${routeDetails.id}`, {
