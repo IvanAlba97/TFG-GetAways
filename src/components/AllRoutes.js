@@ -47,7 +47,7 @@ function AllRoutes() {
       .then((data) => {
         setRoutes(data);
         setDefaultRoutes(data);
-        setRoutesPerPage(10);
+        setRoutesPerPage(5);
       })
       .catch((error) => console.error(error));
   }, []);
@@ -69,11 +69,11 @@ function AllRoutes() {
   }, []);
 
   useEffect(() => {
-    if (order === 'default' && location === 'default') {
+    if (order == 'default' && location == 'default') {
       setRoutes(defaultRoutes);
-    } else if (order === 'default') {
-      setRoutes(defaultRoutes.filter(ruta => ruta.id_provincia === location));
-    } else if (location === 'default') {
+    } else if (order == 'default') {
+      setRoutes(defaultRoutes.filter(route => route.id_provincia == location));
+    } else if (location == 'default') {
       switch (order) {
         case 'ratings':
           setRoutes(defaultRoutes.slice().sort((a, b) => b.media_valoraciones - a.media_valoraciones));
@@ -87,10 +87,10 @@ function AllRoutes() {
     } else {
       switch (order) {
         case 'ratings':
-          setRoutes(defaultRoutes.filter(ruta => ruta.id_provincia === location).slice().sort((a, b) => b.media_valoraciones - a.media_valoraciones));
+          setRoutes(defaultRoutes.filter(route => route.id_provincia == location).slice().sort((a, b) => b.media_valoraciones - a.media_valoraciones));
           break;
         case 'popular':
-          setRoutes(defaultRoutes.filter(ruta => ruta.id_provincia === location).slice().sort((a, b) => b.num_ocurrencias - a.num_ocurrencias));
+          setRoutes(defaultRoutes.filter(route => route.id_provincia == location).slice().sort((a, b) => b.num_ocurrencias - a.num_ocurrencias));
           break;
         default:
           break;
@@ -124,8 +124,8 @@ function AllRoutes() {
             <label htmlFor="location">Filtrar por provincia:</label>
             <select id="location" value={location} onChange={(e) => setLocation(e.target.value)}>
               <option value="default">Seleccionar una opción</option>
-              {provinces.map(provincia => (
-                <option key={provincia.id} value={provincia.id}>{provincia.nombre}</option>
+              {provinces.map(province => (
+                <option key={province.id} value={province.id}>{province.nombre}</option>
               ))}
             </select>
           </div>
@@ -153,7 +153,7 @@ function AllRoutes() {
           <button
             key={number}
             onClick={() => handlePageChange(number)}
-            className={currentPage === number ? 'currentPage' : 'no-currentPage'}
+            className={currentPage == number ? 'currentPage' : 'no-currentPage'}
           >
             {number}
           </button>
