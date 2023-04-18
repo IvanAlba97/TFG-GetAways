@@ -51,19 +51,18 @@ const Navbar = ({ user }) => {
     }
   };
 
-  const handleOutsideClick = (event) => {
-    if (showDropdown && !event.target.closest('.contenedor-perfil')) {
-      setShowDropdown(false);
-    }
-  };
-
   useEffect(() => {
+    const handleOutsideClick = (event) => {
+      if (showDropdown && !event.target.closest('.contenedor-perfil')) {
+        setShowDropdown(false);
+      }
+    };
+
     document.body.addEventListener('click', handleOutsideClick);
     return () => {
       document.body.removeEventListener('click', handleOutsideClick);
     };
   }, [showDropdown]);
-
 
   return (
     <nav>

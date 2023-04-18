@@ -9,7 +9,7 @@ const UsersCRUD = () => {
   const [selectedUserId, setSelectedUserId] = useState(null);
   const [isFormVisible, setIsFormVisible] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
-  const [usersPerPage, setUsersPerPage] = useState(10);
+  const [usersPerPage, setUsersPerPage] = useState('');
   const indexOfLastUser = currentPage * usersPerPage;
   const indexOfFirstUser = indexOfLastUser - usersPerPage;
   const currentUsers = users.slice(indexOfFirstUser, indexOfLastUser);
@@ -55,6 +55,7 @@ const UsersCRUD = () => {
     const response = await fetch("http://localhost:3333/users");
     const data = await response.json();
     setUsers(data);
+    setUsersPerPage(10);
   };
 
   const handleNameChange = (e) => {

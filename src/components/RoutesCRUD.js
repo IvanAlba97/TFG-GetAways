@@ -21,7 +21,6 @@ const UsersCRUD = () => {
   });
   const [selectedRouteId, setSelectedRouteId] = useState(null);
   const [isFormVisible, setIsFormVisible] = useState(false);
-  const [isForm2Visible, setIsForm2Visible] = useState(false);
   const dificultad = {
     Fácil: 'Fácil',
     Moderado: 'Moderado',
@@ -33,7 +32,7 @@ const UsersCRUD = () => {
     Semicircular: 'Semicircular'
   };
   const [currentPage, setCurrentPage] = useState(1);
-  const [routesPerPage, setRoutesPerPage] = useState(10);
+  const [routesPerPage, setRoutesPerPage] = useState('');
   const indexOfLastRoute = currentPage * routesPerPage;
   const indexOfFirstRoute = indexOfLastRoute - routesPerPage;
   const currentRoutes = routes.slice(indexOfFirstRoute, indexOfLastRoute);
@@ -94,6 +93,7 @@ const UsersCRUD = () => {
     const response = await fetch("http://localhost:3333/routes");
     const data = await response.json();
     setRoutes(data);
+    setRoutesPerPage(10);
   };
 
   const handleProvinceChange = (e) => {
