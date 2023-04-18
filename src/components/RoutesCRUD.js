@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
-import Navbar from "./Navbar";
+import Navbar from "./Navbar.js";
+import AddRoute from "./AddRoute.js";
 import '../styles/RoutesCRUD.css';
 
 const UsersCRUD = () => {
@@ -20,6 +21,7 @@ const UsersCRUD = () => {
   });
   const [selectedRouteId, setSelectedRouteId] = useState(null);
   const [isFormVisible, setIsFormVisible] = useState(false);
+  const [isForm2Visible, setIsForm2Visible] = useState(false);
   const dificultad = {
     Fácil: 'Fácil',
     Moderado: 'Moderado',
@@ -126,7 +128,7 @@ const UsersCRUD = () => {
       body: JSON.stringify({ newRoute }),
     });
     fetchRoutes();
-  };  
+  };
 
   const handleDeleteRoute = async (routeId) => {
     const confirmDelete = window.confirm("¿Estás seguro de que quieres eliminar esta ruta?"); // Mostrar ventana de confirmación
@@ -174,6 +176,32 @@ const UsersCRUD = () => {
     });
     setCurrentPage(pageNumber);
   }
+
+  const handleAddRoute = async (e) => {
+    e.preventDefault();
+    const response = await fetch("http://localhost:3333/routes", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(newRoute),
+    });
+    if (response.ok) {
+      setNewRoute({
+        id_provincia: "",
+        nombre: "",
+        descripcion: "",
+        imagen: "",
+        longitud: "",
+        tipo: "",
+        dificultad: "",
+        permiso_necesario: "",
+        como_llegar: "",
+        enlace_maps: "",
+      });
+      setIsForm2Visible(false);
+      fetchRoutes();
+    }
+  };
+  
 
   return (
     <div className="fondo">
@@ -313,17 +341,18 @@ const UsersCRUD = () => {
           ))}
         </ul>
         <div className='pagination'>
-        {pageNumbers.map(number => (
-          <button
-            key={number}
-            onClick={() => handlePageChange(number)}
-            className={currentPage === number ? 'currentPage' : 'no-currentPage'}
-          >
-            {number}
-          </button>
-        ))}
+          {pageNumbers.map(number => (
+            <button
+              key={number}
+              onClick={() => handlePageChange(number)}
+              className={currentPage === number ? 'currentPage' : 'no-currentPage'}
+            >
+              {number}
+            </button>
+          ))}
         </div>
       </div>
+      <AddRoute />
     </div>
   );
 

@@ -877,10 +877,10 @@ app.get("/routes", (req, res) => {
 
 // Ruta para crear una nueva ruta de senderismo
 app.post("/routes", (req, res) => {
-  const { id_provincia, nombre, descripcion, imagen, longitud, tipo, dificultad, permiso_necesario, como_llegar, enlace_maps, media_valoraciones } = req.body;
+  const newRoute = req.body;
   connection.query(
-    "INSERT INTO ruta_senderismo (id_provincia, nombre, descripcion, imagen, longitud, tipo, dificultad, permiso_necesario, como_llegar, enlace_maps, media_valoraciones) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
-    [id_provincia, nombre, descripcion, imagen, longitud, tipo, dificultad, permiso_necesario, como_llegar, enlace_maps, media_valoraciones],
+    "INSERT INTO ruta_senderismo (id_provincia, nombre, descripcion, imagen, longitud, tipo, dificultad, permiso_necesario, como_llegar, enlace_maps) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+    [newRoute.id_provincia, newRoute.nombre, newRoute.descripcion, newRoute.imagen, newRoute.longitud, newRoute.tipo, newRoute.dificultad, newRoute.permiso_necesario, newRoute.como_llegar, newRoute.enlace_maps],
     (err, result) => {
       if (err) throw err;
       res.send(result);

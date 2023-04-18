@@ -4,6 +4,7 @@
 }
 
 .route-details {
+  min-width: 800px;
   max-width: 800px;
   display: flex;
   flex-direction: column;
@@ -108,6 +109,10 @@ span {
 }
 
 @media screen and (max-width: 768px) {
+  .route-details {
+    min-width: auto;
+  }
+
   .comments {
     margin-left: 10px;
     margin-right: 10px;
