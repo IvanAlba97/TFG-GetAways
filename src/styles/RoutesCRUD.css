@@ -5,7 +5,7 @@
 }
 
 .contenedor-crud h1 {
-  font-size: 24px;
+  font-size: 30px;
   text-align: center;
   font-weight: bold;
   color: #725d3f;
@@ -129,6 +129,10 @@
     padding-left: 5px;
     padding-right: 5px;
     margin: 10px;
+  }
+
+  .contenedor-crud h1 {
+    font-size: 25px;
   }
 
   .user-item span {
