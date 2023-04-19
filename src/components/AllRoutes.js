@@ -19,6 +19,13 @@ function AllRoutes() {
 
 
   useEffect(() => {
+    window.scrollTo({
+      top: 0,
+      left: 0
+    });
+  })
+
+  useEffect(() => {
     fetch('http://localhost:3333/user', { credentials: 'include' })
       .then((response) => {
         if (response.ok) {
