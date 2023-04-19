@@ -258,6 +258,11 @@ app.post('/update-password', (req, res) => {
     return res.status(569).json({ message: 'Todos los campos referentes a la contraseña son obligatorios.' });
   }
 
+  // Comprobar que la contraseña cumple los requisitos mínimos para que sea segura
+  if (!schema.validate(newPassword)) {
+    res.status(558).send({ message: 'La contraseña no cumple con los criterios de seguridad. Debe tener mínimo 8 y máximo 100 caracteres, al menos una letra mayúscula, una letra minúscula, un número, un carácter especial, y no puede ser una contraseña común como Passw0rd o 12345678.' });
+  }
+
   // Obtener la contraseña encriptada de la base de datos
   connection.query('SELECT contraseña FROM usuario WHERE id = ?', [id], (err, result) => {
     if (err) {

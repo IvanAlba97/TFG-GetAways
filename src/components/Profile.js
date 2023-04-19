@@ -108,8 +108,9 @@ function Profile() {
             setSuccessfulEmailMessage(message);
           });
         } else {
-          setEmailError(true);
           setUsernameError(false);
+          setEmailError(true);
+          setPasswordError(false);
           setSuccessfulEmailUpdate(false);
           res.json().then(({ message }) => {
             setErrorMessage(message);
@@ -139,6 +140,8 @@ function Profile() {
             setSuccessfulPasswordMessage(message);
           });
         } else {
+          setUsernameError(false);
+          setEmailError(false);
           setPasswordError(true);
           setSuccessfulPasswordUpdate(false);
           res.json().then(({ message }) => {
