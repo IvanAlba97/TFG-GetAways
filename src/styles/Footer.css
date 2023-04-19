@@ -1,6 +1,7 @@
 footer {
   width: auto;
   display: flex;
+  flex-direction: row;
   justify-content: space-around;
   align-items: center;
   padding: 20px;
@@ -28,4 +29,21 @@ footer {
 
 .copyright {
   margin: 0;
+}
+
+
+@media screen and (max-width: 768px) {
+  footer {
+    flex-direction: column;
+  }
+
+  .contact-info, .social-media {
+    width: 100%;
+  }
+
+  .copyright {
+    width: 100%;
+    text-align: center;
+    margin: 30px;
+  }
 }
