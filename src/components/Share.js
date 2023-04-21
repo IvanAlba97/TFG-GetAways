@@ -10,17 +10,20 @@ import {
   WhatsappIcon,
 } from "react-share";
 import '../styles/Share.css';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const Share = () => {
   const url = window.location.href;
-  const [copied, setCopied] = useState(false);
+  /* const [copied, setCopied] = useState(false); */
 
   const handleClick = async () => {
     await navigator.clipboard.writeText(url);
-    setCopied(true);
+    /* setCopied(true);
     setTimeout(() => {
       setCopied(false);
-    }, 3000);
+    }, 3000); */
+    toast.success("Copiado al portapapeles.");
   };
 
   return (
@@ -46,7 +49,8 @@ const Share = () => {
           </button>
         </div>
       </div>
-      {copied && <p className="copy-url-message">Copiado al portapapeles</p>}
+      {/* {copied && <p className="copy-url-message">Copiado al portapapeles</p>} */}
+      <ToastContainer />
     </div>
   );
 };

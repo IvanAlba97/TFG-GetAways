@@ -220,7 +220,7 @@ app.post('/update-email', (req, res) => {
 
   // Comprobar si el correo y el correoAntiguo son válidos
   if (!isValidEmail(newEmail) || !isValidEmail(oldEmail)) {
-    return res.status(566).json({ message: 'El correo antiguo y el correo nuevo deben ser válidos' });
+    return res.status(566).json({ message: 'El correo nuevo debe ser válido' });
   }
 
   // Comprobar si el correoAntiguo es igual al currentEmail
@@ -258,11 +258,6 @@ app.post('/update-password', (req, res) => {
     return res.status(569).json({ message: 'Todos los campos referentes a la contraseña son obligatorios.' });
   }
 
-  // Comprobar que la contraseña cumple los requisitos mínimos para que sea segura
-  if (!schema.validate(newPassword)) {
-    res.status(558).send({ message: 'La contraseña no cumple con los criterios de seguridad. Debe tener mínimo 8 y máximo 100 caracteres, al menos una letra mayúscula, una letra minúscula, un número, un carácter especial, y no puede ser una contraseña común como Passw0rd o 12345678.' });
-  }
-
   // Obtener la contraseña encriptada de la base de datos
   connection.query('SELECT contraseña FROM usuario WHERE id = ?', [id], (err, result) => {
     if (err) {
@@ -279,7 +274,7 @@ app.post('/update-password', (req, res) => {
     // Comparar la contraseña antigua con la existente en la base de datos
     bcrypt.compare(oldPassword, hashedPassword, (err, isMatch) => {
       if (err) {
-        console.error(err);
+        /* console.error(err); */
         return res.status(572).json({ message: 'Error al actualizar la contraseña' });
       }
 
@@ -289,13 +284,18 @@ app.post('/update-password', (req, res) => {
 
       // Comprobar si la nueva contraseña se repite correctamente
       if (newPassword !== newRepeatedPassword) {
-        return res.status(567).json({ message: 'La nueva contraseña y su repetición no coinciden' });
+        return res.status(567).json({ message: 'La nueva contraseña y su confirmación no coinciden' });
+      }
+
+      // Comprobar que la contraseña cumple los requisitos mínimos para que sea segura
+      if (!schema.validate(newPassword)) {
+        return res.status(558).send({ message: 'La contraseña no cumple con los criterios de seguridad. Debe tener mínimo 8 y máximo 100 caracteres, al menos una letra mayúscula, una letra minúscula, un número, un carácter especial, y no puede ser una contraseña común como Passw0rd o 12345678.' });
       }
 
       // Actualizar la contraseña del usuario
       bcrypt.hash(newPassword, 10, (err, hashedNewPassword) => {
         if (err) {
-          console.error(err);
+          /* console.error(err); */
           return res.status(574).json({ message: 'Error al encriptar la contraseña' });
         }
 

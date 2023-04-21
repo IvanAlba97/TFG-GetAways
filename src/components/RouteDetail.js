@@ -8,6 +8,8 @@ import NewComment from './NewComment.js';
 import EditComment from './EditComment';
 import Share from './Share';
 import '../styles/RouteDetail.css';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function RouteDetail() {
 
@@ -94,8 +96,18 @@ function RouteDetail() {
         if (res.ok) {
           if (type === 'pendings') {
             setPendings(checked);
+            if(checked) {
+              toast.success("Ruta añadida a Pendientes.");
+            } else {
+              toast.success("Ruta eliminada de Pendientes.");
+            }
           } else {
             setCompleted(checked);
+            if(checked) {
+              toast.success("Ruta añadida a Completadas.");
+            } else {
+              toast.success("Ruta eliminada de Completadas.");
+            }
           }
         } else {
           console.error('Error updating data');
@@ -155,6 +167,7 @@ function RouteDetail() {
         <CommentBox routeId={id} />
       </div>
       <Footer />
+      <ToastContainer />
     </div>
   );
 }

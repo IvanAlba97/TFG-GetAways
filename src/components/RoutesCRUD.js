@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import Navbar from "./Navbar.js";
 import AddRoute from "./AddRoute.js";
 import '../styles/RoutesCRUD.css';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const UsersCRUD = () => {
   const [user, setUser] = useState([]);
@@ -139,11 +141,11 @@ const UsersCRUD = () => {
   const handleUpdateRoute = async (routeId) => {
     // Verificar si los campos están vacíos
     if (!newRoute.nombre.trim() || !newRoute.descripcion.trim() || !newRoute.imagen.trim() || !newRoute.longitud || !newRoute.como_llegar.trim() || !newRoute.enlace_maps.trim()) {  // Verificar que newRoute.longitud no sea nulo o indefinido
-      alert("Por favor, complete todos los campos.");
+      toast.error("Por favor, complete todos los campos.");
       return;
     }
     if (isNaN(parseFloat(newRoute.longitud))) {
-      alert("La longitud debe ser un número");
+      toast.error("La longitud debe ser un número.");
       return;
     }
     await fetch(`http://localhost:3333/routes/${routeId}`, {
@@ -151,18 +153,40 @@ const UsersCRUD = () => {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ newRoute }),
     });
-    alert("Ruta modificada correctamente.");
+    toast.success("Ruta actualizada correctamente.")
     fetchRoutes();
   };
 
   const handleDeleteRoute = async (routeId) => {
-    const confirmDelete = window.confirm("¿Estás seguro de que quieres eliminar esta ruta?"); // Mostrar ventana de confirmación
-    if (confirmDelete) {
-      await fetch(`http://localhost:3333/routes/${routeId}`, {
-        method: "DELETE",
-      });
-      fetchRoutes();
-    }
+    const toastId = toast.warn(
+      <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+        <p>¿Estás seguro de que quieres eliminar esta ruta?</p>
+        <div style={{ display: "flex", justifyContent: "space-between", width: "100%" }}>
+          <button style={{ margin: "10px" }} onClick={() => handleDeleteConfirm(routeId)}>Sí</button>
+          <button style={{ margin: "10px" }} onClick={() => toast.dismiss()}>No</button>
+        </div>
+      </div>, {
+      position: "top-right",
+      autoClose: false,
+      hideProgressBar: true,
+      closeOnClick: false,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      toastId: "deleteRoute"
+    });
+  };
+  
+  const handleDeleteConfirm = async (routeId) => {
+    await fetch(`http://localhost:3333/routes/${routeId}`, {
+      method: "DELETE",
+    });
+    fetchRoutes();
+    toast.update("deleteRoute", {
+      render: "La ruta ha sido eliminada con éxito",
+      type: toast.TYPE.SUCCESS,
+      autoClose: 3000
+    });
   };
 
   const handleEditRoute = (routeId) => {
@@ -351,6 +375,7 @@ const UsersCRUD = () => {
               ))}
             </div>
           </div>
+          <ToastContainer />
           <div className="addroute">
             <AddRoute />
           </div>

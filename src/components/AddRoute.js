@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import '../styles/AddRoute.css';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const AddRoute = () => {
   const [provinces, setProvinces] = useState([]);
@@ -92,11 +94,11 @@ const AddRoute = () => {
       !newRoute.dificultad ||
       !newRoute.como_llegar ||
       !newRoute.enlace_maps) {
-      alert("Por favor, complete todos los campos");
+      toast.error("Por favor, complete todos los campos.");
       return;
     }
     if (isNaN(parseFloat(newRoute.longitud))) {
-      alert("La longitud debe ser un número");
+      toast.error("La longitud debe ser un número.");
       return;
     }
     const response = await fetch("http://localhost:3333/routes", {
@@ -117,7 +119,7 @@ const AddRoute = () => {
         como_llegar: "",
         enlace_maps: "",
       });
-      alert("Ruta añadida correctamente.");
+      toast.success("Ruta añadida correctamente.");
     }
   };
 
@@ -214,6 +216,7 @@ const AddRoute = () => {
           </button>
         </div>
       </div>
+      <ToastContainer />
     </div>
   );
 };

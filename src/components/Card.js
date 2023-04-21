@@ -3,6 +3,8 @@ import Switch from 'react-switch';
 import '../styles/Card.css';
 import TextTruncator from "./TextTruncator.js";
 import { Link } from 'react-router-dom';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function Card(props) {
   const [pendings, setPendings] = useState(false);
@@ -58,8 +60,18 @@ function Card(props) {
         if (res.ok) {
           if (type === 'pendings') {
             setPendings(checked);
+            if(checked) {
+              toast.success("Ruta añadida a Pendientes.");
+            } else {
+              toast.success("Ruta eliminada de Pendientes.");
+            }
           } else {
             setCompleted(checked);
+            if(checked) {
+              toast.success("Ruta añadida a Completadas.");
+            } else {
+              toast.success("Ruta eliminada de Completadas.");
+            }
           }
         } else {
           console.error('Error updating data');
@@ -109,6 +121,7 @@ function Card(props) {
 
         </dl>
       </div>
+      <ToastContainer />
     </div>
   );
 }

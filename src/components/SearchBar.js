@@ -78,9 +78,9 @@ function SearchBar() {
         {showResults && (
           <div className='resultados-busqueda' ref={searchResultsRef}>
             {routes.map((route) => (
-              <Link key={route.id} to={`/ruta/${route.id}`} className='enlace-ruta' onClick={handleLinkClick}>
+              <a key={route.id} href={`/ruta/${route.id}`} className='enlace-ruta' onClick={handleLinkClick}>
                 <div className='contenedor-individual'>{route.nombre}</div>
-              </Link>
+              </a>
             ))}
           </div>
         )}

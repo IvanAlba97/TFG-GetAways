@@ -1,13 +1,15 @@
 import React, { useState } from "react";
 import '../styles/Register.css';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const Register = () => {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [errorMessage, setErrorMessage] = useState('');
-  const [showErrorMessage, setShowErrorMessage] = useState(false);
+  /* const [errorMessage, setErrorMessage] = useState('');
+  const [showErrorMessage, setShowErrorMessage] = useState(false); */
 
   const handleSubmit = async event => {
     event.preventDefault();
@@ -21,13 +23,12 @@ const Register = () => {
     })
       .then(async response => {
         if (response.ok) {
-          alert('Usuario registrado correctamente');
+          toast.success("Usuario registrado correctamente.");
           setUsername('');
           setEmail('');
           setPassword('');
           setConfirmPassword('');
-          setShowErrorMessage(false);
-
+          /* setShowErrorMessage(false); */
           fetch('http://localhost:3333/auth/login', {
             method: 'POST',
             headers: {
@@ -44,14 +45,14 @@ const Register = () => {
                 // Almacenar la sesión en sessionStorage
                 const data = res.json();
                 sessionStorage.setItem('session', JSON.stringify(data));
-
                 window.location.href = '/';
               }
             })
         } else {
           response.json().then(({ error }) => {
-            setErrorMessage(error);
-            setShowErrorMessage(true);
+            toast.error(error);
+            /* setErrorMessage(error); */
+            /* setShowErrorMessage(true); */
           });
           throw new Error('Error al iniciar sesión');
         }
@@ -89,9 +90,10 @@ const Register = () => {
         onChange={event => setConfirmPassword(event.target.value)}
       />
       <div className='error-message'>
-        {showErrorMessage ? errorMessage : ''}
+        {/* {showErrorMessage ? errorMessage : ''} */}
       </div>
       <button type="submit">Registrar</button>
+      <ToastContainer />
     </form>
   );
 };

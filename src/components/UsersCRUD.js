@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import Navbar from "./Navbar";
 import '../styles/UsersCRUD.css';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const UsersCRUD = () => {
   const [user, setUser] = useState([]);
@@ -69,7 +71,7 @@ const UsersCRUD = () => {
   const handleUpdateUser = async (userId) => {
     // Verificar si los campos están vacíos
     if (!newUser.nombre.trim() || !newUser.correo.trim()) {  // trim() elimina espacios al inicio y al final
-      alert("Por favor, complete todos los campos.");
+      toast.error("Por favor, complete todos los campos.");
       return;
     }
 
@@ -176,6 +178,7 @@ const UsersCRUD = () => {
               </button>
             ))}
           </div>
+          <ToastContainer />
         </div>
       }
       {!isAdmin &&
