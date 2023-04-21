@@ -15,14 +15,9 @@ import 'react-toastify/dist/ReactToastify.css';
 
 const Share = () => {
   const url = window.location.href;
-  /* const [copied, setCopied] = useState(false); */
 
   const handleClick = async () => {
     await navigator.clipboard.writeText(url);
-    /* setCopied(true);
-    setTimeout(() => {
-      setCopied(false);
-    }, 3000); */
     toast.success("Copiado al portapapeles.");
   };
 
@@ -42,14 +37,12 @@ const Share = () => {
         <EmailShareButton url={url} className="share-button">
           <EmailIcon size={32} round={true} />
         </EmailShareButton>
-        {/* <input type="text" value={url} readOnly className="share-input" /> */}
         <div className="copy-url-container">
           <button className='btn' onClick={handleClick}>
             Copiar URL
           </button>
         </div>
       </div>
-      {/* {copied && <p className="copy-url-message">Copiado al portapapeles</p>} */}
       <ToastContainer />
     </div>
   );

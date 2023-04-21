@@ -13,8 +13,6 @@ import 'react-toastify/dist/ReactToastify.css';
 
 function RouteDetail() {
 
-  /* const rutaActual = window.location.pathname;
-  const id = rutaActual.split('/')[2]; */
   const { id } = useParams();
   const [routeDetails, setRouteDetails] = useState(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);

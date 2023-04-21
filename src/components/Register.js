@@ -8,8 +8,6 @@ const Register = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  /* const [errorMessage, setErrorMessage] = useState('');
-  const [showErrorMessage, setShowErrorMessage] = useState(false); */
 
   const handleSubmit = async event => {
     event.preventDefault();
@@ -28,7 +26,6 @@ const Register = () => {
           setEmail('');
           setPassword('');
           setConfirmPassword('');
-          /* setShowErrorMessage(false); */
           fetch('http://localhost:3333/auth/login', {
             method: 'POST',
             headers: {
@@ -51,8 +48,6 @@ const Register = () => {
         } else {
           response.json().then(({ error }) => {
             toast.error(error);
-            /* setErrorMessage(error); */
-            /* setShowErrorMessage(true); */
           });
           throw new Error('Error al iniciar sesión');
         }
@@ -90,7 +85,6 @@ const Register = () => {
         onChange={event => setConfirmPassword(event.target.value)}
       />
       <div className='error-message'>
-        {/* {showErrorMessage ? errorMessage : ''} */}
       </div>
       <button type="submit">Registrar</button>
       <ToastContainer />
