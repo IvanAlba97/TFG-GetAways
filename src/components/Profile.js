@@ -19,6 +19,8 @@ function Profile() {
   const [oldEmail, setOldEmail] = useState('');
 
   /* CONTRASEÑA */
+  const [password, setPassword] = useState('');   // Necesaria para modificar usuario
+  const [password2, setPassword2] = useState('');   // Necesaria para modificar correo
   const [oldPassword, setOldPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [newRepeatedPassword, setNewRepeatedPassword] = useState('');
@@ -49,20 +51,22 @@ function Profile() {
     fetch('http://localhost:3333/update-username', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ username: newUsername }),
+      body: JSON.stringify({ username: newUsername, password: password }),
       credentials: 'include'
     })
       .then(res => {
         if (res.ok) {
-          toast.success("Usuario modificado correctamente.");
+          res.json().then(({ message }) => {
+            toast.success(message);
+          });
           setUser({ ...user, nombre: newUsername });
-          setNewUsername('');
         } else {
-          /* setSuccessfulPasswordUpdate(false); */
           res.json().then(({ message }) => {
             toast.error(message);
           });
         }
+        setNewUsername('');
+        setPassword('');
       })
       .catch(err => console.error(err));
   }
@@ -71,20 +75,23 @@ function Profile() {
     fetch('http://localhost:3333/update-email', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ newEmail: newEmail, oldEmail: oldEmail }),
+      body: JSON.stringify({ newEmail: newEmail, oldEmail: oldEmail, password: password2 }),
       credentials: 'include'
     })
       .then(res => {
         if (res.ok) {
-          toast.success("Correo modificado correctamente.");
+          res.json().then(({ message }) => {
+            toast.success(message);
+          });
           setUser({ ...user, correo: newEmail });
-          setNewEmail('');
-          setOldEmail('');
         } else {
           res.json().then(({ message }) => {
             toast.error(message);
           });
         }
+        setNewEmail('');
+        setOldEmail('');
+        setPassword2('');
       })
       .catch(err => console.error(err));
   }
@@ -133,8 +140,10 @@ function Profile() {
             </button>
             {showUpdateUsername &&
               <div className="perfil-input-container">
-                <label>Nombre:</label>
+                <label>Nombre nuevo:</label>
                 <input type="text" value={newUsername} onChange={event => setNewUsername(event.target.value)} />
+                <label>Contraseña:</label>
+                <input type="password" value={password} onChange={event => setPassword(event.target.value)} />
                 <button className="perfil-button-submit" onClick={updateUsername}>Actualizar nombre</button>
               </div>}
           </div>
@@ -148,6 +157,8 @@ function Profile() {
                 <input type="email" value={oldEmail} onChange={event => setOldEmail(event.target.value)} />
                 <label>Correo electrónico nuevo:</label>
                 <input type="email" value={newEmail} onChange={event => setNewEmail(event.target.value)} />
+                <label>Contraseña:</label>
+                <input type="password" value={password2} onChange={event => setPassword2(event.target.value)} />
                 <button className="perfil-button-submit" onClick={actualizarCorreo}>Actualizar correo</button>
               </div>}
           </div>
@@ -159,9 +170,9 @@ function Profile() {
               <div className="perfil-input-container">
                 <label>Contraseña antigua:</label>
                 <input type="password" value={oldPassword} onChange={event => setOldPassword(event.target.value)} />
-                <label>Nueva contraseña:</label>
+                <label>Contraseña nueva:</label>
                 <input type="password" value={newPassword} onChange={event => setNewPassword(event.target.value)} />
-                <label>Confirmar nueva contraseña:</label>
+                <label>Confirmar contraseña nueva:</label>
                 <input type="password" value={newRepeatedPassword} onChange={event => setNewRepeatedPassword(event.target.value)} />
                 <button className="perfil-button-submit" onClick={updatePassword}>Actualizar contraseña</button>
               </div>}

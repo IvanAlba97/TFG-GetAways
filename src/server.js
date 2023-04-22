@@ -188,55 +188,83 @@ app.get('/', (req, res) => {
 
 // Ruta para actualizar el nombre del usuario
 app.post('/update-username', (req, res) => {
-  const { username } = req.body;
+  const { username, password } = req.body;
   const userId = req.session.user?.id;
   // Comprobar si el nombre está vacío
-  if (!username) {
-    return res.status(563).json({ message: 'El campo nombre es obligatorio.' });
+  if (!username || !password) {
+    return res.status(563).json({ message: 'Los campos son obligatorios.' });
   }
-
-  connection.query('UPDATE usuario SET nombre = ? WHERE id = ?', [username, userId], (err, result) => {
-    if (err) {
-      console.error(err);
-      return res.status(564).json({ message: 'Error al actualizar el nombre' });
+  connection.query('SELECT * FROM usuario WHERE id = ?', [userId], (error, results) => {
+    if (error) {
+      res.status(551).send('Error al buscar usuario.');
+    } else if (results.length === 0) {
+      res.status(552).send({ message: 'Usuario no encontrado' });
+    } else {
+      const user = results[0];
+      bcrypt.compare(password, user.contraseña, (error, result) => {
+        if (error) {
+          res.status(553).send('Error al comparar contraseñas.');
+        } else if (result) {
+          connection.query('UPDATE usuario SET nombre = ? WHERE id = ?', [username, userId], (err, result) => {
+            if (err) {
+              console.error(err);
+              return res.status(564).json({ message: 'Error al actualizar el nombre.' });
+            }
+            // Actualizar el valor de la sesión con el nuevo nombre
+            req.session.user.nombre = username;
+            res.json({ user: req.session.user, message: 'Usuario actualizado correctamente.' });
+          });
+        } else {
+          res.status(554).send({ message: 'Contraseña incorrecta.' });
+        }
+      });
     }
-
-    // Actualizar el valor de la sesión con el nuevo nombre
-    req.session.user.nombre = username;
-
-    res.json({ user: req.session.user, message: 'Usuario actualizado correctamente' });
   });
 });
 
-
 // Ruta para actualizar el correo del usuario
 app.post('/update-email', (req, res) => {
-  const { newEmail, oldEmail } = req.body;
-  const { id, correo: currentEmail } = req.session.user;
-  // Comprobar si el correo y el correoAntiguo no están vacíos
-  if (!newEmail || !oldEmail) {
-    return res.status(565).json({ message: 'Los campos correo antiguo y correo nuevo son obligatorios.' });
+  const { newEmail, oldEmail, password } = req.body;
+  const { id: userId, correo: currentEmail } = req.session.user;
+  console.log(newEmail, oldEmail, password);
+  // Comprobar que los campos no estén vacíos
+  if (!newEmail || !oldEmail || !password) {
+    return res.status(565).json({ message: 'Los campos son obligatorios.' });
   }
 
-  // Comprobar si el correo y el correoAntiguo son válidos
-  if (!isValidEmail(newEmail) || !isValidEmail(oldEmail)) {
-    return res.status(566).json({ message: 'El correo nuevo debe ser válido' });
-  }
-
-  // Comprobar si el correoAntiguo es igual al currentEmail
-  if (oldEmail !== currentEmail) {
-    return res.status(567).json({ message: 'El correo antiguo no coincide con el correo actual del usuario' });
-  }
-
-  connection.query('UPDATE usuario SET correo = ? WHERE id = ?', [newEmail, id], (err, result) => {
-    if (err) {
-      console.error(err);
-      return res.status(568).json({ message: 'Error al actualizar el correo' });
+  connection.query('SELECT * FROM usuario WHERE id = ?', [userId], (error, results) => {
+    if (error) {
+      res.status(551).send('Error al buscar usuario.');
+    } else if (results.length === 0) {
+      res.status(552).send({ message: 'Usuario no encontrado' });
+    } else {
+      const user = results[0];
+      bcrypt.compare(password, user.contraseña, (error, result) => {
+        if (error) {
+          res.status(553).send('Error al comparar contraseñas.');
+        } else if (result) {
+          // Comprobar si el correo es válido
+          if (!isValidEmail(newEmail)) {
+            return res.status(566).json({ message: 'El correo nuevo debe ser válido' });
+          }
+          // Comprobar si el correoAntiguo es igual al currentEmail
+          if (oldEmail !== currentEmail) {
+            return res.status(567).json({ message: 'El correo antiguo no coincide con el correo actual del usuario' });
+          }
+          connection.query('UPDATE usuario SET correo = ? WHERE id = ?', [newEmail, userId], (err, result) => {
+            if (err) {
+              console.error(err);
+              return res.status(568).json({ message: 'Error al actualizar el correo' });
+            }
+            // Actualizar el valor de la sesión con el nuevo correo
+            req.session.user.correo = newEmail;
+            res.json({ user: req.session.user, message: 'Correo actualizado correctamente' });
+          });
+        } else {
+          res.status(554).send({ message: 'Contraseña incorrecta.' });
+        }
+      });
     }
-    // Actualizar el valor de la sesión con el nuevo correo
-    req.session.user.correo = newEmail;
-
-    res.json({ user: req.session.user, message: 'Correo actualizado correctamente' });
   });
 });
 

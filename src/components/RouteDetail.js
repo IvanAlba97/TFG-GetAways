@@ -94,14 +94,14 @@ function RouteDetail() {
         if (res.ok) {
           if (type === 'pendings') {
             setPendings(checked);
-            if(checked) {
+            if (checked) {
               toast.success("Ruta añadida a Pendientes.");
             } else {
               toast.success("Ruta eliminada de Pendientes.");
             }
           } else {
             setCompleted(checked);
-            if(checked) {
+            if (checked) {
               toast.success("Ruta añadida a Completadas.");
             } else {
               toast.success("Ruta eliminada de Completadas.");
@@ -140,7 +140,10 @@ function RouteDetail() {
               <dt>Permiso necesario:</dt>
               <dd>{routeDetails.permiso_necesario === 1 ? 'Sí' : 'No'}</dd>
               <dt>Media de valoraciones:</dt>
-              <dd>{routeDetails.media_valoraciones == null ? 'Sin valoraciones' : routeDetails.media_valoraciones + '/5'}</dd>
+              <dd>{routeDetails.media_valoraciones == null ? 'Sin valoraciones' :
+                Array.from({ length: Math.round(routeDetails.media_valoraciones) }, (_, i) => (
+                  <span key={i}>★</span>
+                ))}</dd>
               <dt>Provincia:</dt>
               <dd>{routeDetails.provincia}</dd>
               <dt>Cómo llegar:</dt>
