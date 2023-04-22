@@ -19,7 +19,7 @@ function Home() {
         if (response.ok) {
           return response.json();
         } else {
-          //throw new Error('No se ha iniciado sesión');
+          return Promise.reject(new Error('No se ha iniciado sesión'));
         }
       })
       .then(data => {

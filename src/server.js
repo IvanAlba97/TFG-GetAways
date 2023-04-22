@@ -55,28 +55,32 @@ app.post('/auth/login', (req, res) => {
   const { identifier, password } = req.body;
 
   if (!identifier || !password) {
-    return res.status(550).send({ message: 'Debes proporcionar un usuario y una contraseña' });
+    return res.status(550).send({ message: 'Debes proporcionar un usuario y una contraseña.' });
   }
 
   connection.query('SELECT * FROM usuario WHERE nombre = ? OR correo = ?', [identifier, identifier], (error, results) => {
     if (error) {
       res.status(551).send('Error al buscar usuario');
     } else if (results.length === 0) {
-      res.status(552).send({ message: 'Usuario no encontrado' });
+      res.status(552).send({ message: 'Usuario no encontrado.' });
     } else {
       const user = results[0];
-      bcrypt.compare(password, user.contraseña, (error, result) => {
-        if (error) {
-          res.status(553).send('Error al comparar contraseñas');
-        } else if (result) {
-          // Inicializar la sesión y almacenar la información del usuario en la sesión
-          req.session.user = { id: user.id, nombre: user.nombre, correo: user.correo };
-          req.session.cookie.maxAge = 30 * 60 * 1000; // 30 minutos
-          res.json(req.session.user);
-        } else {
-          res.status(554).send({ message: 'Contraseña incorrecta' });
-        }
-      });
+      if(user.habilitada) {
+        bcrypt.compare(password, user.contraseña, (error, result) => {
+          if (error) {
+            res.status(553).send('Error al comparar contraseñas.');
+          } else if (result) {
+            // Inicializar la sesión y almacenar la información del usuario en la sesión
+            req.session.user = { id: user.id, nombre: user.nombre, correo: user.correo };
+            req.session.cookie.maxAge = 30 * 60 * 1000; // 30 minutos
+            res.json(req.session.user);
+          } else {
+            res.status(554).send({ message: 'Contraseña incorrecta.' });
+          }
+        });
+      } else {
+        res.status(587).send({ message: 'Cuenta inhabilitada.'});
+      }
     }
   });
 });
@@ -88,7 +92,7 @@ app.post('/auth/logout', (req, res) => {
       res.status(555).json({ message: 'Error al cerrar sesión' });
     } else {
       res.clearCookie('connect.sid');
-      res.json({ message: 'Sesión cerrada exitosamente' });
+      res.json({ message: 'Sesión cerrada exitosamente.' });
     }
     // Cualquier código que necesites ejecutar después de la destrucción de la sesión debe estar aquí
   });
@@ -226,7 +230,6 @@ app.post('/update-username', (req, res) => {
 app.post('/update-email', (req, res) => {
   const { newEmail, oldEmail, password } = req.body;
   const { id: userId, correo: currentEmail } = req.session.user;
-  console.log(newEmail, oldEmail, password);
   // Comprobar que los campos no estén vacíos
   if (!newEmail || !oldEmail || !password) {
     return res.status(565).json({ message: 'Los campos son obligatorios.' });
@@ -247,7 +250,7 @@ app.post('/update-email', (req, res) => {
           if (!isValidEmail(newEmail)) {
             return res.status(566).json({ message: 'El correo nuevo debe ser válido' });
           }
-          // Comprobar si el correoAntiguo es igual al currentEmail
+          // Comprobar si el correo antiguo es igual al correo actual
           if (oldEmail !== currentEmail) {
             return res.status(567).json({ message: 'El correo antiguo no coincide con el correo actual del usuario' });
           }
@@ -342,7 +345,7 @@ app.post('/update-password', (req, res) => {
 });
 
 app.get('/user', (req, res) => {
-  if (req.session.user) {
+  if (req.session?.user) {
     // Devolver la información del usuario almacenada en la sesión
     res.json({ user: req.session.user });
   } else {
@@ -791,7 +794,7 @@ app.delete("/delete-account", (req, res) => {
 
 app.get("/is-admin", (req, res) => {
   if (req.session.user) {
-    const userId = req.session.user.id;
+    const userId = req.session.user?.id;
     const query = `SELECT * FROM usuario WHERE id = ? AND es_admin = 1`;
     connection.query(query, [userId], (err, result) => {
       if (err) {
@@ -836,10 +839,10 @@ app.post("/users", (req, res) => {
 // Ruta para actualizar un usuario existente
 app.put("/users/:id", (req, res) => {
   const { id } = req.params;
-  const { newUser } = req.body;
+  const { userId, checked } = req.body;
   connection.query(
-    "UPDATE usuario SET nombre = ?, correo = ? WHERE id = ?",
-    [newUser.nombre, newUser.correo, id],
+    "UPDATE usuario SET habilitada = ? WHERE id = ?",
+    [checked, userId],
     (err, result) => {
       if (err) throw err;
       res.send(result);

@@ -24,6 +24,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  flex-direction: column;
   padding: 2px;
   border-radius: 10px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
@@ -48,16 +49,20 @@
   font-size: 20px;
 }
 
-.user-item {
-  width: 100%;
-  margin-bottom: 16px;
-  padding: 8px;
-  background-color: #f0f0f0;
-  border-radius: 4px;
+.switch-crud {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  flex-direction: row;
+}
+
+.switch-crud span {
+  margin: 20px;
+  
+}
+
+.user-item {
+  display: flex;
+  flex-direction: column;
 }
 
 .user-name {

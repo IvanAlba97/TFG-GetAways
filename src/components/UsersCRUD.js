@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from "react";
 import Navbar from "./Navbar";
 import '../styles/UsersCRUD.css';
+import Switch from 'react-switch';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 const UsersCRUD = () => {
   const [user, setUser] = useState([]);
   const [users, setUsers] = useState([]);
-  const [newUser, setNewUser] = useState({ nombre: "", correo: "" });
   const [selectedUserId, setSelectedUserId] = useState(null);
   const [isFormVisible, setIsFormVisible] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
@@ -60,46 +60,25 @@ const UsersCRUD = () => {
     setUsersPerPage(10);
   };
 
-  const handleNameChange = (e) => {
-    setNewUser({ ...newUser, nombre: e.target.value });
-  };
-
-  const handleEmailChange = (e) => {
-    setNewUser({ ...newUser, correo: e.target.value });
-  };
-
-  const handleUpdateUser = async (userId) => {
-    // Verificar si los campos están vacíos
-    if (!newUser.nombre.trim() || !newUser.correo.trim()) {  // trim() elimina espacios al inicio y al final
-      toast.error("Por favor, complete todos los campos.");
-      return;
-    }
-
-    await fetch(`http://localhost:3333/users/${userId}`, {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ newUser }),
-    });
-    fetchUsers();
-  };
-
-
-  const handleDeleteUser = async (userId) => {
-    const confirmDelete = window.confirm("¿Estás seguro de que quieres eliminar este usuario?"); // Mostrar ventana de confirmación
-    if (confirmDelete) {
-      await fetch(`http://localhost:3333/users/${userId}`, {
-        method: "DELETE",
-      });
-      fetchUsers();
-    }
-  };
-
   const handleEditUser = (userId) => {
     const selectedUser = users.find(u => u.id === userId); // Buscar el usuario seleccionado
-    setNewUser({ nombre: selectedUser.nombre, correo: selectedUser.correo }); // Establecer los datos del usuario seleccionado en newUser
     setSelectedUserId(userId);
     setIsFormVisible(!isFormVisible);
   };
+
+  async function handleSwitchChange(userId, checked) {
+    await fetch(`http://localhost:3333/users/${userId}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ userId, checked }),
+    });
+    if (checked) {
+      toast.success('Cuenta habilitada correctamente.');
+    } else {
+      toast.success('Cuenta deshabilitada correctamente.');
+    }
+    fetchUsers();
+  }
 
   useEffect(() => {
     fetchUsers();
@@ -133,35 +112,9 @@ const UsersCRUD = () => {
                   {u.nombre} ({u.correo})
                 </span>
                 {isFormVisible && selectedUserId === u.id && (
-                  <div className="user-form">
-                    <input
-                      type="text"
-                      name="nombre"
-                      placeholder={u.nombre}
-                      value={newUser.nombre || ""}
-                      onChange={handleNameChange}
-                      className="form-input"
-                    />
-                    <input
-                      type="text"
-                      name="correo"
-                      placeholder={u.correo}
-                      value={newUser.correo || ""}
-                      onChange={handleEmailChange}
-                      className="form-input"
-                    />
-                    <button
-                      onClick={() => handleUpdateUser(u.id)}
-                      className="button"
-                    >
-                      Actualizar
-                    </button>
-                    <button
-                      onClick={() => handleDeleteUser(u.id)}
-                      className="btn-delete"
-                    >
-                      Eliminar
-                    </button>
+                  <div className="switch-crud">
+                    <span>Habilitada: </span>
+                    <Switch checked={u.habilitada ? true : false} onChange={(checked) => handleSwitchChange(u.id, checked)} />
                   </div>
                 )}
               </li>
