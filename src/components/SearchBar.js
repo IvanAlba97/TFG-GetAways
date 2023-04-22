@@ -59,7 +59,7 @@ function SearchBar() {
         <img src={lupaIcono} alt="icono de búsqueda" onClick={handleToggleSearch} />
         {showFullSearch ?
           <div className='contenedor-busqueda-full' ref={searchContainerRef}>
-            <input type="text" value={search} onChange={(e) => setSearch(e.target.value)} onKeyUp={handleSearch} />
+            <input type="text" placeholder='Buscar' value={search} onChange={(e) => setSearch(e.target.value)} onKeyUp={handleSearch} />
             {showResults && (
               <div className='resultados-busqueda-full' ref={searchResultsRef}>
                 {routes.map((route) => (
@@ -74,7 +74,7 @@ function SearchBar() {
         }
       </div>
       <div className='contenedor-busqueda' ref={searchContainerRef}>
-        <input type="text" value={search} onChange={(e) => setSearch(e.target.value)} onKeyUp={handleSearch} />
+        <input type="text" placeholder='Buscar' value={search} onChange={(e) => setSearch(e.target.value)} onKeyUp={handleSearch} />
         {showResults && (
           <div className='resultados-busqueda' ref={searchResultsRef}>
             {routes.map((route) => (

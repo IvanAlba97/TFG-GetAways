@@ -959,6 +959,29 @@ app.delete("/routes/:id", (req, res) => {
 
 
 
+// Ruta para obtener una lista de todas las publicaciones del usuario autenticado
+app.get('/my-publications', (req, res) => {
+  const userId = req.session.user?.id;
+  connection.query('SELECT * FROM publicacion WHERE id_usuario = ? ORDER BY id DESC', [userId], (error, results) => {
+    if (error) throw error;
+    res.json(results);
+  });
+});
+
+app.post('/new-publication', (req, res) => {
+  const userId = req.session.user?.id;
+  const newPublication = req.body;
+  if(!newPublication.titulo || !newPublication.descripcion) {
+    return res.status(563).json({ message: 'Los campos son obligatorios.' });
+  }
+  connection.query('INSERT INTO publicacion (id_usuario, titulo, descripcion) VALUES (?, ?, ?)', [userId, newPublication.titulo, newPublication.descripcion], (error, results) => {
+    if (error) throw error;
+    return res.json({ message: 'Publicación añadida correctamente.' });
+  });
+});
+
+
+
 
 
 

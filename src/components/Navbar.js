@@ -78,6 +78,7 @@ const Navbar = ({ user }) => {
             {showDropdown && (
               <div className="desplegable">
                 <Link to='/perfil'>Perfil</Link>
+                <Link to='/area-personal'>Área personal</Link>
                 <Link to='/equipaje'>Equipaje</Link>
                 <Link to='/rutas-pendientes'>Rutas pendientes</Link>
                 <Link to='/rutas-completadas'>Rutas completadas</Link>

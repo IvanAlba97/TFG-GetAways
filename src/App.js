@@ -10,6 +10,7 @@ import AllRoutes from './components/AllRoutes.js';
 import Profile from './components/Profile.js';
 import UsersCRUD from './components/UsersCRUD.js';
 import RoutesCRUD from './components/RoutesCRUD.js';
+import PersonalArea from './components/PersonalArea.js';
 
 const App = () => {
   return (
@@ -25,6 +26,7 @@ const App = () => {
         <Route path="/perfil" element={<Profile />} />
         <Route path="/crud-usuarios" element={<UsersCRUD />} />
         <Route path="/crud-rutas" element={<RoutesCRUD />} />
+        <Route path="/area-personal" element={<PersonalArea />} />
       </Routes>
     </Router>
   );
