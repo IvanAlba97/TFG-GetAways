@@ -54,8 +54,10 @@ const PersonalArea = () => {
   };
 
   const handleDescriptionChange = (event) => {
+    /* const value = event.target.value.replace(/\n/g, "\\n"); // Reemplazar saltos de línea por \n */
     setNewPublication({ ...newPublication, descripcion: event.target.value });
   };
+
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -103,7 +105,14 @@ const PersonalArea = () => {
           {publications.map((publication) => (
             <li key={publication.id}>
               <span>{publication.titulo}</span>
-              <p>{publication.descripcion}</p>
+              <div>
+                {publication.descripcion.split("\n").map((line, index) => (
+                  <div key={index}>
+                    {line}
+                    <br />
+                  </div>
+                ))}
+              </div>
             </li>
           ))}
         </ul>
