@@ -9,6 +9,7 @@ const PersonalArea = () => {
   const [user, setUser] = useState([]);
   const [publications, setPublications] = useState([]);
   const [newPublication, setNewPublication] = useState({ titulo: "", descripcion: "" });
+  const [editedPublication, setEditedPublication] = useState({ titulo: "", descripcion: "" });
   const [isEditing, setIsEditing] = useState(false);
   const [selectedPublication, setSelectedPublication] = useState();
   const [currentPage, setCurrentPage] = useState(1);
@@ -57,26 +58,26 @@ const PersonalArea = () => {
   }
 
   const handleTitleChange = (event) => {
-    setNewPublication({ ...newPublication, titulo: event.target.value });
+    setEditedPublication({ ...editedPublication, titulo: event.target.value });
   };
 
   const handleDescriptionChange = (event) => {
-    setNewPublication({ ...newPublication, descripcion: event.target.value });
+    setEditedPublication({ ...editedPublication, descripcion: event.target.value });
   };
 
   const handleEdit = (publication) => {
-    setNewPublication(publication);
+    setEditedPublication(publication);
     setSelectedPublication(publication.id);
     setIsEditing(true);
   };
 
-  const handleEditConfirm = (newPublication) => {
+  const handleEditConfirm = (editedPublication) => {
     // Verificar si los campos están vacíos
-    if (!newPublication.titulo.trim() || !newPublication.descripcion.trim()) {
+    if (!editedPublication.titulo.trim() || !editedPublication.descripcion.trim()) {
       toast.error("Por favor, complete todos los campos.");
       return;
     }
-    fetch(`http://localhost:3333/edit-publication/${newPublication.id}`, {
+    fetch(`http://localhost:3333/edit-publication/${editedPublication.id}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ newPublication })
@@ -202,11 +203,13 @@ const PersonalArea = () => {
             isEditing && selectedPublication === publication.id ? (
               <div className="edit-publication" key={publication.id}>
                 <h4>Título</h4>
-                <input type="text" placeholder="Título" value={newPublication.titulo} onChange={(event) => setNewPublication({ ...newPublication, titulo: event.target.value })} />
+                <input type="text" placeholder="Título" value={editedPublication.titulo} onChange={(event) => setEditedPublication({ ...editedPublication, titulo: event.target.value })} />
                 <h4>Descripción</h4>
-                <textarea placeholder="Descripción" value={newPublication.descripcion} onChange={(event) => setNewPublication({ ...newPublication, descripcion: event.target.value })} />
-                <button onClick={() => setIsEditing(false)}>Cancelar</button>
-                <button onClick={() => handleEditConfirm(newPublication)}>Confirmar</button>
+                <textarea placeholder="Descripción" value={editedPublication.descripcion} onChange={(event) => setEditedPublication({ ...editedPublication, descripcion: event.target.value })} />
+                <div className="buttons">
+                  <button onClick={() => setIsEditing(false)}>Cancelar</button>
+                  <button onClick={() => handleEditConfirm(editedPublication)}>Confirmar</button>
+                </div>
               </div>
             ) : (
               <li key={publication.id}>
@@ -218,8 +221,10 @@ const PersonalArea = () => {
                       <br />
                     </div>
                   ))}
-                  <button onClick={() => handleEdit(publication)}>Editar</button>
-                  <button onClick={() => handleDelete(publication)}>Eliminar</button>
+                  <div className="buttons">
+                    <button onClick={() => handleEdit(publication)}>Editar</button>
+                    <button onClick={() => handleDelete(publication)}>Eliminar</button>
+                  </div>
                 </div>
               </li>
             )
