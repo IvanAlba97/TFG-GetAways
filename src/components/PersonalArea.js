@@ -215,13 +215,13 @@ const PersonalArea = () => {
             ) : (
               <li key={publication.id}>
                 <h3>{publication.titulo}</h3>
-                <div>
+                <p>
                   <TextTruncator text={publication.descripcion} maxLength={400} />
                   <div className="buttons">
                     <button onClick={() => handleEdit(publication)}>Editar</button>
                     <button onClick={() => handleDelete(publication)}>Eliminar</button>
                   </div>
-                </div>
+                </p>
               </li>
             )
           ))}
