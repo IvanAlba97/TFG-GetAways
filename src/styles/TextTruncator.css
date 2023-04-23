@@ -1,9 +1,4 @@
-.expand-text {
-  color: blue;
-  cursor: pointer;
-}
-
-.truncate-text {
+.expand-text, .truncate-text {
   color: blue;
   cursor: pointer;
 }

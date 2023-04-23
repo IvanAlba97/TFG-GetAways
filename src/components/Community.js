@@ -76,9 +76,9 @@ const Community = () => {
           {currentPublications.map((publication) => (
             <li key={publication.id}>
               <p className="contenedor-autor"><img className="contenedor-icono" src={Profile} alt="Icono-Perfil" />{publication.nombre_usuario}</p>
-              <span>{publication.titulo}</span>
+              <h3>{publication.titulo}</h3>
               <div>
-                <TextTruncator text={publication.descripcion} maxLength={300} />
+                <TextTruncator text={publication.descripcion} maxLength={400} />
               </div>
             </li>
           ))}

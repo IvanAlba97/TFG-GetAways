@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Navbar from "./Navbar";
+import TextTruncator from "./TextTruncator.js";
 import "../styles/PersonalArea.css";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -213,14 +214,9 @@ const PersonalArea = () => {
               </div>
             ) : (
               <li key={publication.id}>
-                <span>{publication.titulo}</span>
+                <h3>{publication.titulo}</h3>
                 <div>
-                  {publication.descripcion.split("\n").map((line, index) => (
-                    <div key={index}>
-                      {line}
-                      <br />
-                    </div>
-                  ))}
+                  <TextTruncator text={publication.descripcion} maxLength={400} />
                   <div className="buttons">
                     <button onClick={() => handleEdit(publication)}>Editar</button>
                     <button onClick={() => handleDelete(publication)}>Eliminar</button>
