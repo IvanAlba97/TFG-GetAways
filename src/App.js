@@ -11,6 +11,7 @@ import Profile from './components/Profile.js';
 import UsersCRUD from './components/UsersCRUD.js';
 import RoutesCRUD from './components/RoutesCRUD.js';
 import PersonalArea from './components/PersonalArea.js';
+import Community from './components/Community.js';
 
 const App = () => {
   return (
@@ -27,6 +28,7 @@ const App = () => {
         <Route path="/crud-usuarios" element={<UsersCRUD />} />
         <Route path="/crud-rutas" element={<RoutesCRUD />} />
         <Route path="/area-personal" element={<PersonalArea />} />
+        <Route path="/comunidad" element={<Community />} />
       </Routes>
     </Router>
   );

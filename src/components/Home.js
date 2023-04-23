@@ -43,6 +43,11 @@ function Home() {
               Todas las rutas
             </div>
           </Link>
+          <Link to='/comunidad'>
+            <div className='todas-las-rutas'>
+              Comunidad
+            </div>
+          </Link>
           {/* <Map /> */}
         </div>
         <div className="column-2">

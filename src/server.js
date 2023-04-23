@@ -65,7 +65,7 @@ app.post('/auth/login', (req, res) => {
       res.status(552).send({ message: 'Usuario no encontrado.' });
     } else {
       const user = results[0];
-      if(user.habilitada) {
+      if (user.habilitada) {
         bcrypt.compare(password, user.contraseña, (error, result) => {
           if (error) {
             res.status(553).send('Error al comparar contraseñas.');
@@ -79,7 +79,7 @@ app.post('/auth/login', (req, res) => {
           }
         });
       } else {
-        res.status(587).send({ message: 'Cuenta inhabilitada.'});
+        res.status(587).send({ message: 'Cuenta inhabilitada.' });
       }
     }
   });
@@ -968,10 +968,18 @@ app.get('/my-publications', (req, res) => {
   });
 });
 
+// Ruta para obtener una lista de todas las publicaciones
+app.get('/publications', (req, res) => {
+  connection.query('SELECT publicacion.*, usuario.nombre AS nombre_usuario FROM publicacion INNER JOIN usuario ON publicacion.id_usuario = usuario.id ORDER BY publicacion.id DESC', (error, results) => {
+    if (error) throw error;
+    res.json(results);
+  });
+});
+
 app.post('/new-publication', (req, res) => {
   const userId = req.session.user?.id;
   const newPublication = req.body;
-  if(!newPublication.titulo || !newPublication.descripcion) {
+  if (!newPublication.titulo || !newPublication.descripcion) {
     return res.status(563).json({ message: 'Los campos son obligatorios.' });
   }
   connection.query('INSERT INTO publicacion (id_usuario, titulo, descripcion) VALUES (?, ?, ?)', [userId, newPublication.titulo, newPublication.descripcion], (error, results) => {
