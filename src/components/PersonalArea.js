@@ -9,6 +9,8 @@ const PersonalArea = () => {
   const [user, setUser] = useState([]);
   const [publications, setPublications] = useState([]);
   const [newPublication, setNewPublication] = useState({ titulo: "", descripcion: "" });
+  const [isEditing, setIsEditing] = useState(false);
+  const [selectedPublication, setSelectedPublication] = useState();
 
 
   useEffect(() => {
@@ -57,6 +59,38 @@ const PersonalArea = () => {
     setNewPublication({ ...newPublication, descripcion: event.target.value });
   };
 
+  const handleEdit = (publication) => {
+    setNewPublication(publication);
+    setSelectedPublication(publication.id);
+    setIsEditing(!isEditing);
+  };
+
+  const handleEditConfirm = (newPublication) => {
+    // Verificar si los campos están vacíos
+    if (!newPublication.titulo.trim() || !newPublication.descripcion.trim()) {
+      toast.error("Por favor, complete todos los campos.");
+      return;
+    }
+    fetch(`http://localhost:3333/edit-publication/${newPublication.id}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ newPublication })
+    })
+    .then(res => {
+      if (res.ok) {
+        res.json().then(({ message }) => {
+          toast.success(message);
+          setIsEditing(false);
+          loadPublications();
+        });
+      } else {
+        res.json().then(({ message }) => {
+          toast.error(message);
+        });
+      }
+    })
+  };
+
   const handleDelete = (publication) => {
     const toastId = toast.warn(
       <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
@@ -78,7 +112,7 @@ const PersonalArea = () => {
       progress: undefined,
       toastId: "deleteRoute"
     });
-  };  
+  };
 
   const handleDeleteConfirm = async (publication) => {
     fetch(`http://localhost:3333/delete-publication/${publication.id}`, {
@@ -146,27 +180,37 @@ const PersonalArea = () => {
         <h3>Publicaciones</h3>
         <ul>
           {publications.map((publication) => (
-            <li key={publication.id}>
-              <span>{publication.titulo}</span>
-              <div>
-                {publication.descripcion.split("\n").map((line, index) => (
-                  <div key={index}>
-                    {line}
-                    <br />
-                  </div>
-                ))}
+            isEditing && selectedPublication === publication.id ? (
+              <div key={publication.id}>
+                <h4>Título</h4>
+                <input type="text" placeholder="Título" value={newPublication.titulo} onChange={(event) => setNewPublication({ ...newPublication, titulo: event.target.value })} />
+                <h4>Descripción</h4>
+                <textarea placeholder="Descripción" value={newPublication.descripcion} onChange={(event) => setNewPublication({ ...newPublication, descripcion: event.target.value })} />
+                <button onClick={() => handleEdit(publication)}>Cancelar</button>
+                <button onClick={() => handleEditConfirm(newPublication)}>Confirmar</button>
               </div>
-              <div>
-                {/* <button onClick={() => handleEdit(publication)}>Editar</button> */}
-                <button onClick={() => handleDelete(publication)}>Eliminar</button>
-              </div>
-            </li>
+            ) : (
+              <li key={publication.id}>
+                <span>{publication.titulo}</span>
+                <div>
+                  {publication.descripcion.split("\n").map((line, index) => (
+                    <div key={index}>
+                      {line}
+                      <br />
+                    </div>
+                  ))}
+                  <button onClick={() => handleEdit(publication)}>Editar</button>
+                  <button onClick={() => handleDelete(publication)}>Eliminar</button>
+                </div>
+              </li>
+            )
           ))}
         </ul>
       </div>
       <ToastContainer />
     </div>
   );
+
 };
 
 export default PersonalArea;
