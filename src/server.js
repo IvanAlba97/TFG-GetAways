@@ -993,10 +993,10 @@ app.delete('/delete-publication/:id', (req, res) => {
 
 app.put("/edit-publication/:id", (req, res) => {
   const { id } = req.params;
-  const { newPublication } = req.body;
+  const { editedPublication } = req.body;
   connection.query(
     "UPDATE publicacion SET titulo = ?, descripcion = ? WHERE id = ?",
-    [newPublication.titulo, newPublication.descripcion, id],
+    [editedPublication.titulo, editedPublication.descripcion, id],
     (err, result) => {
       if (err) {
         return res.status(585).json({ message: 'Error al editar la publicación.' });

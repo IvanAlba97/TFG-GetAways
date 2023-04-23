@@ -58,11 +58,11 @@ const PersonalArea = () => {
   }
 
   const handleTitleChange = (event) => {
-    setEditedPublication({ ...editedPublication, titulo: event.target.value });
+    setNewPublication({ ...newPublication, titulo: event.target.value });
   };
 
   const handleDescriptionChange = (event) => {
-    setEditedPublication({ ...editedPublication, descripcion: event.target.value });
+    setNewPublication({ ...newPublication, descripcion: event.target.value });
   };
 
   const handleEdit = (publication) => {
@@ -80,7 +80,7 @@ const PersonalArea = () => {
     fetch(`http://localhost:3333/edit-publication/${editedPublication.id}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ newPublication })
+      body: JSON.stringify({ editedPublication })
     })
       .then(res => {
         if (res.ok) {
