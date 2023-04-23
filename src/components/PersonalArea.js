@@ -11,7 +11,11 @@ const PersonalArea = () => {
   const [newPublication, setNewPublication] = useState({ titulo: "", descripcion: "" });
   const [isEditing, setIsEditing] = useState(false);
   const [selectedPublication, setSelectedPublication] = useState();
-
+  const [currentPage, setCurrentPage] = useState(1);
+  const [publicationsPerPage, setPublicationsPerPage] = useState('');
+  const indexOfLastPublication = currentPage * publicationsPerPage;
+  const indexOfFirstPublication = indexOfLastPublication - publicationsPerPage;
+  const currentPublications = publications.slice(indexOfFirstPublication, indexOfLastPublication);
 
   useEffect(() => {
     fetch('http://localhost:3333/user', { credentials: 'include' })
@@ -45,6 +49,7 @@ const PersonalArea = () => {
       })
       .then((data) => {
         setPublications(data);
+        setPublicationsPerPage(5);
       })
       .catch((error) => {
         console.error(error);
@@ -62,7 +67,7 @@ const PersonalArea = () => {
   const handleEdit = (publication) => {
     setNewPublication(publication);
     setSelectedPublication(publication.id);
-    setIsEditing(!isEditing);
+    setIsEditing(true);
   };
 
   const handleEditConfirm = (newPublication) => {
@@ -76,19 +81,19 @@ const PersonalArea = () => {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ newPublication })
     })
-    .then(res => {
-      if (res.ok) {
-        res.json().then(({ message }) => {
-          toast.success(message);
-          setIsEditing(false);
-          loadPublications();
-        });
-      } else {
-        res.json().then(({ message }) => {
-          toast.error(message);
-        });
-      }
-    })
+      .then(res => {
+        if (res.ok) {
+          res.json().then(({ message }) => {
+            toast.success(message);
+            setIsEditing(false);
+            loadPublications();
+          });
+        } else {
+          res.json().then(({ message }) => {
+            toast.error(message);
+          });
+        }
+      })
   };
 
   const handleDelete = (publication) => {
@@ -164,6 +169,20 @@ const PersonalArea = () => {
       });
   };
 
+  const pageNumbers = [];
+  for (let i = 1; i <= Math.ceil(publications.length / publicationsPerPage); i++) {
+    pageNumbers.push(i);
+  }
+
+  const handlePageChange = (pageNumber) => {
+    window.scrollTo({
+      top: 0,
+      left: 0,
+      behavior: 'smooth'
+    });
+    setCurrentPage(pageNumber);
+  }
+
   return (
     <div className="fondo">
       <Navbar user={user} />
@@ -179,14 +198,14 @@ const PersonalArea = () => {
       <div className="publicaciones">
         <h3>Publicaciones</h3>
         <ul>
-          {publications.map((publication) => (
+          {currentPublications.map((publication) => (
             isEditing && selectedPublication === publication.id ? (
-              <div key={publication.id}>
+              <div className="edit-publication" key={publication.id}>
                 <h4>Título</h4>
                 <input type="text" placeholder="Título" value={newPublication.titulo} onChange={(event) => setNewPublication({ ...newPublication, titulo: event.target.value })} />
                 <h4>Descripción</h4>
                 <textarea placeholder="Descripción" value={newPublication.descripcion} onChange={(event) => setNewPublication({ ...newPublication, descripcion: event.target.value })} />
-                <button onClick={() => handleEdit(publication)}>Cancelar</button>
+                <button onClick={() => setIsEditing(false)}>Cancelar</button>
                 <button onClick={() => handleEditConfirm(newPublication)}>Confirmar</button>
               </div>
             ) : (
@@ -206,6 +225,17 @@ const PersonalArea = () => {
             )
           ))}
         </ul>
+        <div className='pagination'>
+          {pageNumbers.map(number => (
+            <button
+              key={number}
+              onClick={() => handlePageChange(number)}
+              className={currentPage == number ? 'currentPage' : 'no-currentPage'}
+            >
+              {number}
+            </button>
+          ))}
+        </div>
       </div>
       <ToastContainer />
     </div>

@@ -32,6 +32,29 @@
   margin-bottom: 20px;
 }
 
+.publicaciones li:hover {
+  transform: scale(1);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+}
+
+.publicaciones .edit-publication {
+  position: relative;
+  background-color: #f7f7f7;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.2);
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+.nueva-publicacion textarea {
+  height: 300px;
+}
+
+.edit-publication textarea {
+  height: 300px;
+}
+
 .publicaciones span {
   color: #5e451e;
   font-size: 18px;
@@ -64,6 +87,8 @@
 @media (max-width: 768px) {
   .nueva-publicacion {
     margin: 10px;
+    padding-left: 10px;
+    padding-right: 10px;
   }
 
   .publicaciones {
@@ -76,4 +101,5 @@
   .publicaciones li {
     padding: 10px;
   }
+  
 }
