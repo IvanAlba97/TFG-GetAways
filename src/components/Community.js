@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Navbar from "./Navbar";
 import Profile from '../img/profile-icon.ico';
+import TextTruncator from "./TextTruncator.js";
 import "../styles/Community.css";
 
 const Community = () => {
@@ -77,12 +78,7 @@ const Community = () => {
               <p className="contenedor-autor"><img className="contenedor-icono" src={Profile} alt="Icono-Perfil" />{publication.nombre_usuario}</p>
               <span>{publication.titulo}</span>
               <div>
-                {publication.descripcion.split("\n").map((line, index) => (
-                  <div key={index}>
-                    {line}
-                    <br />
-                  </div>
-                ))}
+                <TextTruncator text={publication.descripcion} maxLength={300} />
               </div>
             </li>
           ))}
