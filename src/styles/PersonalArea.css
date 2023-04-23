@@ -55,6 +55,10 @@
   height: 300px;
 }
 
+.edit-publication h4 {
+  color: #725d3f;
+}
+
 .publicaciones span {
   color: #5e451e;
   font-size: 18px;
