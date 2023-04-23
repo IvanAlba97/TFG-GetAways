@@ -980,6 +980,17 @@ app.post('/new-publication', (req, res) => {
   });
 });
 
+app.delete('/delete-publication/:id', (req, res) => {
+  const { id } = req.params;
+  const query = 'DELETE FROM publicacion WHERE id = ?';
+  connection.query(query, [id], (err, results) => {
+    if (err) {
+      return res.status(584).json({ message: 'Error al eliminar publicación.' });
+    }
+    res.json({ message: 'Publicación eliminada correctamente.' });
+  });
+})
+
 
 
 

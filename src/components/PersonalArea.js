@@ -54,10 +54,53 @@ const PersonalArea = () => {
   };
 
   const handleDescriptionChange = (event) => {
-    /* const value = event.target.value.replace(/\n/g, "\\n"); // Reemplazar saltos de línea por \n */
     setNewPublication({ ...newPublication, descripcion: event.target.value });
   };
 
+  const handleDelete = (publication) => {
+    const toastId = toast.warn(
+      <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+        <p>¿Estás seguro de que quieres eliminar esta publicación?</p>
+        <div style={{ display: "flex", justifyContent: "space-between", width: "100%" }}>
+          <button style={{ margin: "10px" }} onClick={() => {
+            handleDeleteConfirm(publication);
+            toast.dismiss();
+          }}>Sí</button>
+          <button style={{ margin: "10px" }} onClick={() => toast.dismiss()}>No</button>
+        </div>
+      </div>, {
+      position: "top-right",
+      autoClose: false,
+      hideProgressBar: true,
+      closeOnClick: false,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      toastId: "deleteRoute"
+    });
+  };  
+
+  const handleDeleteConfirm = async (publication) => {
+    fetch(`http://localhost:3333/delete-publication/${publication.id}`, {
+      method: 'DELETE',
+      credentials: 'include'
+    })
+      .then((response) => {
+        if (response.ok) {
+          response.json().then(({ message }) => {
+            toast.success(message);
+          });
+          loadPublications();
+        } else {
+          response.json().then(({ message }) => {
+            toast.error(message);
+          });
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -112,6 +155,10 @@ const PersonalArea = () => {
                     <br />
                   </div>
                 ))}
+              </div>
+              <div>
+                {/* <button onClick={() => handleEdit(publication)}>Editar</button> */}
+                <button onClick={() => handleDelete(publication)}>Eliminar</button>
               </div>
             </li>
           ))}
