@@ -140,7 +140,7 @@ function EditComment(props) {
             </form>
           ) : (
             <>
-              <h3 className="comment-title">{comment.comentario}</h3>
+              <h4 className="comment-title">{comment.comentario}</h4>
               <p className="comment-author"><img className="contenedor-icono" src={Profile} alt="Icono-Perfil" />{comment.nombre}</p>
               <p className="comment-rating-container">
                 {[...Array(comment.valoracion)].map((e, i) => (

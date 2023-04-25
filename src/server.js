@@ -388,7 +388,7 @@ app.get('/hiking-route', (req, res) => {
 // Obtener una ruta de senderismo por su ID
 app.get('/hiking-route/:id', (req, res) => {
   const id = req.params.id;
-  connection.query('SELECT ruta_senderismo.*, provincia.nombre AS provincia, coordenada.lat, coordenada.long FROM ruta_senderismo JOIN provincia ON ruta_senderismo.id_provincia = provincia.id JOIN coordenada ON coordenada.id_ruta=ruta_senderismo.id WHERE ruta_senderismo.id = ?', [id], (error, results) => {
+  connection.query('SELECT ruta_senderismo.*, provincia.nombre AS provincia, coordenada.lat, coordenada.lon FROM ruta_senderismo JOIN provincia ON ruta_senderismo.id_provincia = provincia.id JOIN coordenada ON coordenada.id_ruta=ruta_senderismo.id WHERE ruta_senderismo.id = ?', [id], (error, results) => {
     if (error) throw error;
     res.send(results[0]);
   });
@@ -1002,7 +1002,7 @@ app.post('/new-publication', (req, res) => {
   if (!newPublication.titulo || !newPublication.descripcion) {
     return res.status(563).json({ message: 'Los campos son obligatorios.' });
   }
-  connection.query('INSERT INTO publicacion (id_usuario, titulo, descripcion) VALUES (?, ?, ?)', [userId, newPublication.titulo, newPublication.descripcion], (error, results) => {
+  connection.query('INSERT INTO publicacion (id_usuario, titulo, descripcion, publica) VALUES (?, ?, ?, ?)', [userId, newPublication.titulo, newPublication.descripcion, newPublication.publica], (error, results) => {
     if (error) throw error;
     return res.json({ message: 'Publicación añadida correctamente.' });
   });
@@ -1023,8 +1023,8 @@ app.put("/edit-publication/:id", (req, res) => {
   const { id } = req.params;
   const { editedPublication } = req.body;
   connection.query(
-    "UPDATE publicacion SET titulo = ?, descripcion = ? WHERE id = ?",
-    [editedPublication.titulo, editedPublication.descripcion, id],
+    "UPDATE publicacion SET titulo = ?, descripcion = ?, publica = ? WHERE id = ?",
+    [editedPublication.titulo, editedPublication.descripcion, editedPublication.publica, id],
     (err, result) => {
       if (err) {
         return res.status(585).json({ message: 'Error al editar la publicación.' });

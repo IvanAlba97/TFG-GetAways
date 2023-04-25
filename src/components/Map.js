@@ -13,12 +13,12 @@ function Map({ routeDetails }) {
   });
 
   return (
-    <MapContainer className='contenedor-map' center={[routeDetails.lat, routeDetails.long]} zoom={10} scrollWheelZoom={false}>
+    <MapContainer className='contenedor-map' center={[routeDetails.lat, routeDetails.lon]} zoom={10} scrollWheelZoom={false}>
       <TileLayer
         attribution='&copy; <a href="https://stamen.com/">Stamen</a> contributors'
         url="https://stamen-tiles-{s}.a.ssl.fastly.net/terrain/{z}/{x}/{y}{r}.png"
       />
-      <Marker position={[routeDetails.lat, routeDetails.long]} icon={marcadorIcon}>
+      <Marker position={[routeDetails.lat, routeDetails.lon]} icon={marcadorIcon}>
         <Popup>
         <a href={routeDetails.enlace_maps} target="_blank" rel="noopener noreferrer">{routeDetails.nombre}</a>
         </Popup>

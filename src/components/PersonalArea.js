@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Navbar from "./Navbar";
 import TextTruncator from "./TextTruncator.js";
+import Switch from 'react-switch';
 import "../styles/PersonalArea.css";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -9,10 +10,11 @@ const PersonalArea = () => {
 
   const [user, setUser] = useState([]);
   const [publications, setPublications] = useState([]);
-  const [newPublication, setNewPublication] = useState({ titulo: "", descripcion: "" });
-  const [editedPublication, setEditedPublication] = useState({ titulo: "", descripcion: "" });
+  const [newPublication, setNewPublication] = useState({ titulo: "", descripcion: "", publica: true });
+  const [editedPublication, setEditedPublication] = useState({ titulo: "", descripcion: "", publica: "" });
   const [isEditing, setIsEditing] = useState(false);
   const [selectedPublication, setSelectedPublication] = useState();
+  const [public_, setPublic1] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
   const [publicationsPerPage, setPublicationsPerPage] = useState('');
   const indexOfLastPublication = currentPage * publicationsPerPage;
@@ -51,7 +53,7 @@ const PersonalArea = () => {
       })
       .then((data) => {
         setPublications(data);
-        setPublicationsPerPage(5);
+        setPublicationsPerPage(5);  // OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO
       })
       .catch((error) => {
         console.error(error);
@@ -65,6 +67,15 @@ const PersonalArea = () => {
   const handleDescriptionChange = (event) => {
     setNewPublication({ ...newPublication, descripcion: event.target.value });
   };
+
+  const handleSwitch1Change = (checked) => {
+    setPublic1(checked);
+    setNewPublication({ ...newPublication, publica: checked });
+  }; 
+  
+  const handleSwitch2Change = (checked) => {
+    setEditedPublication({ ...editedPublication, publica: checked });
+  }; 
 
   const handleEdit = (publication) => {
     setEditedPublication(publication);
@@ -194,6 +205,8 @@ const PersonalArea = () => {
         <form onSubmit={handleSubmit}>
           <input type="text" placeholder="Título" value={newPublication.titulo} onChange={handleTitleChange} />
           <textarea placeholder="Descripción" value={newPublication.descripcion} onChange={handleDescriptionChange} />
+          <span>Público</span>
+          <Switch id="public_" checked={public_} onChange={handleSwitch1Change} />
           <button type="submit">Publicar</button>
         </form>
       </div>
@@ -207,6 +220,8 @@ const PersonalArea = () => {
                 <input type="text" placeholder="Título" value={editedPublication.titulo} onChange={(event) => setEditedPublication({ ...editedPublication, titulo: event.target.value })} />
                 <h4>Descripción</h4>
                 <textarea placeholder="Descripción" value={editedPublication.descripcion} onChange={(event) => setEditedPublication({ ...editedPublication, descripcion: event.target.value })} />
+                <h4>Público</h4>
+                <Switch id="public2" checked={editedPublication.publica ? true : false} onChange={handleSwitch2Change} />
                 <div className="buttons">
                   <button onClick={() => setIsEditing(false)}>Cancelar</button>
                   <button onClick={() => handleEditConfirm(editedPublication)}>Confirmar</button>
@@ -215,13 +230,13 @@ const PersonalArea = () => {
             ) : (
               <li key={publication.id}>
                 <h3>{publication.titulo}</h3>
-                <p>
+                <div className="description">
                   <TextTruncator text={publication.descripcion} maxLength={400} />
                   <div className="buttons">
                     <button onClick={() => handleEdit(publication)}>Editar</button>
                     <button onClick={() => handleDelete(publication)}>Eliminar</button>
                   </div>
-                </p>
+                </div>
               </li>
             )
           ))}
