@@ -23,6 +23,14 @@ function RouteDetail() {
   const [user, setUser] = useState(null);
 
   useEffect(() => {
+    window.scrollTo({
+      top: 0,
+      left: 0,
+      behavior: 'smooth'
+    });
+  })
+
+  useEffect(() => {
     fetch(`http://localhost:3333/hiking-route/${id}`)
       .then(response => response.json())
       .then(data => setRouteDetails(data))
