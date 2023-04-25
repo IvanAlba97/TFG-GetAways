@@ -15,6 +15,14 @@ const Community = () => {
   const currentPublications = publications.slice(indexOfFirstPublication, indexOfLastPublication);
 
   useEffect(() => {
+    window.scrollTo({
+      top: 0,
+      left: 0,
+      behavior: 'smooth'
+    });
+  })
+
+  useEffect(() => {
     fetch('http://localhost:3333/user', { credentials: 'include' })
       .then((response) => {
         if (response.ok) {
