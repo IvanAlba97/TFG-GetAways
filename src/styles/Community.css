@@ -35,3 +35,10 @@
   margin-bottom: 20px;
   margin-bottom: 50px;
 }
+
+@media screen and (max-width: 768px) {
+  .publicaciones li {
+    padding-left: 0;
+    padding-right: 0;
+  }
+}
