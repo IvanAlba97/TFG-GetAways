@@ -10,6 +10,7 @@ import Share from './Share';
 import '../styles/RouteDetail.css';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import Map from './Map.js';
 
 function RouteDetail() {
 
@@ -118,6 +119,8 @@ function RouteDetail() {
     }
   }
 
+
+
   return (
     <div className='fondo'>
       <Navbar user={user} />
@@ -133,28 +136,31 @@ function RouteDetail() {
             <p>{routeDetails.descripcion}</p>
             <img className='imagen' src={routeDetails.imagen} alt={routeDetails.nombre} />
             <dl>
+              <dt>Media de valoraciones:</dt>
+              <dd>{routeDetails.media_valoraciones == null ? 'Sin valoraciones' :
+                Array.from({ length: Math.round(routeDetails.media_valoraciones) }, (_, i) => (
+                  <span key={i}>★</span>
+                ))}</dd>
               <dt>Tipo:</dt>
               <dd>{routeDetails.tipo}</dd>
               <dt>Longitud:</dt>
               <dd>{routeDetails.longitud} km</dd>
               <dt>Permiso necesario:</dt>
               <dd>{routeDetails.permiso_necesario === 1 ? 'Sí' : 'No'}</dd>
-              <dt>Media de valoraciones:</dt>
-              <dd>{routeDetails.media_valoraciones == null ? 'Sin valoraciones' :
-                Array.from({ length: Math.round(routeDetails.media_valoraciones) }, (_, i) => (
-                  <span key={i}>★</span>
-                ))}</dd>
               <dt>Provincia:</dt>
               <dd>{routeDetails.provincia}</dd>
               <dt>Cómo llegar:</dt>
               <dd>{routeDetails.como_llegar}</dd>
-              <dt>Enlace a Google Maps:</dt>
-              <dd className="google-maps-link">{<a href={routeDetails.enlace_maps} target="_blank" rel="noopener noreferrer">{routeDetails.enlace_maps}</a>}</dd>
               <dt>Pendiente:</dt>
               <dd><Switch checked={pendings} onChange={(checked) => handleChange(checked, 'pendings')} /></dd>
               <dt>Completada:</dt>
               <dd><Switch checked={completed} onChange={(checked) => handleChange(checked, 'completed')} /></dd>
+              <dt>Enlace a Google Maps:</dt>
+              <dd className="google-maps-link">{<a href={routeDetails.enlace_maps} target="_blank" rel="noopener noreferrer">{routeDetails.enlace_maps}</a>}</dd>
             </dl>
+            <div className='contenedor-map'>
+              <Map routeDetails={routeDetails} />
+            </div>
             <Share />
           </div>
         )}

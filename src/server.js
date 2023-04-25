@@ -388,12 +388,11 @@ app.get('/hiking-route', (req, res) => {
 // Obtener una ruta de senderismo por su ID
 app.get('/hiking-route/:id', (req, res) => {
   const id = req.params.id;
-  connection.query('SELECT ruta_senderismo.*, provincia.nombre AS provincia FROM ruta_senderismo JOIN provincia ON ruta_senderismo.id_provincia = provincia.id WHERE ruta_senderismo.id = ?', [id], (error, results) => {
+  connection.query('SELECT ruta_senderismo.*, provincia.nombre AS provincia, coordenada.latitud, coordenada.longitud FROM ruta_senderismo JOIN provincia ON ruta_senderismo.id_provincia = provincia.id JOIN coordenada ON coordenada.id_ruta=ruta_senderismo.id WHERE ruta_senderismo.id = ?', [id], (error, results) => {
     if (error) throw error;
     res.send(results[0]);
   });
 });
-
 
 // Crear una nueva ruta de senderismo
 app.post('/hiking-route', (req, res) => {

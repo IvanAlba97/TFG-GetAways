@@ -109,6 +109,11 @@ span {
   word-break: break-all;
 }
 
+.contenedor-map {
+  height: 400px;
+  width: 100%;
+}
+
 @media screen and (max-width: 768px) {
   .route-details {
     min-width: auto;
