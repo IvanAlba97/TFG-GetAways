@@ -990,7 +990,7 @@ app.get('/my-publications', (req, res) => {
 
 // Ruta para obtener una lista de todas las publicaciones
 app.get('/publications', (req, res) => {
-  connection.query('SELECT publicacion.*, usuario.nombre AS nombre_usuario FROM publicacion INNER JOIN usuario ON publicacion.id_usuario = usuario.id ORDER BY publicacion.id DESC', (error, results) => {
+  connection.query('SELECT publicacion.*, usuario.nombre AS nombre_usuario FROM publicacion INNER JOIN usuario ON publicacion.id_usuario = usuario.id WHERE publicacion.publica=true ORDER BY publicacion.id DESC', (error, results) => {
     if (error) throw error;
     res.json(results);
   });

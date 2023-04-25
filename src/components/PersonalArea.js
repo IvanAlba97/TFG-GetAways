@@ -39,6 +39,7 @@ const PersonalArea = () => {
   }, []);
 
   useEffect(() => {
+    setPublicationsPerPage(5);
     loadPublications();
   }, []);
 
@@ -53,7 +54,6 @@ const PersonalArea = () => {
       })
       .then((data) => {
         setPublications(data);
-        setPublicationsPerPage(5);  // OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO
       })
       .catch((error) => {
         console.error(error);

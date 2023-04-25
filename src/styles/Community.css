@@ -36,6 +36,14 @@
   margin-bottom: 50px;
 }
 
+li p {
+  font-size: 15px;
+  text-align: center;
+  text-align: justify;
+  color: #725d3f;
+  margin: 10px;
+}
+
 @media screen and (max-width: 768px) {
   .publicaciones li {
     padding-left: 0;
