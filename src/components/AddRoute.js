@@ -15,7 +15,9 @@ const AddRoute = () => {
     dificultad: "",
     permiso_necesario: false,
     como_llegar: "",
-    enlace_maps: ""
+    enlace_maps: "",
+    lat: "",
+    lon: ""
   });
   const dificultad = {
     Fácil: 'Fácil',
@@ -83,6 +85,14 @@ const AddRoute = () => {
     setNewRoute({ ...newRoute, enlace_maps: e.target.value });
   };
 
+  const handleLatChange = (e) => {
+    setNewRoute({ ...newRoute, lat: e.target.value });
+  };
+
+  const handleLonChange = (e) => {
+    setNewRoute({ ...newRoute, lon: e.target.value });
+  };
+
   const handleAddRoute = async (e) => {
     e.preventDefault();
     if (!newRoute.id_provincia ||
@@ -93,12 +103,30 @@ const AddRoute = () => {
       !newRoute.tipo ||
       !newRoute.dificultad ||
       !newRoute.como_llegar ||
-      !newRoute.enlace_maps) {
+      !newRoute.enlace_maps ||
+      !newRoute.lat ||
+      !newRoute.lon) {
       toast.error("Por favor, complete todos los campos.");
       return;
     }
     if (isNaN(parseFloat(newRoute.longitud))) {
       toast.error("La longitud debe ser un número.");
+      return;
+    }
+    if (isNaN(parseFloat(newRoute.lat))) {
+      toast.error("La latitud debe ser un número.");
+      return;
+    }
+    if (isNaN(parseFloat(newRoute.lon))) {
+      toast.error("La longitud debe ser un número.");
+      return;
+    }
+    if (newRoute.lat < -90 || newRoute.lat > 90) {
+      toast.error("La latitud debe estar en el rango (-90º, 90º).");
+      return;
+    }
+    if (newRoute.lon < -180 || newRoute.lon > 180) {
+      toast.error("La longitud debe estar en el rango (-180º, 180º).");
       return;
     }
     const response = await fetch("http://localhost:3333/routes", {
@@ -208,6 +236,22 @@ const AddRoute = () => {
             type="text"
             value={newRoute.enlace_maps}
             onChange={handleMapsChange}
+          />
+        </label>
+        <label>
+          <span>Latitud (Coordenada eje Y):</span>
+          <input className="form-input"
+            type="text"
+            value={newRoute.lat}
+            onChange={handleLatChange}
+          />
+        </label>
+        <label>
+          <span>Longitud (Coordenada eje X):</span>
+          <input className="form-input"
+            type="text"
+            value={newRoute.lon}
+            onChange={handleLonChange}
           />
         </label>
         <div className="addroute-button">

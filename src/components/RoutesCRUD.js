@@ -19,7 +19,9 @@ const UsersCRUD = () => {
     dificultad: "",
     permiso_necesario: "",
     como_llegar: "",
-    enlace_maps: ""
+    enlace_maps: "",
+    lat: "",
+    lon: ""
   });
   const [selectedRouteId, setSelectedRouteId] = useState(null);
   const [isFormVisible, setIsFormVisible] = useState(false);
@@ -138,6 +140,14 @@ const UsersCRUD = () => {
     setNewRoute({ ...newRoute, enlace_maps: e.target.value });
   };
 
+  const handleLatChange = (e) => {
+    setNewRoute({ ...newRoute, lat: e.target.value });
+  };
+
+  const handleLonChange = (e) => {
+    setNewRoute({ ...newRoute, lon: e.target.value });
+  };
+
   const handleUpdateRoute = async (routeId) => {
     // Verificar si los campos están vacíos
     if (!newRoute.nombre.trim() || !newRoute.descripcion.trim() || !newRoute.imagen.trim() || !newRoute.longitud || !newRoute.como_llegar.trim() || !newRoute.enlace_maps.trim()) {  // Verificar que newRoute.longitud no sea nulo o indefinido
@@ -146,6 +156,22 @@ const UsersCRUD = () => {
     }
     if (isNaN(parseFloat(newRoute.longitud))) {
       toast.error("La longitud debe ser un número.");
+      return;
+    }
+    if (isNaN(parseFloat(newRoute.lat))) {
+      toast.error("La latitud debe ser un número.");
+      return;
+    }
+    if (isNaN(parseFloat(newRoute.lon))) {
+      toast.error("La longitud debe ser un número.");
+      return;
+    }
+    if (newRoute.lat < -90 || newRoute.lat > 90) {
+      toast.error("La latitud debe estar en el rango (-90º, 90º).");
+      return;
+    }
+    if (newRoute.lon < -180 || newRoute.lon > 180) {
+      toast.error("La longitud debe estar en el rango (-180º, 180º).");
       return;
     }
     await fetch(`http://localhost:3333/routes/${routeId}`, {
@@ -201,7 +227,9 @@ const UsersCRUD = () => {
       dificultad: selectedRoute.dificultad,
       permiso_necesario: selectedRoute.permiso_necesario,
       como_llegar: selectedRoute.como_llegar,
-      enlace_maps: selectedRoute.enlace_maps
+      enlace_maps: selectedRoute.enlace_maps,
+      lat: selectedRoute.lat,
+      lon: selectedRoute.lon
     }); // Establecer los datos de la ruta seleccionada en newRoute
     setSelectedRouteId(routeId);
     setIsFormVisible(!isFormVisible);
@@ -344,6 +372,24 @@ const UsersCRUD = () => {
                         placeholder={r.enlace_maps}
                         value={newRoute.enlace_maps || ""}
                         onChange={handleMapsChange}
+                        className="form-input"
+                      />
+                      <span>Latitud (Coordenada eje Y)</span>
+                      <input
+                        type="text"
+                        name="lat"
+                        placeholder={r.lat}
+                        value={newRoute.lat || ""}
+                        onChange={handleLatChange}
+                        className="form-input"
+                      />
+                      <span>Longitud (Coordenada eje X)</span>
+                      <input
+                        type="text"
+                        name="lon"
+                        placeholder={r.lon}
+                        value={newRoute.lon || ""}
+                        onChange={handleLonChange}
                         className="form-input"
                       />
                       <button

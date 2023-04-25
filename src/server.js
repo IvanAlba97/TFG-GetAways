@@ -904,7 +904,7 @@ app.delete("/users/:id", (req, res) => {
 
 // Ruta para obtener la lista de rutas de senderismo
 app.get("/routes", (req, res) => {
-  connection.query("SELECT * FROM ruta_senderismo ORDER BY nombre ASC", (err, result) => {
+  connection.query("SELECT r.*, c.lat, c.lon FROM ruta_senderismo AS r JOIN coordenada AS c ON r.id = c.id_ruta ORDER BY r.nombre ASC", (err, result) => {
     if (err) throw err;
     res.send(result);
   });
@@ -918,10 +918,19 @@ app.post("/routes", (req, res) => {
     [newRoute.id_provincia, newRoute.nombre, newRoute.descripcion, newRoute.imagen, newRoute.longitud, newRoute.tipo, newRoute.dificultad, newRoute.permiso_necesario, newRoute.como_llegar, newRoute.enlace_maps],
     (err, result) => {
       if (err) throw err;
-      res.send(result);
+      const routeId = result.insertId; // Obtener el ID de la ruta insertada
+      connection.query(
+        "INSERT INTO coordenada (id_ruta, lat, lon) VALUES (?, ?, ?)",
+        [routeId, newRoute.lat, newRoute.lon],
+        (err, result) => {
+          if (err) throw err;
+          res.send(result);
+        }
+      );
     }
   );
 });
+
 
 // Ruta para actualizar una ruta de senderismo existente
 app.put("/routes/:id", (req, res) => {
@@ -932,28 +941,40 @@ app.put("/routes/:id", (req, res) => {
     [newRoute.id_provincia, newRoute.nombre, newRoute.descripcion, newRoute.imagen, newRoute.longitud, newRoute.tipo, newRoute.dificultad, newRoute.permiso_necesario, newRoute.como_llegar, newRoute.enlace_maps, id],
     (err, result) => {
       if (err) throw err;
-      res.send(result);
+      connection.query(
+        "UPDATE coordenada SET lat = ?, lon = ? WHERE id_ruta = ?",
+        [newRoute.lat, newRoute.lon, id],
+        (err, result) => {
+          if (err) throw err;
+          res.send(result);
+        }
+      );
     }
   );
 });
 
+
 // Ruta para borrar una ruta de senderismo
 app.delete("/routes/:id", (req, res) => {
   const { id } = req.params;
-  connection.query("DELETE FROM ruta_pendiente WHERE id_ruta = ?", [id], (err, result) => {
+  connection.query("DELETE FROM coordenada WHERE id_ruta = ?", [id], (err, result) => {
     if (err) throw err;
-    connection.query("DELETE FROM ruta_completada WHERE id_ruta = ?", [id], (err, result) => {
+    connection.query("DELETE FROM ruta_pendiente WHERE id_ruta = ?", [id], (err, result) => {
       if (err) throw err;
-      connection.query("DELETE FROM valoracion WHERE id_ruta = ?", [id], (err, result) => {
+      connection.query("DELETE FROM ruta_completada WHERE id_ruta = ?", [id], (err, result) => {
         if (err) throw err;
-        connection.query("DELETE FROM ruta_senderismo WHERE id = ?", [id], (err, result) => {
+        connection.query("DELETE FROM valoracion WHERE id_ruta = ?", [id], (err, result) => {
           if (err) throw err;
-          res.send(result);
+          connection.query("DELETE FROM ruta_senderismo WHERE id = ?", [id], (err, result) => {
+            if (err) throw err;
+            res.send(result);
+          });
         });
       });
     });
   });
 });
+
 
 
 
