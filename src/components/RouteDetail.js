@@ -155,9 +155,7 @@ function RouteDetail() {
               <dd><Switch checked={pendings} onChange={(checked) => handleChange(checked, 'pendings')} /></dd>
               <dt>Completada:</dt>
               <dd><Switch checked={completed} onChange={(checked) => handleChange(checked, 'completed')} /></dd>
-              <dt>Enlace a Google Maps:</dt>
-              <dd className="google-maps-link">{<a href={routeDetails.enlace_maps} target="_blank" rel="noopener noreferrer">{routeDetails.enlace_maps}</a>}</dd>
-            </dl>
+              </dl>
             <div className='contenedor-map'>
               <Map routeDetails={routeDetails} />
             </div>
