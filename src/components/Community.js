@@ -85,9 +85,9 @@ const Community = () => {
             <li key={publication.id}>
               <p className="contenedor-autor"><img className="contenedor-icono" src={Profile} alt="Icono-Perfil" />{publication.nombre_usuario}</p>
               <h3>{publication.titulo}</h3>
-              <p>
+              <div className="description">
                 <TextTruncator text={publication.descripcion} maxLength={400} />
-              </p>
+              </div>
             </li>
           ))}
         </ul>

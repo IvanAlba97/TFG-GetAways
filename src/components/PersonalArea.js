@@ -205,7 +205,7 @@ const PersonalArea = () => {
         <form onSubmit={handleSubmit}>
           <input type="text" placeholder="Título" value={newPublication.titulo} onChange={handleTitleChange} />
           <textarea placeholder="Descripción" value={newPublication.descripcion} onChange={handleDescriptionChange} />
-          <span>Público</span>
+          <h4>Público</h4>
           <Switch id="public_" checked={public_} onChange={handleSwitch1Change} />
           <button type="submit">Publicar</button>
         </form>
