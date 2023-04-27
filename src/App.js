@@ -17,18 +17,18 @@ const App = () => {
   return (
     <Router>
       <Routes>
-        <Route exact path="*" element={<Home />} />
-        <Route path="/access" element={<Access />} />
-        <Route path="/ruta/:id" element={<RouteDetail />} />
-        <Route path="/equipaje" element={<Baggage />} />
-        <Route path="/rutas-pendientes" element={<PendingRoute />} />
-        <Route path="/rutas-completadas" element={<CompletedRoute />} />
-        <Route path="/rutas" element={<AllRoutes />} />
-        <Route path="/perfil" element={<Profile />} />
-        <Route path="/crud-usuarios" element={<UsersCRUD />} />
-        <Route path="/crud-rutas" element={<RoutesCRUD />} />
-        <Route path="/area-personal" element={<PersonalArea />} />
-        <Route path="/comunidad" element={<Community />} />
+        <Route exact path='*' element={<Home />} />
+        <Route path='/access' element={<Access />} />
+        <Route path='/ruta/:id' element={<RouteDetail />} />
+        <Route path='/equipaje' element={<Baggage />} />
+        <Route path='/rutas-pendientes' element={<PendingRoute />} />
+        <Route path='/rutas-completadas' element={<CompletedRoute />} />
+        <Route path='/rutas' element={<AllRoutes />} />
+        <Route path='/perfil' element={<Profile />} />
+        <Route path='/crud-usuarios' element={<UsersCRUD />} />
+        <Route path='/crud-rutas' element={<RoutesCRUD />} />
+        <Route path='/area-personal' element={<PersonalArea />} />
+        <Route path='/comunidad' element={<Community />} />
       </Routes>
     </Router>
   );

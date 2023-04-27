@@ -114,35 +114,35 @@ function EditComment(props) {
   return (
     <div style={{ width: '100%' }}>
       {comment.map(comment => (
-        <div className="comment" key={comment.id}>
+        <div className='comment' key={comment.id}>
           {isEditing ? (
             <form>
               <div>
-                <label htmlFor="rating">Valoración:</label>
+                <label htmlFor='rating'>Valoración:</label>
                 <StarRatings
                   rating={newRating}
-                  starRatedColor="orange"
+                  starRatedColor='orange'
                   changeRating={handleRatingChange}
                   numberOfStars={5}
                   name='rating'
-                  starDimension="20px"
+                  starDimension='20px'
                 />
               </div>
               <div style={{ width: '100%', height: '200px' }}>
-                <label htmlFor="comment">Comentario:</label>
-                <textarea id="comment" value={newComment} onChange={(event) => setNewComment(event.target.value)} />
+                <label htmlFor='comment'>Comentario:</label>
+                <textarea id='comment' value={newComment} onChange={(event) => setNewComment(event.target.value)} />
               </div>
               <div>
-                <label htmlFor="public">Público:</label>
-                <Switch id="public" checked={public_ ? true : false} onChange={handleSwitchChange} />
+                <label htmlFor='public'>Público:</label>
+                <Switch id='public' checked={public_ ? true : false} onChange={handleSwitchChange} />
               </div>
               <button type='submit' onClick={() => handleSave(comment.id)}>Publicar</button>
             </form>
           ) : (
             <>
-              <h4 className="comment-title">{comment.comentario}</h4>
-              <p className="comment-author"><img className="contenedor-icono" src={Profile} alt="Icono-Perfil" />{comment.nombre}</p>
-              <p className="comment-rating-container">
+              <h4 className='comment-title'>{comment.comentario}</h4>
+              <p className='comment-author'><img className='contenedor-icono' src={Profile} alt='Icono-Perfil' />{comment.nombre}</p>
+              <p className='comment-rating-container'>
                 {[...Array(comment.valoracion)].map((e, i) => (
                   <span key={i}>★</span>
                 ))}
@@ -151,7 +151,7 @@ function EditComment(props) {
                 <button className='btn-edit' onClick={() => handleEdit(comment)}>Editar</button>
                 <button className='btn-delete' onClick={() => handleDelete(comment)}>Eliminar</button>
               </div>
-              <p className="comment-date">Fecha: {comment.fecha}</p>
+              <p className='comment-date'>Fecha: {comment.fecha}</p>
             </>
           )}
         </div>

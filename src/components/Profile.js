@@ -105,7 +105,7 @@ function Profile() {
     })
       .then(res => {
         if (res.ok) {
-          toast.success("Contraseña modificada correctamente.");
+          toast.success('Contraseña modificada correctamente.');
           setOldPassword('');
           setNewPassword('');
           setNewRepeatedPassword('');
@@ -131,7 +131,7 @@ function Profile() {
   return (
     <div className='fondo'>
       <Navbar user={user} />
-      <div className="perfil-content">
+      <div className='perfil-content'>
         <div className='titulo'><h1>Perfil</h1></div>
         <div className='contenedor-botones'>
           <div className='contenedor-boton-individual'>
@@ -139,12 +139,12 @@ function Profile() {
               Cambiar nombre
             </button>
             {showUpdateUsername &&
-              <div className="perfil-input-container">
+              <div className='perfil-input-container'>
                 <label>Nombre nuevo:</label>
-                <input type="text" value={newUsername} onChange={event => setNewUsername(event.target.value)} />
+                <input type='text' value={newUsername} onChange={event => setNewUsername(event.target.value)} />
                 <label>Contraseña:</label>
-                <input type="password" value={password} onChange={event => setPassword(event.target.value)} />
-                <button className="perfil-button-submit" onClick={updateUsername}>Actualizar nombre</button>
+                <input type='password' value={password} onChange={event => setPassword(event.target.value)} />
+                <button className='perfil-button-submit' onClick={updateUsername}>Actualizar nombre</button>
               </div>}
           </div>
           <div className='contenedor-boton-individual'>
@@ -152,14 +152,14 @@ function Profile() {
               Cambiar correo
             </button>
             {showUpdateEmail &&
-              <div className="perfil-input-container">
+              <div className='perfil-input-container'>
                 <label>Correo electrónico antiguo:</label>
-                <input type="email" value={oldEmail} onChange={event => setOldEmail(event.target.value)} />
+                <input type='email' value={oldEmail} onChange={event => setOldEmail(event.target.value)} />
                 <label>Correo electrónico nuevo:</label>
-                <input type="email" value={newEmail} onChange={event => setNewEmail(event.target.value)} />
+                <input type='email' value={newEmail} onChange={event => setNewEmail(event.target.value)} />
                 <label>Contraseña:</label>
-                <input type="password" value={password2} onChange={event => setPassword2(event.target.value)} />
-                <button className="perfil-button-submit" onClick={actualizarCorreo}>Actualizar correo</button>
+                <input type='password' value={password2} onChange={event => setPassword2(event.target.value)} />
+                <button className='perfil-button-submit' onClick={actualizarCorreo}>Actualizar correo</button>
               </div>}
           </div>
           <div className='contenedor-boton-individual'>
@@ -167,14 +167,14 @@ function Profile() {
               Cambiar contraseña
             </button>
             {showUpdatePassword &&
-              <div className="perfil-input-container">
+              <div className='perfil-input-container'>
                 <label>Contraseña antigua:</label>
-                <input type="password" value={oldPassword} onChange={event => setOldPassword(event.target.value)} />
+                <input type='password' value={oldPassword} onChange={event => setOldPassword(event.target.value)} />
                 <label>Contraseña nueva:</label>
-                <input type="password" value={newPassword} onChange={event => setNewPassword(event.target.value)} />
+                <input type='password' value={newPassword} onChange={event => setNewPassword(event.target.value)} />
                 <label>Confirmar contraseña nueva:</label>
-                <input type="password" value={newRepeatedPassword} onChange={event => setNewRepeatedPassword(event.target.value)} />
-                <button className="perfil-button-submit" onClick={updatePassword}>Actualizar contraseña</button>
+                <input type='password' value={newRepeatedPassword} onChange={event => setNewRepeatedPassword(event.target.value)} />
+                <button className='perfil-button-submit' onClick={updatePassword}>Actualizar contraseña</button>
               </div>}
           </div>
         </div>

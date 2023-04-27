@@ -95,7 +95,7 @@
   font-size: 15px;
 }
 
-.edit-publication [type="text"] {
+.edit-publication [type='text'] {
   width: calc(100% - 20px);
 }
 

@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from "react";
-import Navbar from "./Navbar";
+import React, { useState, useEffect } from 'react';
+import Navbar from './Navbar';
 import Profile from '../img/profile-icon.ico';
-import TextTruncator from "./TextTruncator.js";
-import "../styles/Community.css";
+import TextTruncator from './TextTruncator.js';
+import '../styles/Community.css';
 
 const Community = () => {
 
@@ -76,16 +76,16 @@ const Community = () => {
   }
 
   return (
-    <div className="fondo">
+    <div className='fondo'>
       <Navbar user={user} />
-      <div className="publicaciones">
+      <div className='publicaciones'>
         <h1>Comunidad</h1>
         <ul>
           {currentPublications.map((publication) => (
             <li key={publication.id}>
-              <p className="contenedor-autor"><img className="contenedor-icono" src={Profile} alt="Icono-Perfil" />{publication.nombre_usuario}</p>
+              <p className='contenedor-autor'><img className='contenedor-icono' src={Profile} alt='Icono-Perfil' />{publication.nombre_usuario}</p>
               <h3>{publication.titulo}</h3>
-              <div className="description">
+              <div className='description'>
                 <TextTruncator text={publication.descripcion} maxLength={400} />
               </div>
             </li>

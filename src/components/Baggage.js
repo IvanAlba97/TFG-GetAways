@@ -132,33 +132,33 @@ function Baggage() {
   return (
     <div className='fondo'>
       <Navbar user={user} />
-      <div className="equipaje">
+      <div className='equipaje'>
         <h1>Equipaje para la ruta de senderismo:</h1>
         <ul>
           {items.map((item) => (
             <li key={item.id}>
               <label>
                 <input
-                  type="checkbox"
+                  type='checkbox'
                   checked={item.checked}
                   onChange={() => handleItemCheck(item.id)}
                 />
               </label>
               <p>{item.item}</p>
-              <button className="btn-eliminar" onClick={() => handleItemDelete(item.id)}>Eliminar</button>
+              <button className='btn-eliminar' onClick={() => handleItemDelete(item.id)}>Eliminar</button>
             </li>
           ))}
         </ul>
         <form onSubmit={handleNewItemSubmit}>
-          <label htmlFor="nuevo-item">Añadir elemento:</label>
+          <label htmlFor='nuevo-item'>Añadir elemento:</label>
           <input
-            type="text"
-            id="nuevo-item"
-            name="nuevo-item"
+            type='text'
+            id='nuevo-item'
+            name='nuevo-item'
             value={newItem}
             onChange={handleNewItemChange}
           />
-          <button type="submit">Añadir</button>
+          <button type='submit'>Añadir</button>
         </form>
       </div>
       <Footer />

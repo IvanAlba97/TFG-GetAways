@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
 import '../styles/Profile.css';
 
 function DeleteAccount() {
@@ -9,8 +9,8 @@ function DeleteAccount() {
   };
 
   const handleAcceptClick = () => {
-    fetch("http://localhost:3333/delete-account", {
-      method: "DELETE",
+    fetch('http://localhost:3333/delete-account', {
+      method: 'DELETE',
       credentials: 'include'
     }).then(() => {
       setShowConfirm(false);
@@ -24,7 +24,7 @@ function DeleteAccount() {
   };
 
   return (
-    <div style={{textAlign: "center"}}>
+    <div style={{textAlign: 'center'}}>
       {showConfirm ? (
         <div>
           <p>¿Está seguro que desea eliminar su cuenta? Esta acción es irreversible.</p>

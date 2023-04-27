@@ -29,13 +29,13 @@ function Home() {
   }, []);
 
   return (
-    <div className="fondo">
+    <div className='fondo'>
       <Routes>
-        <Route path="/access" element={<Access />} />
+        <Route path='/access' element={<Access />} />
       </Routes>
       <Navbar user={user} />
-      <div className="content">
-        <div className="column-1">
+      <div className='content'>
+        <div className='column-1'>
           <Intro />
           <Carousel />
           <Link to='/rutas'>
@@ -50,7 +50,7 @@ function Home() {
           </Link>
           {/* <Map /> */}
         </div>
-        <div className="column-2">
+        <div className='column-2'>
           {/* <Intro /> */}
         </div>
       </div>

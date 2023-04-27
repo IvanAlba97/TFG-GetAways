@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import Navbar from "./Navbar";
+import React, { useState, useEffect } from 'react';
+import Navbar from './Navbar';
 import '../styles/UsersCRUD.css';
 import Switch from 'react-switch';
 import { ToastContainer, toast } from 'react-toastify';
@@ -54,7 +54,7 @@ const UsersCRUD = () => {
   }, []);
 
   const fetchUsers = async () => {
-    const response = await fetch("http://localhost:3333/users");
+    const response = await fetch('http://localhost:3333/users');
     const data = await response.json();
     setUsers(data);
     setUsersPerPage(10);
@@ -68,8 +68,8 @@ const UsersCRUD = () => {
 
   async function handleSwitchChange(userId, checked) {
     await fetch(`http://localhost:3333/users/${userId}`, {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ userId, checked }),
     });
     if (checked) {
@@ -100,19 +100,19 @@ const UsersCRUD = () => {
   }
 
   return (
-    <div className="fondo">
+    <div className='fondo'>
       <Navbar user={user} />
       {isAdmin &&
-        <div className="contenedor-crud">
+        <div className='contenedor-crud'>
           <h1>Gestión de usuarios</h1>
           <ul>
             {currentUsers.map((u) => (
-              <li key={u.id} className="user-item">
-                <span onClick={() => handleEditUser(u.id)} className="user-name">
+              <li key={u.id} className='user-item'>
+                <span onClick={() => handleEditUser(u.id)} className='user-name'>
                   {u.nombre} ({u.correo})
                 </span>
                 {isFormVisible && selectedUserId === u.id && (
-                  <div className="switch-crud">
+                  <div className='switch-crud'>
                     <span>Habilitada: </span>
                     <Switch checked={u.habilitada ? true : false} onChange={(checked) => handleSwitchChange(u.id, checked)} />
                   </div>

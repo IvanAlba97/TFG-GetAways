@@ -129,20 +129,20 @@ function AllRoutes() {
         <h1>Rutas de senderismo</h1>
         <div className='desplegables'>
           <div className='desplegable-individual'>
-            <label htmlFor="location">Filtrar por provincia:</label>
-            <select id="location" value={location} onChange={(e) => setLocation(e.target.value)}>
-              <option value="default">Seleccionar una opción</option>
+            <label htmlFor='location'>Filtrar por provincia:</label>
+            <select id='location' value={location} onChange={(e) => setLocation(e.target.value)}>
+              <option value='default'>Seleccionar una opción</option>
               {provinces.map(province => (
                 <option key={province.id} value={province.id}>{province.nombre}</option>
               ))}
             </select>
           </div>
           <div className='desplegable-individual'>
-            <label htmlFor="order">Ordenar por:</label>
-            <select id="order" value={order} onChange={(e) => setOrder(e.target.value)}>
-              <option value="default">Seleccionar una opción</option>
-              <option value="ratings">Mejor valoradas</option>
-              <option value="popular">Más populares</option>
+            <label htmlFor='order'>Ordenar por:</label>
+            <select id='order' value={order} onChange={(e) => setOrder(e.target.value)}>
+              <option value='default'>Seleccionar una opción</option>
+              <option value='ratings'>Mejor valoradas</option>
+              <option value='popular'>Más populares</option>
             </select>
           </div>
         </div>

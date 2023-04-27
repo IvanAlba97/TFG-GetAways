@@ -743,36 +743,36 @@ app.get('/provinces', (req, res) => {
   })
 })
 
-app.delete("/delete-account", (req, res) => {
+app.delete('/delete-account', (req, res) => {
   // Recuperar el id_usuario de la sesión
   const userId = req.session.user?.id;
   // Eliminar registros de la tabla lista_revisar
   connection.query(
-    "DELETE FROM lista_revisar WHERE id_usuario = ?",
+    'DELETE FROM lista_revisar WHERE id_usuario = ?',
     [userId],
     (error, results) => {
       if (error) throw error;
       // Eliminar registros de la tabla valoracion
       connection.query(
-        "DELETE FROM valoracion WHERE id_usuario = ?",
+        'DELETE FROM valoracion WHERE id_usuario = ?',
         [userId],
         (error, results) => {
           if (error) throw error;
           // Eliminar registros de la tabla ruta_pendiente
           connection.query(
-            "DELETE FROM ruta_pendiente WHERE id_usuario = ?",
+            'DELETE FROM ruta_pendiente WHERE id_usuario = ?',
             [userId],
             (error, results) => {
               if (error) throw error;
               // Eliminar registros de la tabla ruta_completada
               connection.query(
-                "DELETE FROM ruta_completada WHERE id_usuario = ?",
+                'DELETE FROM ruta_completada WHERE id_usuario = ?',
                 [userId],
                 (error, results) => {
                   if (error) throw error;
                   // Eliminar registro de la tabla Usuario
                   connection.query(
-                    "DELETE FROM Usuario WHERE id = ?",
+                    'DELETE FROM Usuario WHERE id = ?',
                     [userId],
                     (error, results) => {
                       if (error) throw error;
@@ -791,7 +791,7 @@ app.delete("/delete-account", (req, res) => {
   req.session.destroy();
 });
 
-app.get("/is-admin", (req, res) => {
+app.get('/is-admin', (req, res) => {
   if (req.session.user) {
     const userId = req.session.user?.id;
     const query = `SELECT * FROM usuario WHERE id = ? AND es_admin = 1`;
@@ -815,18 +815,18 @@ app.get("/is-admin", (req, res) => {
 
 
 // Ruta para obtener la lista de usuarios
-app.get("/users", (req, res) => {
-  connection.query("SELECT * FROM usuario ORDER BY nombre ASC", (err, result) => {
+app.get('/users', (req, res) => {
+  connection.query('SELECT * FROM usuario ORDER BY nombre ASC', (err, result) => {
     if (err) throw err;
     res.send(result);
   });
 });
 
 /* // Ruta para crear un nuevo usuario
-app.post("/users", (req, res) => {
+app.post('/users', (req, res) => {
   const { name, email } = req.body;
   connection.query(
-    "INSERT INTO usuario (nombre, correo) VALUES (?, ?)",
+    'INSERT INTO usuario (nombre, correo) VALUES (?, ?)',
     [name, email],
     (err, result) => {
       if (err) throw err;
@@ -836,11 +836,11 @@ app.post("/users", (req, res) => {
 }); */
 
 // Ruta para actualizar un usuario existente
-app.put("/users/:id", (req, res) => {
+app.put('/users/:id', (req, res) => {
   const { id } = req.params;
   const { userId, checked } = req.body;
   connection.query(
-    "UPDATE usuario SET habilitada = ? WHERE id = ?",
+    'UPDATE usuario SET habilitada = ? WHERE id = ?',
     [checked, userId],
     (err, result) => {
       if (err) throw err;
@@ -850,34 +850,34 @@ app.put("/users/:id", (req, res) => {
 });
 
 // Ruta para borrar un usuario
-app.delete("/users/:id", (req, res) => {
+app.delete('/users/:id', (req, res) => {
   const { id } = req.params;
   connection.query(
-    "DELETE FROM lista_revisar WHERE id_usuario = ?",
+    'DELETE FROM lista_revisar WHERE id_usuario = ?',
     [id],
     (error, results) => {
       if (error) throw error;
       // Eliminar registros de la tabla valoracion
       connection.query(
-        "DELETE FROM valoracion WHERE id_usuario = ?",
+        'DELETE FROM valoracion WHERE id_usuario = ?',
         [id],
         (error, results) => {
           if (error) throw error;
           // Eliminar registros de la tabla ruta_pendiente
           connection.query(
-            "DELETE FROM ruta_pendiente WHERE id_usuario = ?",
+            'DELETE FROM ruta_pendiente WHERE id_usuario = ?',
             [id],
             (error, results) => {
               if (error) throw error;
               // Eliminar registros de la tabla ruta_completada
               connection.query(
-                "DELETE FROM ruta_completada WHERE id_usuario = ?",
+                'DELETE FROM ruta_completada WHERE id_usuario = ?',
                 [id],
                 (error, results) => {
                   if (error) throw error;
                   // Eliminar registro de la tabla Usuario
                   connection.query(
-                    "DELETE FROM Usuario WHERE id = ?",
+                    'DELETE FROM Usuario WHERE id = ?',
                     [id],
                     (error, results) => {
                       if (error) throw error;
@@ -903,24 +903,24 @@ app.delete("/users/:id", (req, res) => {
 
 
 // Ruta para obtener la lista de rutas de senderismo
-app.get("/routes", (req, res) => {
-  connection.query("SELECT r.*, c.lat, c.lon FROM ruta_senderismo AS r JOIN coordenada AS c ON r.id = c.id_ruta ORDER BY r.nombre ASC", (err, result) => {
+app.get('/routes', (req, res) => {
+  connection.query('SELECT r.*, c.lat, c.lon FROM ruta_senderismo AS r JOIN coordenada AS c ON r.id = c.id_ruta ORDER BY r.nombre ASC', (err, result) => {
     if (err) throw err;
     res.send(result);
   });
 });
 
 // Ruta para crear una nueva ruta de senderismo
-app.post("/routes", (req, res) => {
+app.post('/routes', (req, res) => {
   const newRoute = req.body;
   connection.query(
-    "INSERT INTO ruta_senderismo (id_provincia, nombre, descripcion, imagen, longitud, tipo, dificultad, permiso_necesario, como_llegar, enlace_maps) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+    'INSERT INTO ruta_senderismo (id_provincia, nombre, descripcion, imagen, longitud, tipo, dificultad, permiso_necesario, como_llegar, enlace_maps) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
     [newRoute.id_provincia, newRoute.nombre, newRoute.descripcion, newRoute.imagen, newRoute.longitud, newRoute.tipo, newRoute.dificultad, newRoute.permiso_necesario, newRoute.como_llegar, newRoute.enlace_maps],
     (err, result) => {
       if (err) throw err;
       const routeId = result.insertId; // Obtener el ID de la ruta insertada
       connection.query(
-        "INSERT INTO coordenada (id_ruta, lat, lon) VALUES (?, ?, ?)",
+        'INSERT INTO coordenada (id_ruta, lat, lon) VALUES (?, ?, ?)',
         [routeId, newRoute.lat, newRoute.lon],
         (err, result) => {
           if (err) throw err;
@@ -933,16 +933,16 @@ app.post("/routes", (req, res) => {
 
 
 // Ruta para actualizar una ruta de senderismo existente
-app.put("/routes/:id", (req, res) => {
+app.put('/routes/:id', (req, res) => {
   const { id } = req.params;
   const { newRoute } = req.body;
   connection.query(
-    "UPDATE ruta_senderismo SET id_provincia = ?, nombre = ?, descripcion = ?, imagen = ?, longitud = ?, tipo = ?, dificultad = ?, permiso_necesario = ?, como_llegar = ?, enlace_maps = ? WHERE id = ?",
+    'UPDATE ruta_senderismo SET id_provincia = ?, nombre = ?, descripcion = ?, imagen = ?, longitud = ?, tipo = ?, dificultad = ?, permiso_necesario = ?, como_llegar = ?, enlace_maps = ? WHERE id = ?',
     [newRoute.id_provincia, newRoute.nombre, newRoute.descripcion, newRoute.imagen, newRoute.longitud, newRoute.tipo, newRoute.dificultad, newRoute.permiso_necesario, newRoute.como_llegar, newRoute.enlace_maps, id],
     (err, result) => {
       if (err) throw err;
       connection.query(
-        "UPDATE coordenada SET lat = ?, lon = ? WHERE id_ruta = ?",
+        'UPDATE coordenada SET lat = ?, lon = ? WHERE id_ruta = ?',
         [newRoute.lat, newRoute.lon, id],
         (err, result) => {
           if (err) throw err;
@@ -955,17 +955,17 @@ app.put("/routes/:id", (req, res) => {
 
 
 // Ruta para borrar una ruta de senderismo
-app.delete("/routes/:id", (req, res) => {
+app.delete('/routes/:id', (req, res) => {
   const { id } = req.params;
-  connection.query("DELETE FROM coordenada WHERE id_ruta = ?", [id], (err, result) => {
+  connection.query('DELETE FROM coordenada WHERE id_ruta = ?', [id], (err, result) => {
     if (err) throw err;
-    connection.query("DELETE FROM ruta_pendiente WHERE id_ruta = ?", [id], (err, result) => {
+    connection.query('DELETE FROM ruta_pendiente WHERE id_ruta = ?', [id], (err, result) => {
       if (err) throw err;
-      connection.query("DELETE FROM ruta_completada WHERE id_ruta = ?", [id], (err, result) => {
+      connection.query('DELETE FROM ruta_completada WHERE id_ruta = ?', [id], (err, result) => {
         if (err) throw err;
-        connection.query("DELETE FROM valoracion WHERE id_ruta = ?", [id], (err, result) => {
+        connection.query('DELETE FROM valoracion WHERE id_ruta = ?', [id], (err, result) => {
           if (err) throw err;
-          connection.query("DELETE FROM ruta_senderismo WHERE id = ?", [id], (err, result) => {
+          connection.query('DELETE FROM ruta_senderismo WHERE id = ?', [id], (err, result) => {
             if (err) throw err;
             res.send(result);
           });
@@ -1003,7 +1003,7 @@ app.post('/new-publication', (req, res) => {
     return res.status(563).json({ message: 'Los campos son obligatorios.' });
   }
   connection.query('INSERT INTO publicacion (id_usuario, titulo, descripcion, publica) VALUES (?, ?, ?, ?)', [userId, newPublication.titulo, newPublication.descripcion, newPublication.publica], (error, results) => {
-    if (error) res.json({ message: "Error al añadir publicación."});
+    if (error) res.json({ message: 'Error al añadir publicación.'});
     return res.json({ message: 'Publicación añadida correctamente.' });
   });
 });
@@ -1019,11 +1019,11 @@ app.delete('/delete-publication/:id', (req, res) => {
   });
 })
 
-app.put("/edit-publication/:id", (req, res) => {
+app.put('/edit-publication/:id', (req, res) => {
   const { id } = req.params;
   const { editedPublication } = req.body;
   connection.query(
-    "UPDATE publicacion SET titulo = ?, descripcion = ?, publica = ? WHERE id = ?",
+    'UPDATE publicacion SET titulo = ?, descripcion = ?, publica = ? WHERE id = ?',
     [editedPublication.titulo, editedPublication.descripcion, editedPublication.publica, id],
     (err, result) => {
       if (err) {

@@ -67,16 +67,16 @@ const Navbar = ({ user }) => {
   return (
     <nav>
       <Link to='/'>
-        <img src={Logo} alt="Logo" />
+        <img src={Logo} alt='Logo' />
       </Link>
       <SearchBar className='barra-busqueda' />
       <div className='contenedor-perfil'>
         {user ? (
           <div className='contenedor-perfil' onClick={mostrarOcultarDesplegable}>
             <span>{user.nombre}</span>
-            <img className="contenedor-icono" src={Profile} alt="Profile" />
+            <img className='contenedor-icono' src={Profile} alt='Profile' />
             {showDropdown && (
-              <div className="desplegable">
+              <div className='desplegable'>
                 <Link to='/perfil'>Perfil</Link>
                 <Link to='/area-personal'>Área personal</Link>
                 <Link to='/equipaje'>Equipaje</Link>
@@ -94,8 +94,8 @@ const Navbar = ({ user }) => {
           </div>
         ) : (
           <div>
-            <Link to="/access">
-              <img className="contenedor-icono" src={Profile} alt="Profile" />
+            <Link to='/access'>
+              <img className='contenedor-icono' src={Profile} alt='Profile' />
             </Link>
           </div>
         )

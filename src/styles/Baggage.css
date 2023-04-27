@@ -52,7 +52,7 @@ li:hover {
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
 }
 
-li input[type="checkbox"] {
+li input[type='checkbox'] {
   width: 25px;
   height: 25px;
   margin: 10px;
@@ -82,7 +82,7 @@ label {
   cursor: pointer;
 }
 
-form input[type="text"] {
+form input[type='text'] {
   padding: 15px 20px;
   font-size: 20px;
   border: none;
@@ -96,12 +96,12 @@ form input[type="text"] {
   transition: all 0.1s;
 }
 
-input[type="text"]:focus {
+input[type='text']:focus {
   outline: none;
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
 }
 
-button[type="submit"] {
+button[type='submit'] {
   padding: 15px 30px;
   font-size: 20px;
   background-color: #E8D2B1;
@@ -113,7 +113,7 @@ button[type="submit"] {
   transition: all 0.1s;
 }
 
-button[type="submit"]:hover {
+button[type='submit']:hover {
   background-color: #d2bd9f;
 }
 
@@ -141,12 +141,12 @@ button[type="submit"]:hover {
     font-size: 18px;
   }
   
-  input[type="text"] {
+  input[type='text'] {
     font-size: 18px;
     padding: 10px 15px;
   }
 
-  button[type="submit"] {
+  button[type='submit'] {
     font-size: 18px;
     padding: 12px 24px;
   }

@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from "react";
-import Navbar from "./Navbar.js";
-import AddRoute from "./AddRoute.js";
+import React, { useState, useEffect } from 'react';
+import Navbar from './Navbar.js';
+import AddRoute from './AddRoute.js';
 import '../styles/RoutesCRUD.css';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -10,18 +10,18 @@ const UsersCRUD = () => {
   const [routes, setRoutes] = useState([]);
   const [provinces, setProvinces] = useState([]);
   const [newRoute, setNewRoute] = useState({
-    id_provincia: "",
-    nombre: "",
-    descripcion: "",
-    imagen: "",
-    longitud: "",
-    tipo: "",
-    dificultad: "",
-    permiso_necesario: "",
-    como_llegar: "",
-    enlace_maps: "",
-    lat: "",
-    lon: ""
+    id_provincia: '',
+    nombre: '',
+    descripcion: '',
+    imagen: '',
+    longitud: '',
+    tipo: '',
+    dificultad: '',
+    permiso_necesario: '',
+    como_llegar: '',
+    enlace_maps: '',
+    lat: '',
+    lon: ''
   });
   const [selectedRouteId, setSelectedRouteId] = useState(null);
   const [isFormVisible, setIsFormVisible] = useState(false);
@@ -94,7 +94,7 @@ const UsersCRUD = () => {
   }, []);
 
   const fetchRoutes = async () => {
-    const response = await fetch("http://localhost:3333/routes");
+    const response = await fetch('http://localhost:3333/routes');
     const data = await response.json();
     setRoutes(data);
     setRoutesPerPage(10);
@@ -151,65 +151,65 @@ const UsersCRUD = () => {
   const handleUpdateRoute = async (routeId) => {
     // Verificar si los campos están vacíos
     if (!newRoute.nombre.trim() || !newRoute.descripcion.trim() || !newRoute.imagen.trim() || !newRoute.longitud || !newRoute.como_llegar.trim() || !newRoute.enlace_maps.trim()) {  // Verificar que newRoute.longitud no sea nulo o indefinido
-      toast.error("Por favor, complete todos los campos.");
+      toast.error('Por favor, complete todos los campos.');
       return;
     }
     if (isNaN(parseFloat(newRoute.longitud))) {
-      toast.error("La longitud debe ser un número.");
+      toast.error('La longitud debe ser un número.');
       return;
     }
     if (isNaN(parseFloat(newRoute.lat))) {
-      toast.error("La latitud debe ser un número.");
+      toast.error('La latitud debe ser un número.');
       return;
     }
     if (isNaN(parseFloat(newRoute.lon))) {
-      toast.error("La longitud debe ser un número.");
+      toast.error('La longitud debe ser un número.');
       return;
     }
     if (newRoute.lat < -90 || newRoute.lat > 90) {
-      toast.error("La latitud debe estar en el rango (-90º, 90º).");
+      toast.error('La latitud debe estar en el rango (-90º, 90º).');
       return;
     }
     if (newRoute.lon < -180 || newRoute.lon > 180) {
-      toast.error("La longitud debe estar en el rango (-180º, 180º).");
+      toast.error('La longitud debe estar en el rango (-180º, 180º).');
       return;
     }
     await fetch(`http://localhost:3333/routes/${routeId}`, {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ newRoute }),
     });
-    toast.success("Ruta actualizada correctamente.")
+    toast.success('Ruta actualizada correctamente.')
     fetchRoutes();
   };
 
   const handleDeleteRoute = async (routeId) => {
     const toastId = toast.warn(
-      <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
         <p>¿Estás seguro de que quieres eliminar esta ruta?</p>
-        <div style={{ display: "flex", justifyContent: "space-between", width: "100%" }}>
-          <button style={{ margin: "10px" }} onClick={() => handleDeleteConfirm(routeId)}>Sí</button>
-          <button style={{ margin: "10px" }} onClick={() => toast.dismiss()}>No</button>
+        <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
+          <button style={{ margin: '10px' }} onClick={() => handleDeleteConfirm(routeId)}>Sí</button>
+          <button style={{ margin: '10px' }} onClick={() => toast.dismiss()}>No</button>
         </div>
       </div>, {
-      position: "top-right",
+      position: 'top-right',
       autoClose: false,
       hideProgressBar: true,
       closeOnClick: false,
       pauseOnHover: true,
       draggable: true,
       progress: undefined,
-      toastId: "deleteRoute"
+      toastId: 'deleteRoute'
     });
   };
   
   const handleDeleteConfirm = async (routeId) => {
     await fetch(`http://localhost:3333/routes/${routeId}`, {
-      method: "DELETE",
+      method: 'DELETE',
     });
     fetchRoutes();
-    toast.update("deleteRoute", {
-      render: "La ruta ha sido eliminada con éxito",
+    toast.update('deleteRoute', {
+      render: 'La ruta ha sido eliminada con éxito',
       type: toast.TYPE.SUCCESS,
       autoClose: 3000
     });
@@ -255,43 +255,43 @@ const UsersCRUD = () => {
   }
 
   return (
-    <div className="fondo">
+    <div className='fondo'>
       <Navbar user={user} />
       {isAdmin &&
         <div>
-          <div className="contenedor-crud">
+          <div className='contenedor-crud'>
             <h1>Gestión de rutas</h1>
             <ul>
               {currentRoutes.map((r) => (
-                <li key={r.id} className="user-item">
-                  <span onClick={() => handleEditRoute(r.id)} className="user-name">
+                <li key={r.id} className='user-item'>
+                  <span onClick={() => handleEditRoute(r.id)} className='user-name'>
                     {r.nombre}
                   </span>
                   {isFormVisible && selectedRouteId === r.id && (
-                    <div className="user-form">
+                    <div className='user-form'>
                       <span>Nombre</span>
                       <input
-                        type="text"
-                        name="nombre"
+                        type='text'
+                        name='nombre'
                         placeholder={r.nombre}
-                        value={newRoute.nombre || ""}
+                        value={newRoute.nombre || ''}
                         onChange={handleNameChange}
-                        className="form-input"
+                        className='form-input'
                       />
                       <span>Descripción</span>
                       <textarea
-                        name="descripcion"
+                        name='descripcion'
                         placeholder={r.descripcion}
-                        value={newRoute.descripcion || ""}
+                        value={newRoute.descripcion || ''}
                         onChange={handleDescriptionChange}
-                        className="form-input"
+                        className='form-input'
                       />
                       <span>Provincia</span>
                       <select
-                        name="provincia"
+                        name='provincia'
                         value={newRoute.id_provincia}
                         onChange={handleProvinceChange}
-                        className="form-input"
+                        className='form-input'
                       >
                         {provinces.map((provincia) => {
                           return (
@@ -303,28 +303,28 @@ const UsersCRUD = () => {
                       </select>
                       <span>Imagen</span>
                       <input
-                        type="text"
-                        name="imagen"
+                        type='text'
+                        name='imagen'
                         placeholder={r.imagen}
-                        value={newRoute.imagen || ""}
+                        value={newRoute.imagen || ''}
                         onChange={handleImageChange}
-                        className="form-input"
+                        className='form-input'
                       />
                       <span>Longitud (Km)</span>
                       <input
-                        type="text"
-                        name="longitud"
+                        type='text'
+                        name='longitud'
                         placeholder={r.longitud}
-                        value={newRoute.longitud || ""}
+                        value={newRoute.longitud || ''}
                         onChange={handleLengthChange}
-                        className="form-input"
+                        className='form-input'
                       />
                       <span>Tipo</span>
                       <select
-                        name="tipo"
+                        name='tipo'
                         value={newRoute.tipo}
                         onChange={handleTypeChange}
-                        className="form-input"
+                        className='form-input'
                       >
                         {Object.values(tipo).map((t) => {
                           return (
@@ -336,10 +336,10 @@ const UsersCRUD = () => {
                       </select>
                       <span>Dificultad</span>
                       <select
-                        name="dificultad"
+                        name='dificultad'
                         value={newRoute.dificultad}
                         onChange={handleDifficultyChange}
-                        className="form-input"
+                        className='form-input'
                       >
                         {Object.values(dificultad).map((d) => {
                           return (
@@ -351,56 +351,56 @@ const UsersCRUD = () => {
                       </select>
                       <span>Permiso necesario</span>
                       <input
-                        type="checkbox"
-                        name="permiso"
+                        type='checkbox'
+                        name='permiso'
                         checked={newRoute.permiso_necesario}
                         onChange={handlePermissionChange}
-                        className="form-check"
+                        className='form-check'
                       />
                       <span>Cómo llegar</span>
                       <textarea
-                        name="como-llegar"
+                        name='como-llegar'
                         placeholder={r.como_llegar}
-                        value={newRoute.como_llegar || ""}
+                        value={newRoute.como_llegar || ''}
                         onChange={handleArriveChange}
-                        className="form-input"
+                        className='form-input'
                       />
                       <span>Enlace Google Maps</span>
                       <input
-                        type="text"
-                        name="enlace-maps"
+                        type='text'
+                        name='enlace-maps'
                         placeholder={r.enlace_maps}
-                        value={newRoute.enlace_maps || ""}
+                        value={newRoute.enlace_maps || ''}
                         onChange={handleMapsChange}
-                        className="form-input"
+                        className='form-input'
                       />
                       <span>Latitud (Coordenada eje Y)</span>
                       <input
-                        type="text"
-                        name="lat"
+                        type='text'
+                        name='lat'
                         placeholder={r.lat}
-                        value={newRoute.lat || ""}
+                        value={newRoute.lat || ''}
                         onChange={handleLatChange}
-                        className="form-input"
+                        className='form-input'
                       />
                       <span>Longitud (Coordenada eje X)</span>
                       <input
-                        type="text"
-                        name="lon"
+                        type='text'
+                        name='lon'
                         placeholder={r.lon}
-                        value={newRoute.lon || ""}
+                        value={newRoute.lon || ''}
                         onChange={handleLonChange}
-                        className="form-input"
+                        className='form-input'
                       />
                       <button
                         onClick={() => handleUpdateRoute(r.id)}
-                        className="button"
+                        className='button'
                       >
                         Actualizar
                       </button>
                       <button
                         onClick={() => handleDeleteRoute(r.id)}
-                        className="btn-delete"
+                        className='btn-delete'
                       >
                         Eliminar
                       </button>
@@ -422,7 +422,7 @@ const UsersCRUD = () => {
             </div>
           </div>
           <ToastContainer />
-          <div className="addroute">
+          <div className='addroute'>
             <AddRoute />
           </div>
         </div>

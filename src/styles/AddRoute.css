@@ -37,7 +37,7 @@ span {
   color: #725d3f;
 }
 
-input[type="checkbox"] {
+input[type='checkbox'] {
   width: 25px;
   height: 25px;
   margin: 10px;

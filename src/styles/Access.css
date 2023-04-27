@@ -27,9 +27,9 @@
   align-items: center;
 }
 
-input[type="text"],
-input[type="email"],
-input[type="password"] {
+input[type='text'],
+input[type='email'],
+input[type='password'] {
   padding: 0.5rem;
   margin-bottom: 1rem;
   border-radius: 4px;
@@ -38,7 +38,7 @@ input[type="password"] {
   font-size: 1rem;
 }
 
-button[type="submit"] {
+button[type='submit'] {
   background-color: #0077ff;
   color: white;
   padding: 0.5rem 1rem;
@@ -50,7 +50,7 @@ button[type="submit"] {
   transition: background-color 0.2s ease;
 }
 
-button[type="submit"]:hover {
+button[type='submit']:hover {
   background-color: #0059b3;
 }
 

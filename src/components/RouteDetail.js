@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import Navbar from "./Navbar";
-import Footer from "./Footer";
+import Navbar from './Navbar';
+import Footer from './Footer';
 import Switch from 'react-switch';
 import CommentBox from './CommentBox.js';
 import NewComment from './NewComment.js';
@@ -104,16 +104,16 @@ function RouteDetail() {
           if (type === 'pendings') {
             setPendings(checked);
             if (checked) {
-              toast.success("Ruta añadida a Pendientes.");
+              toast.success('Ruta añadida a Pendientes.');
             } else {
-              toast.success("Ruta eliminada de Pendientes.");
+              toast.success('Ruta eliminada de Pendientes.');
             }
           } else {
             setCompleted(checked);
             if (checked) {
-              toast.success("Ruta añadida a Completadas.");
+              toast.success('Ruta añadida a Completadas.');
             } else {
-              toast.success("Ruta eliminada de Completadas.");
+              toast.success('Ruta eliminada de Completadas.');
             }
           }
         } else {
@@ -134,7 +134,7 @@ function RouteDetail() {
       <Navbar user={user} />
       <div className='container'>
         {routeDetails && (
-          <div className="route-details">
+          <div className='route-details'>
             <h3>{routeDetails.nombre}</h3>
             <div>
               {Array.from({ length: Math.round(routeDetails.media_valoraciones) }, (_, i) => (

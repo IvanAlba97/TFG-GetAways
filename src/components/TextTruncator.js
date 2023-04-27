@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect } from 'react';
 import '../styles/TextTruncator.css';
 
 const TextTruncator = ({ text, maxLength = 100 }) => {
@@ -18,7 +18,7 @@ const TextTruncator = ({ text, maxLength = 100 }) => {
       return text;
     }
     if (text.length > maxLength) {
-      return text.slice(0, maxLength) + "...";
+      return text.slice(0, maxLength) + '...';
     }
     return text;
   }
@@ -43,11 +43,11 @@ const TextTruncator = ({ text, maxLength = 100 }) => {
       </div>
       {text.length > maxLength &&
         (isExpanded ? (
-          <span className="truncate-text" onClick={handleTruncate}>
+          <span className='truncate-text' onClick={handleTruncate}>
             Ver menos
           </span>
         ) : (
-          <span className="expand-text" onClick={handleExpand}>
+          <span className='expand-text' onClick={handleExpand}>
             Ver más
           </span>
         ))}

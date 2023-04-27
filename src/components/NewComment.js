@@ -80,26 +80,26 @@ function NewComment(props) {
       <h2>Agregar comentario</h2>
       <form onSubmit={handleSubmit}>
         <div>
-          <label htmlFor="rating">Valoración:</label>
+          <label htmlFor='rating'>Valoración:</label>
           <StarRatings
             rating={rating}
-            starRatedColor="orange"
+            starRatedColor='orange'
             changeRating={handleRatingChange}
             numberOfStars={5}
             name='rating'
-            starDimension="20px"
+            starDimension='20px'
           />
         </div>
         <div style={{ width: '100%', height: '200px'}}>
-          <label htmlFor="comment">Comentario:</label>
-          <textarea id="comment" value={comment} onChange={(event) => setComment(event.target.value)} />
+          <label htmlFor='comment'>Comentario:</label>
+          <textarea id='comment' value={comment} onChange={(event) => setComment(event.target.value)} />
         </div>
         <div>
-          <label htmlFor="public">Público:</label>
-          <Switch id="public" checked={public_} onChange={handleSwitchChange} />
+          <label htmlFor='public'>Público:</label>
+          <Switch id='public' checked={public_} onChange={handleSwitchChange} />
         </div>
         {error && <div style={{ color: 'red' }}>{error}</div>}
-        <button type="submit">Enviar</button>
+        <button type='submit'>Enviar</button>
       </form>
     </div>
   );

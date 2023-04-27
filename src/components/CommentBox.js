@@ -48,22 +48,22 @@ function CommentBox(props) {
     <div style={{ width: '100%' }}>
       {comments.length > 0 ? (
         comments.map(comment => (
-          <div className="comment" key={comment.id}>
-            <h4 className="comment-title">{comment.comentario}</h4>
-            <p className="comment-author"><img className="contenedor-icono" src={Profile} alt="Icono-Perfil" />{comment.nombre}</p>
-            <p className="comment-rating-container">
+          <div className='comment' key={comment.id}>
+            <h4 className='comment-title'>{comment.comentario}</h4>
+            <p className='comment-author'><img className='contenedor-icono' src={Profile} alt='Icono-Perfil' />{comment.nombre}</p>
+            <p className='comment-rating-container'>
               {[...Array(comment.valoracion)].map((e, i) => (
                 <span key={i}>★</span>
               ))}
             </p>
-            <p className="comment-date">Fecha: {comment.fecha}</p>
+            <p className='comment-date'>Fecha: {comment.fecha}</p>
           </div>
         ))
       ) : (
         <div className='no-comments'>
           <p>Nadie ha comentado aún en esta ruta.</p>
           {!user ?
-            <Link to="/access" className="comment-button">
+            <Link to='/access' className='comment-button'>
               <button>Inicia sesión para añadir tu comentario.</button>
             </Link>
             : ''

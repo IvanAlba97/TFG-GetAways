@@ -16,11 +16,11 @@ function Map({ routeDetails }) {
     <MapContainer className='contenedor-map' center={[routeDetails.lat, routeDetails.lon]} zoom={10} scrollWheelZoom={false}>
       <TileLayer
         attribution='&copy; <a href="https://stamen.com/">Stamen</a> contributors'
-        url="https://stamen-tiles-{s}.a.ssl.fastly.net/terrain/{z}/{x}/{y}{r}.png"
+        url='https://stamen-tiles-{s}.a.ssl.fastly.net/terrain/{z}/{x}/{y}{r}.png'
       />
       <Marker position={[routeDetails.lat, routeDetails.lon]} icon={marcadorIcon}>
         <Popup>
-        <a href={routeDetails.enlace_maps} target="_blank" rel="noopener noreferrer">{routeDetails.nombre}</a>
+        <a href={routeDetails.enlace_maps} target='_blank' rel='noopener noreferrer'>{routeDetails.nombre}</a>
         </Popup>
       </Marker>
     </MapContainer>

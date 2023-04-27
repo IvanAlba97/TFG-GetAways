@@ -1,13 +1,13 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
 import '../styles/Register.css';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 const Register = () => {
-  const [username, setUsername] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
+  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
 
   const handleSubmit = async event => {
     event.preventDefault();
@@ -21,7 +21,7 @@ const Register = () => {
     })
       .then(async response => {
         if (response.ok) {
-          toast.success("Usuario registrado correctamente.");
+          toast.success('Usuario registrado correctamente.');
           setUsername('');
           setEmail('');
           setPassword('');
@@ -61,32 +61,32 @@ const Register = () => {
     <form onSubmit={handleSubmit}>
       <h2>Registro</h2>
       <input
-        type="text"
-        placeholder="Usuario"
+        type='text'
+        placeholder='Usuario'
         value={username}
         onChange={event => setUsername(event.target.value)}
       />
       <input
-        type="email"
-        placeholder="Correo electrónico"
+        type='email'
+        placeholder='Correo electrónico'
         value={email}
         onChange={event => setEmail(event.target.value)}
       />
       <input
-        type="password"
-        placeholder="Contraseña"
+        type='password'
+        placeholder='Contraseña'
         value={password}
         onChange={event => setPassword(event.target.value)}
       />
       <input
-        type="password"
-        placeholder="Confirmar contraseña"
+        type='password'
+        placeholder='Confirmar contraseña'
         value={confirmPassword}
         onChange={event => setConfirmPassword(event.target.value)}
       />
       <div className='error-message'>
       </div>
-      <button type="submit">Registrar</button>
+      <button type='submit'>Registrar</button>
       <ToastContainer />
     </form>
   );

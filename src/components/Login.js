@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
 import '../styles/Login.css';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -51,21 +51,21 @@ const Login = () => {
     <form onSubmit={handleSubmit}>
       <h2>Iniciar sesión</h2>
       <input
-        type="text"
-        placeholder="Usuario o correo"
+        type='text'
+        placeholder='Usuario o correo'
         value={identifier}
         onChange={event => setIdentifier(event.target.value)}
       />
       <input
-        type="password"
-        placeholder="Contraseña"
+        type='password'
+        placeholder='Contraseña'
         value={password}
         onChange={event => setPassword(event.target.value)}
       />
       <div className='error-message'>
         {/* {showErrorMessage ? errorMessage : ''} */}
       </div>
-      <button type="submit">Acceder</button>
+      <button type='submit'>Acceder</button>
       <ToastContainer />
     </form>
   );

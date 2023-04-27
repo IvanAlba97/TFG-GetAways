@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect } from 'react';
 import '../styles/AddRoute.css';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -6,18 +6,18 @@ import 'react-toastify/dist/ReactToastify.css';
 const AddRoute = () => {
   const [provinces, setProvinces] = useState([]);
   const [newRoute, setNewRoute] = useState({
-    id_provincia: "",
-    nombre: "",
-    descripcion: "",
-    imagen: "",
-    longitud: "",
-    tipo: "",
-    dificultad: "",
+    id_provincia: '',
+    nombre: '',
+    descripcion: '',
+    imagen: '',
+    longitud: '',
+    tipo: '',
+    dificultad: '',
     permiso_necesario: false,
-    como_llegar: "",
-    enlace_maps: "",
-    lat: "",
-    lon: ""
+    como_llegar: '',
+    enlace_maps: '',
+    lat: '',
+    lon: ''
   });
   const dificultad = {
     Fácil: 'Fácil',
@@ -106,60 +106,60 @@ const AddRoute = () => {
       !newRoute.enlace_maps ||
       !newRoute.lat ||
       !newRoute.lon) {
-      toast.error("Por favor, complete todos los campos.");
+      toast.error('Por favor, complete todos los campos.');
       return;
     }
     if (isNaN(parseFloat(newRoute.longitud))) {
-      toast.error("La longitud debe ser un número.");
+      toast.error('La longitud debe ser un número.');
       return;
     }
     if (isNaN(parseFloat(newRoute.lat))) {
-      toast.error("La latitud debe ser un número.");
+      toast.error('La latitud debe ser un número.');
       return;
     }
     if (isNaN(parseFloat(newRoute.lon))) {
-      toast.error("La longitud debe ser un número.");
+      toast.error('La longitud debe ser un número.');
       return;
     }
     if (newRoute.lat < -90 || newRoute.lat > 90) {
-      toast.error("La latitud debe estar en el rango (-90º, 90º).");
+      toast.error('La latitud debe estar en el rango (-90º, 90º).');
       return;
     }
     if (newRoute.lon < -180 || newRoute.lon > 180) {
-      toast.error("La longitud debe estar en el rango (-180º, 180º).");
+      toast.error('La longitud debe estar en el rango (-180º, 180º).');
       return;
     }
-    const response = await fetch("http://localhost:3333/routes", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
+    const response = await fetch('http://localhost:3333/routes', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(newRoute),
     });
     if (response.ok) {
       setNewRoute({
-        id_provincia: "",
-        nombre: "",
-        descripcion: "",
-        imagen: "",
-        longitud: "",
-        tipo: "",
-        dificultad: "",
-        permiso_necesario: "",
-        como_llegar: "",
-        enlace_maps: "",
+        id_provincia: '',
+        nombre: '',
+        descripcion: '',
+        imagen: '',
+        longitud: '',
+        tipo: '',
+        dificultad: '',
+        permiso_necesario: '',
+        como_llegar: '',
+        enlace_maps: '',
       });
-      toast.success("Ruta añadida correctamente.");
+      toast.success('Ruta añadida correctamente.');
     }
   };
 
 
   return (
-    <div className="contenedor-add">
+    <div className='contenedor-add'>
       <h2>Añadir ruta</h2>
-      <div className="addroute-form">
+      <div className='addroute-form'>
         <label>
           <span>Provincia:</span>
-          <select className="form-input" value={newRoute.id_provincia} onChange={handleProvinceChange}>
-            <option value="">Seleccione una provincia</option>
+          <select className='form-input' value={newRoute.id_provincia} onChange={handleProvinceChange}>
+            <option value=''>Seleccione una provincia</option>
             {provinces.map((province) => (
               <option key={province.id} value={province.id}>
                 {province.nombre}
@@ -169,31 +169,31 @@ const AddRoute = () => {
         </label>
         <label>
           <span>Nombre:</span>
-          <input className="form-input" type="text" value={newRoute.nombre} onChange={handleNameChange} />
+          <input className='form-input' type='text' value={newRoute.nombre} onChange={handleNameChange} />
         </label>
         <label>
           <span>Descripción:</span>
-          <textarea className="form-input"
+          <textarea className='form-input'
             value={newRoute.descripcion}
             onChange={handleDescriptionChange}
           ></textarea>
         </label>
         <label>
           <span>Imagen:</span>
-          <input className="form-input" type="text" value={newRoute.imagen} onChange={handleImageChange} />
+          <input className='form-input' type='text' value={newRoute.imagen} onChange={handleImageChange} />
         </label>
         <label>
           <span>Longitud:</span>
-          <input className="form-input"
-            type="text"
+          <input className='form-input'
+            type='text'
             value={newRoute.longitud}
             onChange={handleLengthChange}
           />
         </label>
         <label>
           <span>Tipo:</span>
-          <select className="form-input" value={newRoute.tipo} onChange={handleTypeChange}>
-            <option value="">Seleccione un tipo</option>
+          <select className='form-input' value={newRoute.tipo} onChange={handleTypeChange}>
+            <option value=''>Seleccione un tipo</option>
             {Object.keys(tipo).map((key) => (
               <option key={key} value={tipo[key]}>
                 {tipo[key]}
@@ -203,11 +203,11 @@ const AddRoute = () => {
         </label>
         <label>
           <span>Dificultad:</span>
-          <select className="form-input"
+          <select className='form-input'
             value={newRoute.dificultad}
             onChange={handleDifficultyChange}
           >
-            <option value="">Seleccione una dificultad</option>
+            <option value=''>Seleccione una dificultad</option>
             {Object.keys(dificultad).map((key) => (
               <option key={key} value={dificultad[key]}>
                 {dificultad[key]}
@@ -217,45 +217,45 @@ const AddRoute = () => {
         </label>
         <label>
           <span>Permiso necesario:</span>
-          <input className="form-check"
-            type="checkbox"
+          <input className='form-check'
+            type='checkbox'
             checked={newRoute.permiso_necesario}
             onChange={handlePermissionChange}
           />
         </label>
         <label>
           <span>Cómo llegar:</span>
-          <textarea className="form-input"
+          <textarea className='form-input'
             value={newRoute.como_llegar}
             onChange={handleArriveChange}
           ></textarea>
         </label>
         <label>
           <span>Enlace a Google Maps:</span>
-          <input className="form-input"
-            type="text"
+          <input className='form-input'
+            type='text'
             value={newRoute.enlace_maps}
             onChange={handleMapsChange}
           />
         </label>
         <label>
           <span>Latitud (Coordenada eje Y):</span>
-          <input className="form-input"
-            type="text"
+          <input className='form-input'
+            type='text'
             value={newRoute.lat}
             onChange={handleLatChange}
           />
         </label>
         <label>
           <span>Longitud (Coordenada eje X):</span>
-          <input className="form-input"
-            type="text"
+          <input className='form-input'
+            type='text'
             value={newRoute.lon}
             onChange={handleLonChange}
           />
         </label>
-        <div className="addroute-button">
-          <button type="button" onClick={handleAddRoute}>
+        <div className='addroute-button'>
+          <button type='button' onClick={handleAddRoute}>
             Añadir ruta
           </button>
         </div>
