@@ -1003,7 +1003,7 @@ app.post('/new-publication', (req, res) => {
     return res.status(563).json({ message: 'Los campos son obligatorios.' });
   }
   connection.query('INSERT INTO publicacion (id_usuario, titulo, descripcion, publica) VALUES (?, ?, ?, ?)', [userId, newPublication.titulo, newPublication.descripcion, newPublication.publica], (error, results) => {
-    if (error) throw error;
+    if (error) res.json({ message: "Error al añadir publicación."});
     return res.json({ message: 'Publicación añadida correctamente.' });
   });
 });

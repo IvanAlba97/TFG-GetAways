@@ -26,7 +26,23 @@
   font-size: 40px;
   background-image: url('../img/pano.png');
   background-size: cover;
+  background-position: center center;
   box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.2);
+}
+
+
+.comunidad {
+  width: 100%;
+  min-height: 100px;
+  border-radius: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  font-size: 40px;
+  background-image: url('../img/cork.png');
+  box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.2);
+  text-shadow: -1px 1px 0 #5e451e, 2px 2px 0 #5e451e, 2px -2px 0 #5e451e, -2px -2px 0 #5e451e; /* añade esta línea */
 }
 
 .column-1 a {
@@ -47,7 +63,7 @@
     width: 100%;
   }
 
-  .todas-las-rutas {
+  .todas-las-rutas, .comunidad {
     font-size: 30px;
     min-height: 150px;
   }

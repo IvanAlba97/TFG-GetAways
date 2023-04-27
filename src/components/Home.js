@@ -44,7 +44,7 @@ function Home() {
             </div>
           </Link>
           <Link to='/comunidad'>
-            <div className='todas-las-rutas'>
+            <div className='comunidad'>
               Comunidad
             </div>
           </Link>
