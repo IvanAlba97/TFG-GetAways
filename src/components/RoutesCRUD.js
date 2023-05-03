@@ -158,6 +158,10 @@ const UsersCRUD = () => {
       toast.error('La longitud debe ser un número.');
       return;
     }
+    if (newRoute.longitud <= 0) {
+      toast.error('La longitud debe ser un número positivo distinto de cero (0).');
+      return;
+    }
     if (isNaN(parseFloat(newRoute.lat))) {
       toast.error('La latitud debe ser un número.');
       return;
