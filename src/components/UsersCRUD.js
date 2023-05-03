@@ -54,7 +54,9 @@ const UsersCRUD = () => {
   }, []);
 
   const fetchUsers = async () => {
-    const response = await fetch('http://localhost:3333/users');
+    const response = await fetch('http://localhost:3333/users', {
+      credentials: 'include'
+    });
     const data = await response.json();
     setUsers(data);
     setUsersPerPage(10);

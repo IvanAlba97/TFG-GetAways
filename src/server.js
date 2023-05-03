@@ -816,28 +816,15 @@ app.get('/is-admin', (req, res) => {
 
 // Ruta para obtener la lista de usuarios
 app.get('/users', (req, res) => {
-  connection.query('SELECT * FROM usuario ORDER BY nombre ASC', (err, result) => {
+  const userId = req.session.user?.id;
+  connection.query('SELECT * FROM usuario WHERE es_admin = 0 AND id <> ? ORDER BY nombre ASC', [userId], (err, result) => {
     if (err) throw err;
     res.send(result);
   });
 });
 
-/* // Ruta para crear un nuevo usuario
-app.post('/users', (req, res) => {
-  const { name, email } = req.body;
-  connection.query(
-    'INSERT INTO usuario (nombre, correo) VALUES (?, ?)',
-    [name, email],
-    (err, result) => {
-      if (err) throw err;
-      res.send(result);
-    }
-  );
-}); */
-
 // Ruta para actualizar un usuario existente
 app.put('/users/:id', (req, res) => {
-  const { id } = req.params;
   const { userId, checked } = req.body;
   connection.query(
     'UPDATE usuario SET habilitada = ? WHERE id = ?',
