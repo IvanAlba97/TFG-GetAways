@@ -2,7 +2,6 @@ const express = require('express');
 const app = express();
 const port = 3333;
 
-const mysql = require('mysql2');
 const nodemailer = require('nodemailer');
 const passwordValidator = require('password-validator');
 const { check, validationResult } = require('express-validator');
@@ -25,13 +24,7 @@ app.use(cors({
   credentials: true,
 }));
 
-const connection = mysql.createConnection({
-  host: 'localhost',
-  user: 'root',
-  password: '',
-  database: 'GetAways_db'
-});
-
+const connection = require('./db');
 app.use(express.json());
 
 const bcrypt = require('bcrypt');
@@ -554,8 +547,7 @@ app.get('/pending-route/:id', (req, res) => {
 // Actualiza el estado de la ruta pendiente
 app.post('/update-pendings', (req, res) => {
   const { id } = req.body;
-  const routeId = id;
-  /* const checked_ruta = checked; */
+  const routeId = id  /* const checked_ruta = checked; */
   const userId = req.session.user.id;
   let query;
   let values;
@@ -684,7 +676,7 @@ app.put('/edit-my-comment', (req, res) => {
   connection.query(query, [newRating, newComment, public_, commentId], (err, results) => {
     if (err) {
       console.error('Error executing MySQL query: ' + err.stack);
-      return res.status(583).json({ message: 'Internal server error' });
+      return res.status(583).json({ message: 'Error al editar el comentario.' });
     }
     res.json({ message: 'Comment updated successfully' });
   });
@@ -696,7 +688,7 @@ app.delete('/delete-my-comment/:id', (req, res) => {
   connection.query(query, [id], (err, results) => {
     if (err) {
       console.error('Error executing MySQL query: ' + err.stack);
-      return res.status(584).json({ message: 'Internal server error' });
+      return res.status(584).json({ message: 'Error al eliminar el comentario.' });
     }
     res.json({ message: 'Comment deleted successfully' });
   });
@@ -717,7 +709,7 @@ app.post('/new-comment', (req, res) => {
       console.error(error);
       res.status(585).send('Error al añadir el comentario');
     } else {
-      res/* .status(200) */.send('Comentario añadido correctamente');
+      res/* .status(200) */.send('Comentario añadido correctamente.');
     }
   });
 });
@@ -728,7 +720,7 @@ app.put('/update-average-rating', (req, res) => {
 
   connection.query(sql, [routeId, routeId], (err, result) => {
     if (err) throw err;
-    res.send('Media de valoraciones actualizada correctamente');
+    res.send('Media de valoraciones actualizada correctamente.');
   });
 });
 
@@ -736,7 +728,7 @@ app.get('/provinces', (req, res) => {
   const query = 'SELECT * FROM provincia';
   connection.query(query, (error, results) => {
     if (error) {
-      res.status(586).send('Error al obtener la tabla provincia');
+      res.status(586).send('Error al obtener la tabla provincia.');
     } else {
       res.send(results);
     }
