@@ -38,7 +38,6 @@ app.use(session({
   secret: 'mi-secreto',
   resave: false,
   saveUninitialized: true,
-  //store: sessionStore,
   cookie: { secure: false }
 }));
 
@@ -762,14 +761,22 @@ app.delete('/delete-account', (req, res) => {
                 [userId],
                 (error, results) => {
                   if (error) throw error;
-                  // Eliminar registro de la tabla Usuario
+                  // Eliminar registros de la tabla publicacion
                   connection.query(
-                    'DELETE FROM Usuario WHERE id = ?',
+                    'DELETE FROM publicacion WHERE id_usuario = ?',
                     [userId],
                     (error, results) => {
                       if (error) throw error;
-                      // Enviar una respuesta exitosa al cliente
-                      res.sendStatus(200);
+                      // Eliminar registro de la tabla Usuario
+                      connection.query(
+                        'DELETE FROM Usuario WHERE id = ?',
+                        [userId],
+                        (error, results) => {
+                          if (error) throw error;
+                          // Enviar una respuesta exitosa al cliente
+                          res.sendStatus(200);
+                        }
+                      );
                     }
                   );
                 }
@@ -782,6 +789,7 @@ app.delete('/delete-account', (req, res) => {
   );
   req.session.destroy();
 });
+
 
 app.get('/is-admin', (req, res) => {
   if (req.session.user) {
@@ -854,14 +862,22 @@ app.delete('/users/:id', (req, res) => {
                 [id],
                 (error, results) => {
                   if (error) throw error;
-                  // Eliminar registro de la tabla Usuario
+                  // Eliminar registros de la tabla publicacion
                   connection.query(
-                    'DELETE FROM Usuario WHERE id = ?',
+                    'DELETE FROM publicacion WHERE id_usuario = ?',
                     [id],
                     (error, results) => {
                       if (error) throw error;
-                      // Enviar una respuesta exitosa al cliente
-                      res.sendStatus(200);
+                      // Eliminar registro de la tabla Usuario
+                      connection.query(
+                        'DELETE FROM Usuario WHERE id = ?',
+                        [id],
+                        (error, results) => {
+                          if (error) throw error;
+                          // Enviar una respuesta exitosa al cliente
+                          res.sendStatus(200);
+                        }
+                      );
                     }
                   );
                 }
@@ -873,6 +889,7 @@ app.delete('/users/:id', (req, res) => {
     }
   );
 });
+
 
 
 

@@ -6,8 +6,6 @@ import 'react-toastify/dist/ReactToastify.css';
 const Login = () => {
   const [identifier, setIdentifier] = useState('');
   const [password, setPassword] = useState('');
-  /* const [errorMessage, setErrorMessage] = useState('');
-  const [showErrorMessage, setShowErrorMessage] = useState(false); */
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -27,15 +25,10 @@ const Login = () => {
 
       if (!response.ok) {
         response.json().then(({ message }) => {
-          /* setErrorMessage(message);
-          setShowErrorMessage(true); */
           toast.error(message);
         });
         throw new Error('Error al iniciar sesión');
-      } /* else {
-        setShowErrorMessage(false);
       }
- */
       // Almacenar la sesión en sessionStorage
       const data = await response.json();
       sessionStorage.setItem('session', JSON.stringify(data));
@@ -63,7 +56,6 @@ const Login = () => {
         onChange={event => setPassword(event.target.value)}
       />
       <div className='error-message'>
-        {/* {showErrorMessage ? errorMessage : ''} */}
       </div>
       <button type='submit'>Acceder</button>
       <ToastContainer />
