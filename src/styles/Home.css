@@ -33,18 +33,18 @@
 
 .comunidad {
   width: 100%;
-  min-height: 100px;
+  min-height: 300px;
   border-radius: 10px;
   display: flex;
   justify-content: center;
   align-items: center;
   color: white;
   font-size: 40px;
-  /* background-image: url('../img/cork.png'); */
-  background-image: url('../img/leaves.png');
-  /* background-color: #175345; */
+  background-image: url('../img/communityPano.jpg');
+  background-size: cover;
+  background-position: center center;
   box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.2);
-  text-shadow: -1px 1px 0 #5e451e, 2px 2px 0 #5e451e, 2px -2px 0 #5e451e, -2px -2px 0 #5e451e; /* añade esta línea */
+ /*  text-shadow: -1px 1px 0 #5e451e, 2px 2px 0 #5e451e, 2px -2px 0 #5e451e, -2px -2px 0 #5e451e; */
 }
 
 .column-1 a {
@@ -54,7 +54,6 @@
   margin: 30px;
 }
 
-/* Media query para reducir el tamaño de fuente en pantallas más pequeñas */
 @media (max-width: 768px) {
   .content {
     flex-direction: column;

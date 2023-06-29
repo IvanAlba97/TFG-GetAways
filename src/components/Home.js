@@ -7,7 +7,6 @@ import '../styles/Home.css';
 import Intro from './Intro.js';
 import Carousel from './Carousel';
 import { Link } from 'react-router-dom';
-/* import Map from './Map.js'; */
 
 function Home() {
   const [user, setUser] = useState(null);
@@ -48,10 +47,6 @@ function Home() {
               Comunidad
             </div>
           </Link>
-          {/* <Map /> */}
-        </div>
-        <div className='column-2'>
-          {/* <Intro /> */}
         </div>
       </div>
       <Footer />
