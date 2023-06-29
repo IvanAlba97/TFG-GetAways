@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import '../styles/Login.css';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+
+import '../styles/Login.css';
 
 const Login = () => {
   const [identifier, setIdentifier] = useState('');
@@ -24,43 +25,37 @@ const Login = () => {
       });
 
       if (!response.ok) {
-        response.json().then(({ message }) => {
-          toast.error(message);
-        });
-        throw new Error('Error al iniciar sesión');
+        const { message } = await response.json();
+        toast.error(message);
       }
-      // Almacenar la sesión en sessionStorage
+
       const data = await response.json();
       sessionStorage.setItem('session', JSON.stringify(data));
-
       window.location.href = '/';
     } catch (error) {
-      //console.error(error);
+      console.error(error);
     }
   };
-
 
   return (
     <form onSubmit={handleSubmit}>
       <h2>Iniciar sesión</h2>
       <input
         type='text'
-        placeholder='Usuario o correo'
+        placeholder='Correo electrónico'
         value={identifier}
-        onChange={event => setIdentifier(event.target.value)}
+        onChange={(event) => setIdentifier(event.target.value)}
       />
       <input
         type='password'
         placeholder='Contraseña'
         value={password}
-        onChange={event => setPassword(event.target.value)}
+        onChange={(event) => setPassword(event.target.value)}
       />
-      <div className='error-message'>
-      </div>
       <button type='submit'>Acceder</button>
       <ToastContainer />
     </form>
   );
-}
+};
 
 export default Login;

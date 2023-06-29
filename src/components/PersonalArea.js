@@ -17,6 +17,7 @@ const PersonalArea = () => {
   const [public_, setPublic1] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
   const [publicationsPerPage, setPublicationsPerPage] = useState('');
+  const [hasPublications, setHasPublications] = useState(false);
   const indexOfLastPublication = currentPage * publicationsPerPage;
   const indexOfFirstPublication = indexOfLastPublication - publicationsPerPage;
   const currentPublications = publications.slice(indexOfFirstPublication, indexOfLastPublication);
@@ -54,6 +55,7 @@ const PersonalArea = () => {
       })
       .then((data) => {
         setPublications(data);
+        setHasPublications(data.length > 0);
       })
       .catch((error) => {
         console.error(error);
@@ -212,35 +214,39 @@ const PersonalArea = () => {
       </div>
       <div className='publicaciones'>
         <h3>Publicaciones</h3>
-        <ul>
-          {currentPublications.map((publication) => (
-            isEditing && selectedPublication === publication.id ? (
-              <div className='edit-publication' key={publication.id}>
-                <h4>Título</h4>
-                <input type='text' placeholder='Título' value={editedPublication.titulo} onChange={(event) => setEditedPublication({ ...editedPublication, titulo: event.target.value })} />
-                <h4>Descripción</h4>
-                <textarea placeholder='Descripción' value={editedPublication.descripcion} onChange={(event) => setEditedPublication({ ...editedPublication, descripcion: event.target.value })} />
-                <h4>Público</h4>
-                <Switch id='public2' checked={editedPublication.publica ? true : false} onChange={handleSwitch2Change} />
-                <div className='buttons'>
-                  <button onClick={() => setIsEditing(false)}>Cancelar</button>
-                  <button onClick={() => handleEditConfirm(editedPublication)}>Confirmar</button>
-                </div>
-              </div>
-            ) : (
-              <li key={publication.id}>
-                <h3>{publication.titulo}</h3>
-                <div className='description'>
-                  <TextTruncator text={publication.descripcion} maxLength={400} />
+        {hasPublications ? (
+          <ul>
+            {currentPublications.map((publication) => (
+              isEditing && selectedPublication === publication.id ? (
+                <div className='edit-publication' key={publication.id}>
+                  <h4>Título</h4>
+                  <input type='text' placeholder='Título' value={editedPublication.titulo} onChange={(event) => setEditedPublication({ ...editedPublication, titulo: event.target.value })} />
+                  <h4>Descripción</h4>
+                  <textarea placeholder='Descripción' value={editedPublication.descripcion} onChange={(event) => setEditedPublication({ ...editedPublication, descripcion: event.target.value })} />
+                  <h4>Público</h4>
+                  <Switch id='public2' checked={editedPublication.publica ? true : false} onChange={handleSwitch2Change} />
                   <div className='buttons'>
-                    <button onClick={() => handleEdit(publication)}>Editar</button>
-                    <button onClick={() => handleDelete(publication)}>Eliminar</button>
+                    <button onClick={() => setIsEditing(false)}>Cancelar</button>
+                    <button onClick={() => handleEditConfirm(editedPublication)}>Confirmar</button>
                   </div>
                 </div>
-              </li>
-            )
-          ))}
-        </ul>
+              ) : (
+                <li key={publication.id}>
+                  <h3>{publication.titulo}</h3>
+                  <div className='description'>
+                    <TextTruncator text={publication.descripcion} maxLength={400} />
+                    <div className='buttons'>
+                      <button onClick={() => handleEdit(publication)}>Editar</button>
+                      <button onClick={() => handleDelete(publication)}>Eliminar</button>
+                    </div>
+                  </div>
+                </li>
+              )
+            ))}
+          </ul>
+        ) : (
+          <p>No se ha publicado nada aún.</p>
+        )}
         <div className='pagination'>
           {pageNumbers.map(number => (
             <button
@@ -256,7 +262,6 @@ const PersonalArea = () => {
       <ToastContainer />
     </div>
   );
-
 };
 
 export default PersonalArea;

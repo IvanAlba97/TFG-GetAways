@@ -50,7 +50,7 @@ app.post('/auth/login', (req, res) => {
     return res.status(550).send({ message: 'Debes proporcionar un usuario y una contraseña.' });
   }
 
-  connection.query('SELECT * FROM usuario WHERE nombre = ? OR correo = ?', [identifier, identifier], (error, results) => {
+  connection.query('SELECT * FROM usuario WHERE correo = ?', [identifier], (error, results) => {
     if (error) {
       res.status(551).send('Error al buscar usuario');
     } else if (results.length === 0) {
