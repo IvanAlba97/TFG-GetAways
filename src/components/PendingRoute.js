@@ -33,17 +33,19 @@ function RutaPendiente() {
     <div className='fondo'>
       <Navbar user={user} />
       <div style={{ textAlign: 'center' }}>
-      <h1 style={{color: '#5e451e', fontSize: '30px'}}>Rutas pendientes</h1>
+        <h1 style={{ color: '#5e451e', fontSize: '30px' }}>Rutas pendientes</h1>
       </div>
-      {routes.map(route => (
-        <Card
-          key={route.id}
-          id={route.id}
-          name={route.nombre}
-          description={route.descripcion}
-          image={route.imagen}
-          averageRating={route.media_valoraciones} />
-      ))}
+      <div style={{ height: '500px', background: 'transparent' }}>
+        {routes.map(route => (
+          <Card
+            key={route.id}
+            id={route.id}
+            name={route.nombre}
+            description={route.descripcion}
+            image={route.imagen}
+            averageRating={route.media_valoraciones} />
+        ))}
+      </div>
       <Footer />
     </div>
   );
