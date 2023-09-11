@@ -150,6 +150,8 @@ const AddRoute = () => {
         permiso_necesario: '',
         como_llegar: '',
         enlace_maps: '',
+        lat: '',
+        lon: ''
       });
       toast.success('Ruta añadida correctamente.');
     }
