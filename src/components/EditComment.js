@@ -19,7 +19,7 @@ function EditComment(props) {
         if (res.ok) {
           return res.json();
         }
-        throw new Error('Network response was not ok.');
+        throw Error('Network response was not ok.');
       })
       .then(data => {
         setComment(data);
@@ -47,13 +47,23 @@ function EditComment(props) {
         body: JSON.stringify({ commentId, newComment, newRating, public_ })
       });
       if (!response.ok) {
-        throw new Error('Network response was not ok.');
+        throw Error('Network response was not ok.');
       }
       const data = await response.json();
       setComment(data);
       setNewComment('');
       setNewRating(undefined);
       setIsEditing(false);
+
+      // Luego de editar con éxito, actualiza la calificación promedio
+      updateAverageRating();
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const updateAverageRating = async () => {
+    try {
       const ratingResponse = await fetch('http://localhost:3333/update-average-rating', {
         method: 'PUT',
         credentials: 'include',
@@ -76,7 +86,7 @@ function EditComment(props) {
       method: 'DELETE',
       credentials: 'include',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application.json'
       }
     })
       .then(res => {
@@ -87,20 +97,13 @@ function EditComment(props) {
       })
       .then(async () => {
         try {
-          const response = await fetch('http://localhost:3333/update-average-rating', {
-            method: 'PUT',
-            credentials: 'include',
-            headers: {
-              'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ routeId: props.routeId })
-          });
-          console.log(response);
+          // Después de eliminar con éxito, actualiza la calificación promedio
+          updateAverageRating();
         } catch (error) {
           console.error(error);
         }
         window.location.reload();
-      })
+      });
   };
 
   const handleSwitchChange = (checked) => {
@@ -109,7 +112,7 @@ function EditComment(props) {
 
   const handleRatingChange = (newRating) => {
     setNewRating(newRating);
-  }
+  };
 
   return (
     <div style={{ width: '100%' }}>

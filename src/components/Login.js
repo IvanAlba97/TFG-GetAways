@@ -9,33 +9,34 @@ const Login = () => {
   const [password, setPassword] = useState('');
 
   const handleSubmit = async (event) => {
-    event.preventDefault();
+  event.preventDefault();
 
-    try {
-      const response = await fetch('http://localhost:3333/auth/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          identifier,
-          password
-        }),
-        credentials: 'include',
-      });
+  try {
+    const response = await fetch('http://localhost:3333/auth/login', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        identifier,
+        password
+      }),
+      credentials: 'include',
+    });
 
-      if (!response.ok) {
-        const { message } = await response.json();
-        toast.error(message);
-      }
-
+    if (!response.ok) {
+      const errorData = await response.json();
+      toast.error(errorData.message);
+    } else {
       const data = await response.json();
       sessionStorage.setItem('session', JSON.stringify(data));
       window.location.href = '/';
-    } catch (error) {
-      console.error(error);
     }
-  };
+  } catch (error) {
+    console.error(error);
+  }
+};
+
 
   return (
     <form onSubmit={handleSubmit}>

@@ -47,32 +47,38 @@ app.post('/auth/login', (req, res) => {
   const { identifier, password } = req.body;
 
   if (!identifier || !password) {
-    return res.status(550).send({ message: 'Debes proporcionar un usuario y una contraseña.' });
+    return res.status(400).send({ message: 'Debes proporcionar un usuario y una contraseña.' });
   }
 
   connection.query('SELECT * FROM usuario WHERE correo = ?', [identifier], (error, results) => {
     if (error) {
-      res.status(551).send('Error al buscar usuario');
-    } else if (results.length === 0) {
-      res.status(552).send({ message: 'Usuario no encontrado.' });
+      console.error('Error interno al buscar usuario', error);
+      return res.status(500).send('Error interno al buscar usuario');
+    }
+
+    if (results.length === 0) {
+      return res.status(404).send({ message: 'Usuario no encontrado.' });
+    }
+
+    const user = results[0];
+    if (user.habilitada) {
+      bcrypt.compare(password, user.contraseña, (error, result) => {
+        if (error) {
+          console.error('Error interno al comparar contraseñas', error);
+          return res.status(500).send('Error interno al comparar contraseñas');
+        }
+
+        if (result) {
+          // Inicializar la sesión y almacenar la información del usuario en la sesión
+          req.session.user = { id: user.id, nombre: user.nombre, correo: user.correo };
+          req.session.cookie.maxAge = 30 * 60 * 1000; // 30 minutos
+          return res.json(req.session.user);
+        } else {
+          return res.status(401).send({ message: 'Contraseña incorrecta.' });
+        }
+      });
     } else {
-      const user = results[0];
-      if (user.habilitada) {
-        bcrypt.compare(password, user.contraseña, (error, result) => {
-          if (error) {
-            res.status(553).send('Error al comparar contraseñas.');
-          } else if (result) {
-            // Inicializar la sesión y almacenar la información del usuario en la sesión
-            req.session.user = { id: user.id, nombre: user.nombre, correo: user.correo };
-            req.session.cookie.maxAge = 30 * 60 * 1000; // 30 minutos
-            res.json(req.session.user);
-          } else {
-            res.status(554).send({ message: 'Contraseña incorrecta.' });
-          }
-        });
-      } else {
-        res.status(587).send({ message: 'Cuenta inhabilitada.' });
-      }
+      return res.status(403).send({ message: 'Cuenta inhabilitada.' });
     }
   });
 });
