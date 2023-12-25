@@ -15,9 +15,9 @@ function Map({ routeDetails }) {
   return (
     <MapContainer className='contenedor-map' center={[routeDetails.lat, routeDetails.lon]} zoom={10} scrollWheelZoom={false}>
       <TileLayer
-        attribution='&copy; <a href="https://stamen.com/">Stamen</a> contributors'
-        url='https://stamen-tiles-{s}.a.ssl.fastly.net/terrain/{z}/{x}/{y}{r}.png'
-      />
+          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        />
       <Marker position={[routeDetails.lat, routeDetails.lon]} icon={marcadorIcon}>
         <Popup>
         <a href={routeDetails.enlace_maps} target='_blank' rel='noopener noreferrer'>{routeDetails.nombre}</a>
