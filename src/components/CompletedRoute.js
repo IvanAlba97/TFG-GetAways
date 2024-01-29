@@ -35,7 +35,7 @@ function CompletedRoute() {
       <div style={{ textAlign: 'center' }}>
         <h1 style={{ color: '#5e451e', fontSize: '30px' }}>Rutas completadas</h1>
       </div>
-      <div style={{ height: '500px', background: 'transparent' }}>
+      <div style={{ minheight: '500px', background: 'transparent' }}>
         {routes.map(route => (
           <Card
             key={route.id}
