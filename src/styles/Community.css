@@ -49,4 +49,8 @@ li p {
     padding-left: 0;
     padding-right: 0;
   }
+
+  .description {
+    padding: 10px;
+  }
 }
